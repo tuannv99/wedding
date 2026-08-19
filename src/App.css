@@ -1,0 +1,187 @@
+.wedding-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.55), transparent 30%),
+    linear-gradient(180deg, #fffaf7 0%, #f7e8e2 50%, #f5efe8 100%);
+  color: #382f2d;
+}
+
+.hero-section {
+  padding: 72px 24px 32px;
+}
+
+.hero-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 28px 28px;
+  border: 1px solid rgba(120, 87, 77, 0.15);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 20px 45px rgba(117, 84, 74, 0.12);
+  text-align: center;
+}
+
+.eyebrow,
+.section-kicker {
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: #a16459;
+  margin: 0 0 18px;
+}
+
+.hero-card h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #4d2a26;
+}
+
+.subtitle {
+  max-width: 620px;
+  margin: 18px auto 0;
+  font-size: 1.08rem;
+  color: #604d49;
+}
+
+.date-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d7a89f, #b75d52);
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 36px;
+}
+
+.detail-box {
+  padding: 18px 16px;
+  border-radius: 18px;
+  background: rgba(255, 249, 246, 0.8);
+  border: 1px solid rgba(125, 88, 79, 0.1);
+}
+
+.detail-box span {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9d7b72;
+  margin-bottom: 10px;
+}
+
+.detail-box strong {
+  font-size: 1.08rem;
+  color: #3c2d2a;
+}
+
+.content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 24px 72px;
+}
+
+.section-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(120, 87, 77, 0.12);
+  border-radius: 26px;
+  padding: 32px 28px;
+  margin-bottom: 26px;
+  box-shadow: 0 12px 32px rgba(101, 77, 69, 0.06);
+}
+
+.section-card h2 {
+  margin: 0 0 18px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: #432f2d;
+}
+
+.story p,
+.timeline-copy p,
+.rsvp p {
+  color: #5d4b47;
+  line-height: 1.8;
+  font-size: 1.03rem;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 100px 1px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.time {
+  font-weight: 700;
+  color: #a16459;
+  padding-top: 4px;
+}
+
+.line {
+  width: 1px;
+  min-height: 100%;
+  background: linear-gradient(180deg, rgba(161, 100, 89, 0.5), rgba(161, 100, 89, 0.1));
+}
+
+.timeline-copy h3 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+  color: #3e2d2d;
+}
+
+.rsvp {
+  text-align: center;
+}
+
+.rsvp button {
+  margin-top: 22px;
+  border: none;
+  border-radius: 999px;
+  padding: 15px 28px;
+  background: linear-gradient(135deg, #d8a59d, #b5564d);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(181, 86, 77, 0.25);
+}
+
+@media (max-width: 720px) {
+  .hero-card {
+    padding: 42px 18px 22px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .line {
+    display: none;
+  }
+}
