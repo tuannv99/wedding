@@ -32,7 +32,7 @@ export function Hero() {
     <section
       id="hero"
       aria-label="Thiệp cưới Tuấn và Hoa"
-      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 py-24"
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 pt-28 pb-24 md:pt-32"
     >
       {/* Ảnh cưới nền */}
       <motion.div

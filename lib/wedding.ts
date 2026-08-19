@@ -138,7 +138,7 @@ export const wedding = {
 
   nav: [
     { label: "Chuyện chúng mình", id: "our-story" },
-    { label: "Ngày cưới", id: "the-wedding" },
+    { label: "Lễ cưới", id: "the-wedding" },
     { label: "Ảnh cưới", id: "gallery" },
     { label: "Xác nhận", id: "rsvp" },
   ],
@@ -149,7 +149,7 @@ export const wedding = {
    */
   copy: {
     hero: {
-      tagline: "Chúng mình sẽ kết hôn",
+      tagline: "Chúng mình sắp cưới",
       openButton: "Mở thiệp",
     },
     story: {

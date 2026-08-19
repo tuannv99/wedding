@@ -4,18 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { coupleShort, wedding } from "@/lib/wedding";
-import { cn, scrollToSection } from "@/lib/utils";
+import { scrollToSection } from "@/lib/utils";
 
 export function Navigation() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Khoá scroll + đóng bằng Escape khi menu mobile mở
   useEffect(() => {
@@ -43,14 +35,8 @@ export function Navigation() {
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-out",
-          scrolled
-            ? "border-b border-taupe/20 bg-ivory/85 backdrop-blur-md"
-            : "border-b border-transparent bg-transparent",
-        )}
-      >
+      {/* Thanh nav luôn có nền + gạch chân như bản design (không đổi theo scroll) */}
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-taupe/20 bg-ivory/85 backdrop-blur-md">
         <nav
           aria-label="Điều hướng chính"
           className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 md:h-20 md:px-10"

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Music2, Pause } from "lucide-react";
 import { wedding } from "@/lib/wedding";
 import { OPEN_INVITATION_EVENT } from "@/lib/events";
 import { cn } from "@/lib/utils";
@@ -86,21 +85,15 @@ export function MusicPlayer() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 3, ease: [0.22, 1, 0.36, 1] }}
+        /* Pill chữ ở góc trái dưới, đúng như bản design */
         className={cn(
-          "fixed right-5 bottom-5 z-50 flex h-12 w-12 items-center justify-center rounded-full border backdrop-blur-md transition-colors duration-700 md:right-8 md:bottom-8",
+          "wd-btn-ghost fixed bottom-5 left-5 z-50 min-h-11 gap-2 px-5 backdrop-blur-md md:bottom-8 md:left-8",
           playing
-            ? "border-ink/30 bg-ivory/90 text-ink"
-            : "border-taupe/30 bg-ivory/70 text-taupe hover:text-ink",
+            ? "border-ink/40 bg-ivory/90"
+            : "border-taupe/50 bg-ivory/75",
         )}
       >
-        {playing ? (
-          <Pause className="h-4 w-4" strokeWidth={1.25} aria-hidden="true" />
-        ) : (
-          <Music2 className="h-4 w-4" strokeWidth={1.25} aria-hidden="true" />
-        )}
-        <span className="sr-only">
-          {playing ? "Đang phát nhạc nền" : "Nhạc nền đang tắt"}
-        </span>
+        Nhạc: {playing ? "Bật" : "Tắt"}
       </motion.button>
     </>
   );
