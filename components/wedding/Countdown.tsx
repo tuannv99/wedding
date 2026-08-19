@@ -59,13 +59,13 @@ export function Countdown() {
     >
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
         <Reveal className="flex flex-col items-center gap-5">
-          <span className="label">Counting down</span>
-          <span aria-hidden="true" className="h-px w-10 bg-champagne" />
+          <span className="wd-eyebrow">Counting down</span>
+          <hr className="wd-rule" />
         </Reveal>
 
         {isOver ? (
           <Reveal delay={0.1} className="mt-14">
-            <p className="font-display text-[clamp(2rem,8vw,3.5rem)] leading-tight tracking-[0.06em] text-ink">
+            <p className="wd-h1 tracking-[0.06em]">
               Today is the day <span className="text-champagne">♡</span>
             </p>
           </Reveal>
@@ -77,12 +77,12 @@ export function Countdown() {
             >
               {UNITS.map(({ key, label }) => (
                 <div key={key} className="flex flex-col items-center gap-3">
-                  <span className="font-display text-[clamp(2.75rem,11vw,4.5rem)] leading-none tracking-[0.04em] text-ink tabular-nums">
+                  <span className="wd-numeral text-[clamp(2.75rem,10vw,4.5rem)] tracking-[0.04em] tabular-nums">
                     {remaining
                       ? String(remaining[key]).padStart(2, "0")
                       : "--"}
                   </span>
-                  <span className="label text-[0.625rem]">{label}</span>
+                  <span className="wd-eyebrow">{label}</span>
                 </div>
               ))}
             </div>

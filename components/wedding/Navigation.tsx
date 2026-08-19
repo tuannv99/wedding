@@ -58,7 +58,7 @@ export function Navigation() {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-display text-sm tracking-[0.32em] text-ink uppercase transition-opacity duration-500 hover:opacity-60 md:text-base"
+            className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.32em] text-ink uppercase transition-opacity duration-500 hover:opacity-60 md:text-base"
           >
             {coupleShort}
           </button>
@@ -69,7 +69,7 @@ export function Navigation() {
                 <button
                   type="button"
                   onClick={() => goTo(item.id)}
-                  className="label transition-colors duration-500 hover:text-ink"
+                  className="wd-nav-link inline-flex min-h-11 items-center transition-colors duration-500"
                 >
                   {item.label}
                 </button>
@@ -128,8 +128,8 @@ export function Navigation() {
               ))}
             </ul>
 
-            <span aria-hidden="true" className="h-px w-10 bg-champagne" />
-            <p className="label">{wedding.date.display}</p>
+            <hr className="wd-rule" />
+            <p className="wd-eyebrow">{wedding.date.display}</p>
           </motion.div>
         ) : null}
       </AnimatePresence>

@@ -128,8 +128,9 @@ export const wedding = {
   ] satisfies GalleryImage[],
 
   music: {
-    /** Đặt file nhạc tại public/audio/wedding-song.mp3. Nếu chưa có, nút nhạc sẽ tự ẩn. */
-    src: "/audio/wedding-song.mp3",
+    /** File nhạc trong public/audio. Nếu file lỗi hoặc thiếu, nút nhạc sẽ tự ẩn. */
+    src: "/audio/mot-doi.mp3",
+    title: "Một Đời",
     /** Bật nhạc khi khách bấm "MỞ THIỆP" (đây là user gesture nên trình duyệt cho phép). */
     startOnOpen: true,
     volume: 0.35,

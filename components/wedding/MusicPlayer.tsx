@@ -77,7 +77,12 @@ export function MusicPlayer() {
         type="button"
         onClick={toggle}
         aria-pressed={playing}
-        aria-label={playing ? "Tắt nhạc nền" : "Bật nhạc nền"}
+        aria-label={
+          playing
+            ? `Tắt nhạc nền: ${wedding.music.title}`
+            : `Bật nhạc nền: ${wedding.music.title}`
+        }
+        title={wedding.music.title}
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 3, ease: [0.22, 1, 0.36, 1] }}

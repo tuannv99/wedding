@@ -25,11 +25,11 @@ export function Closing() {
 
       <div className="flex w-full max-w-2xl flex-col items-center text-center">
         <Reveal>
-          <p className="label text-ink/70">With love</p>
+          <p className="wd-eyebrow text-ink/70">With love</p>
         </Reveal>
 
         <Reveal delay={0.12}>
-          <p className="font-display mt-10 text-[clamp(2.5rem,12vw,5.5rem)] leading-[0.95] tracking-[0.08em] text-ink uppercase">
+          <p className="wd-display mt-10 text-[clamp(2.5rem,11vw,5.5rem)] uppercase">
             {wedding.groom.short}
             <span className="mx-3 text-champagne italic lowercase">&amp;</span>
             {wedding.bride.short}
@@ -38,11 +38,11 @@ export function Closing() {
 
         <Reveal delay={0.24} className="mt-10 flex flex-col items-center gap-8">
           <span aria-hidden="true" className="h-px w-16 bg-ink/25" />
-          <p className="label text-ink/70">{wedding.date.display}</p>
+          <p className="wd-eyebrow text-ink/70">{wedding.date.display}</p>
         </Reveal>
 
         <Reveal delay={0.36}>
-          <p className="font-display mt-14 text-[clamp(1.25rem,4.5vw,1.75rem)] leading-[1.8] whitespace-pre-line text-ink/85">
+          <p className="wd-body-serif mt-14 text-[clamp(1.25rem,4vw,1.75rem)] whitespace-pre-line">
             {"Thank you for being\npart of our story."}
           </p>
         </Reveal>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { cn } from "@/lib/utils";
 
 export function OurStory() {
   const { story } = wedding.images;
@@ -19,17 +20,27 @@ export function OurStory() {
           <SectionHeading label="Chapter one" title="Our Story" align="left" />
 
           <div className="mt-12 flex flex-col gap-8">
-            {wedding.story.map((paragraph, index) => (
-              <Reveal key={paragraph} delay={0.12 + index * 0.12}>
-                <p className="font-display text-[clamp(1.35rem,4.4vw,1.75rem)] leading-[1.7] whitespace-pre-line text-ink/85">
-                  {paragraph}
-                </p>
-              </Reveal>
-            ))}
+            {wedding.story.map((paragraph, index) => {
+              // Câu chốt ("And here we are...") dùng style quote italic
+              const isClosingLine = index === wedding.story.length - 1;
+
+              return (
+                <Reveal key={paragraph} delay={0.12 + index * 0.12}>
+                  <p
+                    className={cn(
+                      "whitespace-pre-line",
+                      isClosingLine ? "wd-quote" : "wd-body-serif",
+                    )}
+                  >
+                    {paragraph}
+                  </p>
+                </Reveal>
+              );
+            })}
           </div>
 
           <Reveal delay={0.5} className="mt-12">
-            <p className="label">
+            <p className="wd-eyebrow">
               {wedding.groom.name} &nbsp;·&nbsp; {wedding.bride.name}
             </p>
           </Reveal>
@@ -48,7 +59,7 @@ export function OurStory() {
                 className="object-cover"
               />
             </div>
-            <figcaption className="label mt-5 text-right">
+            <figcaption className="wd-eyebrow mt-5 text-right">
               Est. {wedding.date.year}
             </figcaption>
           </figure>

@@ -78,7 +78,7 @@ export function Gallery() {
         </div>
 
         <Reveal delay={0.1} className="mt-12 flex justify-center">
-          <p className="label text-center">
+          <p className="wd-eyebrow text-center">
             Chạm vào ảnh để xem lớn · vuốt để chuyển ảnh
           </p>
         </Reveal>

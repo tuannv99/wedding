@@ -118,12 +118,15 @@ components/
     Timeline.tsx        # Our day
     Gallery.tsx         # masonry bất đối xứng
     Lightbox.tsx        # xem ảnh lớn: keyboard + swipe
-    RSVP.tsx
+    RSVP.tsx            # section RSVP: khung + gọi API
+    RsvpForm.tsx        # UI form (export từ Claude Design)
     Closing.tsx
     MusicPlayer.tsx
   ui/
     Reveal.tsx          # fade-up khi scroll, tôn trọng prefers-reduced-motion
     SectionHeading.tsx
+styles/
+  wedding.css           # text + form styles (.wd-*)
 lib/
   wedding.ts            # ⇦ toàn bộ nội dung thiệp
   utils.ts              # cn() + scrollToSection()
@@ -136,17 +139,40 @@ scripts/
 
 ## Design system
 
+Text style + form style nằm trong [`styles/wedding.css`](styles/wedding.css) (export từ Claude Design),
+được import vào `app/globals.css` ở `layer(components)` để utility của Tailwind vẫn ghi đè được:
+
+| Class            | Dùng cho                                 |
+| ---------------- | ---------------------------------------- |
+| `.wd-display`    | Tên cô dâu chú rể (focal point)          |
+| `.wd-h1`         | Heading section, tên nhà hàng            |
+| `.wd-numeral`    | Ngày / tháng / năm, giờ lễ, countdown    |
+| `.wd-body-serif` | Đoạn kể chuyện                           |
+| `.wd-quote`      | Câu nhấn italic ("And here we are...")   |
+| `.wd-eyebrow`    | Nhãn nhỏ trên heading, caption           |
+| `.wd-label`      | Nhãn timeline, thứ trong tuần            |
+| `.wd-body-sm`    | Địa chỉ, ghi chú                         |
+| `.wd-rule`       | Gạch ngang champagne                     |
+| `.wd-form` …     | Form RSVP: input, pill chọn, nút gửi     |
+| `.wd-btn-ghost`  | Nút viền bo tròn (Mở thiệp, Xem bản đồ)  |
+
 | Token       | Màu       | Dùng cho                  |
 | ----------- | --------- | ------------------------- |
 | `ivory`     | `#F9F7F2` | background chính          |
 | `warm`      | `#FFFDFC` | background section xen kẽ |
 | `ink`       | `#3D3935` | text chính                |
+| `ink-soft`  | `#6E6862` | text phụ                  |
 | `taupe`     | `#A99F95` | text phụ, hairline        |
 | `sage`      | `#AAB2A3` | accent                    |
 | `champagne` | `#D8C5A5` | accent (dấu &, gạch nhỏ)  |
 
-Typography: **Cormorant Garamond** (heading, tên cô dâu chú rể) + **Manrope** (body).
-Cả hai đều nạp subset `vietnamese` nên dấu tiếng Việt hiển thị đúng.
+Typography: **Cormorant Garamond** (heading, tên cô dâu chú rể) + **Manrope** (body), nạp bằng
+`next/font` với subset `vietnamese`.
+
+> File export gốc ghi body font là DM Sans, nhưng DM Sans trên Google Fonts chỉ có subset
+> `latin` + `latin-ext` — thiếu khoảng `U+1EA0–1EF1` của tiếng Việt (ạ, ế, ộ, ừ…), nên chữ có dấu
+> sẽ rơi về font hệ thống. Vì vậy `--wd-font-body` được map sang Manrope. Muốn dùng đúng DM Sans
+> thì phải self-host bản có dựng thêm glyph tiếng Việt.
 
 Animation: chỉ `opacity` + `translateY` nhỏ, `duration` 0.8–1.2s, ease-out.
 Có `prefers-reduced-motion` cho mọi animation và cho smooth scroll.

@@ -61,7 +61,7 @@ export function Hero() {
       </motion.div>
 
       <div className="flex w-full max-w-3xl flex-col items-center text-center">
-        <motion.p {...rise(0.4)} className="label text-ink/70">
+        <motion.p {...rise(0.4)} className="wd-eyebrow text-ink/70">
           {wedding.date.display}
         </motion.p>
 
@@ -78,7 +78,7 @@ export function Hero() {
 
           <motion.span
             {...rise(0.85, 24)}
-            className="font-display block text-[clamp(3.25rem,17vw,9rem)] leading-[0.95] tracking-[0.08em] text-ink uppercase"
+            className="wd-display block uppercase"
           >
             {wedding.groom.short}
           </motion.span>
@@ -98,7 +98,7 @@ export function Hero() {
 
           <motion.span
             {...rise(1.6, 24)}
-            className="font-display block text-[clamp(3.25rem,17vw,9rem)] leading-[0.95] tracking-[0.08em] text-ink uppercase"
+            className="wd-display block uppercase"
           >
             {wedding.bride.short}
           </motion.span>
@@ -106,13 +106,13 @@ export function Hero() {
 
         <motion.p
           {...rise(2.1)}
-          className="label mt-10 text-ink/60 md:mt-12"
+          className="wd-eyebrow mt-10 text-ink/60 md:mt-12"
         >
           We are getting married
         </motion.p>
 
         <motion.div {...rise(2.45)} className="mt-12 md:mt-14">
-          <button type="button" onClick={handleOpen} className="btn-outline">
+          <button type="button" onClick={handleOpen} className="wd-btn-ghost">
             Mở thiệp
           </button>
         </motion.div>

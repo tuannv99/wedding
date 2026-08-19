@@ -2,10 +2,10 @@ import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
 
 type SectionHeadingProps = {
-  /** Nhãn nhỏ phía trên (uppercase, letter-spacing rộng). */
+  /** Nhãn nhỏ phía trên (.wd-eyebrow). */
   label?: string;
   title: string;
-  /** Gạch ngang champagne dưới tiêu đề. */
+  /** Gạch ngang champagne (.wd-rule) dưới tiêu đề. */
   rule?: boolean;
   align?: "left" | "center";
   className?: string;
@@ -28,13 +28,9 @@ export function SectionHeading({
         className,
       )}
     >
-      {label ? <span className="label">{label}</span> : null}
-      <h2 className="text-[clamp(2rem,6.5vw,3.5rem)] tracking-[0.16em] uppercase">
-        {title}
-      </h2>
-      {rule ? (
-        <span aria-hidden="true" className="block h-px w-14 bg-champagne" />
-      ) : null}
+      {label ? <span className="wd-eyebrow">{label}</span> : null}
+      <h2 className="wd-h1 tracking-[0.16em] uppercase">{title}</h2>
+      {rule ? <hr className="wd-rule" /> : null}
     </Reveal>
   );
 }

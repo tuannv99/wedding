@@ -23,7 +23,7 @@ export function Timeline() {
                 <li className="relative grid grid-cols-[4.5rem_1px_1fr] items-stretch gap-x-6 sm:grid-cols-[7rem_1px_1fr] sm:gap-x-10">
                   <span
                     className={cn(
-                      "font-display pt-1 text-right text-xl leading-none tracking-[0.1em] text-taupe sm:text-2xl",
+                      "wd-label pt-2 text-right text-taupe",
                       isLast ? "pb-0" : "pb-14 sm:pb-16",
                     )}
                   >
@@ -43,7 +43,7 @@ export function Timeline() {
 
                   <span
                     className={cn(
-                      "font-display -mt-1 text-[clamp(1.5rem,5.5vw,2.25rem)] leading-tight tracking-[0.06em] text-ink",
+                      "wd-h1 -mt-2 text-[clamp(1.5rem,5vw,2.25rem)] tracking-[0.04em]",
                       isLast ? "pb-0" : "pb-14 sm:pb-16",
                     )}
                   >
