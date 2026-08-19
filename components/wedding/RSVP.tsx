@@ -1,5 +1,6 @@
 "use client";
 
+import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import RsvpForm, { type RsvpData } from "@/components/wedding/RsvpForm";
 
@@ -7,6 +8,9 @@ import RsvpForm, { type RsvpData } from "@/components/wedding/RsvpForm";
  * Section RSVP: chỉ lo phần khung + gọi API.
  * Toàn bộ giao diện form nằm trong RsvpForm (export từ Claude Design),
  * nên sau này đổi thiết kế form không phải đụng tới chỗ gọi API.
+ *
+ * Spacing theo spec: padding clamp(84px,13vh,168px) / clamp(24px,6vw,120px),
+ * nền warm white, viền trên dưới 1px taupe 20%, khung form rộng tối đa 620px.
  */
 export function RSVP() {
   async function handleSubmit(data: RsvpData) {
@@ -26,17 +30,17 @@ export function RSVP() {
   }
 
   return (
-    <section id="rsvp" className="w-full bg-warm px-6 py-28 md:px-10 md:py-40">
-      <div className="mx-auto w-full max-w-xl">
+    <section
+      id="rsvp"
+      className="w-full border-y border-taupe/20 bg-warm px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
+    >
+      <div className="mx-auto w-full max-w-[620px]">
         <Reveal>
           <RsvpForm
-            title={"WE WOULD LOVE\nTO SEE YOU"}
-            submitLabel="Xác nhận"
-            successTitle="Thank you ♡"
-            successBody={
-              "Sự hiện diện của bạn\nlà món quà tuyệt vời\nđối với chúng mình."
-            }
-            note="Vui lòng xác nhận trước ngày 10.09.2026 để gia đình chuẩn bị chu đáo nhất."
+            title={wedding.copy.rsvp.title}
+            submitLabel={wedding.copy.rsvp.submitLabel}
+            successTitle={wedding.copy.rsvp.successTitle}
+            successBody={wedding.copy.rsvp.successBody}
             onSubmit={handleSubmit}
           />
         </Reveal>

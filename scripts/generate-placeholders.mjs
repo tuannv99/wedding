@@ -152,16 +152,19 @@ async function main() {
     [
       "# Nhạc nền",
       "",
-      "Đặt file nhạc tại `public/audio/wedding-song.mp3`.",
+      "Tên file cấu hình trong `lib/wedding.ts` (`wedding.music.src`).",
       "",
-      "- Tên file được cấu hình trong `lib/wedding.ts` (`wedding.music.src`).",
-      "- Nếu chưa có file, nút nhạc ở góc phải sẽ tự động ẩn.",
-      "- Nên dùng bản mp3 nhẹ (< 3MB) và có bản quyền hợp lệ.",
+      "- Nếu file lỗi hoặc chưa có, nút nhạc ở góc phải sẽ tự động ẩn.",
+      "- Nên nén xuống dưới ~4MB (128 kbps) cho khách dùng 3G/4G.",
+      "- Nhớ dùng bản nhạc có bản quyền hợp lệ.",
       "",
     ].join("\n"),
-    "utf8",
+    // "wx": không ghi đè nếu file đã có (tránh xoá ghi chú bạn tự sửa)
+    { encoding: "utf8", flag: "wx" },
+  ).then(
+    () => console.log("✓ public/audio/README.md"),
+    () => console.log("· public/audio/README.md đã có, bỏ qua"),
   );
-  console.log("✓ public/audio/README.md");
 }
 
 main().catch((error) => {

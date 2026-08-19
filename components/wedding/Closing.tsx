@@ -25,7 +25,7 @@ export function Closing() {
 
       <div className="flex w-full max-w-2xl flex-col items-center text-center">
         <Reveal>
-          <p className="wd-eyebrow text-ink/70">With love</p>
+          <p className="wd-eyebrow text-ink/70">{wedding.copy.closing.eyebrow}</p>
         </Reveal>
 
         <Reveal delay={0.12}>
@@ -43,7 +43,7 @@ export function Closing() {
 
         <Reveal delay={0.36}>
           <p className="wd-body-serif mt-14 text-[clamp(1.25rem,4vw,1.75rem)] whitespace-pre-line">
-            {"Thank you for being\npart of our story."}
+            {wedding.copy.closing.thanks}
           </p>
         </Reveal>
 

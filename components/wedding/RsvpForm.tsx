@@ -32,7 +32,8 @@ export default function RsvpForm({
   const reduceMotion = useReducedMotion();
   const [data, setData] = useState<RsvpData>({
     name: "",
-    attending: null,
+    // Mặc định chọn sẵn "Có, tôi sẽ đến" như trong spec (pill đầu aria-pressed="true")
+    attending: "yes",
     guests: 1,
     note: "",
   });
@@ -88,7 +89,11 @@ export default function RsvpForm({
         <hr className="wd-rule" style={{ margin: "32px auto" }} />
         <p
           className="wd-body-serif"
-          style={{ whiteSpace: "pre-line", fontSize: "clamp(20px, 2.4vw, 27px)" }}
+          style={{
+            whiteSpace: "pre-line",
+            fontSize: "clamp(20px, 2.4vw, 27px)",
+            lineHeight: 1.7,
+          }}
         >
           {successBody}
         </p>
@@ -183,7 +188,7 @@ export default function RsvpForm({
           className="wd-btn"
           type="submit"
           disabled={sending}
-          style={{ justifySelf: "center", minWidth: 240 }}
+          style={{ marginTop: 10 }}
         >
           {sending ? "Đang gửi…" : submitLabel}
         </button>

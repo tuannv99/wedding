@@ -43,9 +43,15 @@ wedding = {
   timeline,            // lịch trình "Our day"
   images, gallery,     // đường dẫn + tỉ lệ ảnh
   music,               // file nhạc, âm lượng, có bật khi "Mở thiệp" hay không
-  nav, site,           // menu + metadata SEO/Open Graph
+  nav,                 // menu
+  copy,                // TOÀN BỘ chữ hiển thị trên trang (tiếng Việt)
+  site,                // metadata SEO/Open Graph
 }
 ```
+
+`copy` gom hết chữ của từng section (`hero`, `story`, `details`, `countdown`, `timeline`,
+`gallery`, `rsvp`, `closing`) — sửa câu chữ chỉ cần vào đây, không phải mở component.
+Các nhãn nhỏ được CSS tự viết hoa nên trong config cứ ghi chữ thường.
 
 Cần sửa trước khi gửi thiệp:
 
@@ -75,10 +81,13 @@ Nếu đổi tỉ lệ, cập nhật `width`/`height` tương ứng trong `lib/w
 
 ## Nhạc nền
 
-Đặt file `public/audio/wedding-song.mp3` (tên cấu hình ở `wedding.music.src`).
+File nhạc đặt trong `public/audio/`, tên khai báo ở `wedding.music.src` (đang dùng `mot-doi.mp3`).
 Nhạc **không** tự phát khi load (trình duyệt chặn autoplay) — chỉ phát khi khách bấm
 nút nhạc ở góc phải, hoặc bấm **MỞ THIỆP** ở hero (`wedding.music.startOnOpen`).
 Chưa có file thì nút nhạc tự ẩn.
+
+> File hiện tại nặng ~13MB. Nên nén xuống ~3–4MB (mp3 128 kbps) trước khi gửi thiệp:
+> khách mở bằng 3G/4G sẽ đỡ tốn dung lượng, và repo Git cũng không phình theo mỗi lần đổi nhạc.
 
 ---
 

@@ -99,7 +99,7 @@ export function MusicPlayer() {
           <Music2 className="h-4 w-4" strokeWidth={1.25} aria-hidden="true" />
         )}
         <span className="sr-only">
-          {playing ? "Music on" : "Music off"}
+          {playing ? "Đang phát nhạc nền" : "Nhạc nền đang tắt"}
         </span>
       </motion.button>
     </>

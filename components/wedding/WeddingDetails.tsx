@@ -12,7 +12,11 @@ export function WeddingDetails() {
       className="w-full bg-warm px-6 py-28 md:px-10 md:py-40"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
-        <SectionHeading label="Save the date" title="The Wedding" rule={false} />
+        <SectionHeading
+          label={wedding.copy.details.eyebrow}
+          title={wedding.copy.details.title}
+          rule={false}
+        />
 
         {/* Ngày cưới dạng editorial: 20 / 09 / 2026 */}
         <Reveal delay={0.15} className="mt-16 md:mt-20">
@@ -51,7 +55,7 @@ export function WeddingDetails() {
         {/* Venue */}
         <Reveal delay={0.2} className="mt-20 flex w-full flex-col items-center md:mt-28">
           <span aria-hidden="true" className="mb-14 h-px w-full max-w-xs bg-taupe/30" />
-          <span className="wd-eyebrow">Venue</span>
+          <span className="wd-eyebrow">{wedding.copy.details.venueLabel}</span>
           <p className="wd-h1 mt-6 text-[clamp(1.75rem,5vw,2.75rem)] tracking-[0.08em]">
             {venue.name}
           </p>
@@ -64,7 +68,7 @@ export function WeddingDetails() {
             className="wd-btn-ghost mt-10 gap-3"
           >
             <MapPin className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
-            Xem bản đồ
+            {wedding.copy.details.mapsLabel}
           </a>
         </Reveal>
       </div>

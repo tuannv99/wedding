@@ -10,7 +10,10 @@ export function Timeline() {
       className="w-full bg-warm px-6 py-28 md:px-10 md:py-40"
     >
       <div className="mx-auto w-full max-w-3xl">
-        <SectionHeading label="Chương trình" title="Our Day" />
+        <SectionHeading
+          label={wedding.copy.timeline.eyebrow}
+          title={wedding.copy.timeline.title}
+        />
 
         <ol className="mt-20 md:mt-24">
           {wedding.timeline.map((item, index) => {

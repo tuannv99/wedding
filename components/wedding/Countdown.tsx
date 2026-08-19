@@ -12,10 +12,10 @@ type Remaining = {
 };
 
 const UNITS: { key: keyof Remaining; label: string }[] = [
-  { key: "days", label: "Days" },
-  { key: "hours", label: "Hours" },
-  { key: "minutes", label: "Minutes" },
-  { key: "seconds", label: "Seconds" },
+  { key: "days", label: wedding.copy.countdown.units.days },
+  { key: "hours", label: wedding.copy.countdown.units.hours },
+  { key: "minutes", label: wedding.copy.countdown.units.minutes },
+  { key: "seconds", label: wedding.copy.countdown.units.seconds },
 ];
 
 const TARGET = new Date(wedding.date.target).getTime();
@@ -59,14 +59,15 @@ export function Countdown() {
     >
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
         <Reveal className="flex flex-col items-center gap-5">
-          <span className="wd-eyebrow">Counting down</span>
+          <span className="wd-eyebrow">{wedding.copy.countdown.eyebrow}</span>
           <hr className="wd-rule" />
         </Reveal>
 
         {isOver ? (
           <Reveal delay={0.1} className="mt-14">
             <p className="wd-h1 tracking-[0.06em]">
-              Today is the day <span className="text-champagne">♡</span>
+              {wedding.copy.countdown.finished}{" "}
+              <span className="text-champagne">♡</span>
             </p>
           </Reveal>
         ) : (

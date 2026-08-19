@@ -39,11 +39,11 @@ export const wedding = {
   },
 
   ceremony: {
-    label: "CEREMONY",
+    label: "Lễ thành hôn",
     time: "18:00",
   },
   reception: {
-    label: "RECEPTION",
+    label: "Tiệc cưới",
     time: "18:30",
   },
 
@@ -57,14 +57,14 @@ export const wedding = {
   story: [
     "Một ngày bình thường,\nchúng mình gặp nhau.",
     "Rồi từ những điều rất nhỏ,\nchúng mình quyết định\nđi cùng nhau thật lâu.",
-    "And here we are...",
+    "Và rồi, chúng mình ở đây...",
   ],
 
   timeline: [
     { time: "17:30", title: "Đón khách" },
     { time: "18:00", title: "Lễ thành hôn" },
     { time: "18:30", title: "Tiệc cưới" },
-    { time: "21:00", title: "Cheers & Celebration" },
+    { time: "21:00", title: "Nâng ly chúc mừng" },
   ] satisfies TimelineItem[],
 
   images: {
@@ -137,11 +137,63 @@ export const wedding = {
   },
 
   nav: [
-    { label: "OUR STORY", id: "our-story" },
-    { label: "THE WEDDING", id: "the-wedding" },
-    { label: "GALLERY", id: "gallery" },
-    { label: "RSVP", id: "rsvp" },
+    { label: "Chuyện chúng mình", id: "our-story" },
+    { label: "Ngày cưới", id: "the-wedding" },
+    { label: "Ảnh cưới", id: "gallery" },
+    { label: "Xác nhận", id: "rsvp" },
   ],
+
+  /**
+   * Toàn bộ chữ hiển thị trên trang.
+   * Các nhãn nhỏ (eyebrow, label, nút) được CSS tự viết hoa, nên ở đây cứ ghi thường.
+   */
+  copy: {
+    hero: {
+      tagline: "Chúng mình sẽ kết hôn",
+      openButton: "Mở thiệp",
+    },
+    story: {
+      eyebrow: "Chương một",
+      title: "Chuyện chúng mình",
+      caption: "Năm 2026",
+    },
+    details: {
+      eyebrow: "Lưu lại ngày này",
+      title: "Ngày cưới",
+      venueLabel: "Địa điểm",
+      mapsLabel: "Xem bản đồ",
+    },
+    countdown: {
+      eyebrow: "Đếm ngược",
+      units: {
+        days: "Ngày",
+        hours: "Giờ",
+        minutes: "Phút",
+        seconds: "Giây",
+      },
+      finished: "Hôm nay là ngày ấy",
+    },
+    timeline: {
+      eyebrow: "Chương trình",
+      title: "Ngày vui",
+    },
+    gallery: {
+      eyebrow: "Khoảnh khắc",
+      title: "Ảnh cưới",
+      hint: "Chạm vào ảnh để xem lớn · vuốt để chuyển ảnh",
+    },
+    rsvp: {
+      title: "RẤT MONG\nĐƯỢC GẶP BẠN",
+      submitLabel: "Xác nhận",
+      successTitle: "Cảm ơn bạn ♡",
+      successBody:
+        "Sự hiện diện của bạn\nlà món quà tuyệt vời\nđối với chúng mình.",
+    },
+    closing: {
+      eyebrow: "Thương mến",
+      thanks: "Cảm ơn bạn đã là một phần\ntrong câu chuyện của chúng mình.",
+    },
+  },
 
   site: {
     url: "https://wedding-tuan-hoa.vercel.app",

@@ -58,7 +58,7 @@ export function Navigation() {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.32em] text-ink uppercase transition-opacity duration-500 hover:opacity-60 md:text-base"
+            className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase transition-opacity duration-500 hover:opacity-60 md:text-base md:tracking-[0.32em]"
           >
             {coupleShort}
           </button>
@@ -120,7 +120,7 @@ export function Navigation() {
                   <button
                     type="button"
                     onClick={() => goTo(item.id)}
-                    className="font-display text-2xl tracking-[0.2em] text-ink uppercase"
+                    className="font-display text-center text-xl tracking-[0.14em] text-ink uppercase"
                   >
                     {item.label}
                   </button>

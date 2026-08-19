@@ -17,7 +17,11 @@ export function OurStory() {
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 lg:grid-cols-[1fr_1.15fr] lg:gap-20">
         {/* Text */}
         <div className="flex min-w-0 flex-col lg:pr-4">
-          <SectionHeading label="Chapter one" title="Our Story" align="left" />
+          <SectionHeading
+            label={wedding.copy.story.eyebrow}
+            title={wedding.copy.story.title}
+            align="left"
+          />
 
           <div className="mt-12 flex flex-col gap-8">
             {wedding.story.map((paragraph, index) => {
@@ -60,7 +64,7 @@ export function OurStory() {
               />
             </div>
             <figcaption className="wd-eyebrow mt-5 text-right">
-              Est. {wedding.date.year}
+              {wedding.copy.story.caption}
             </figcaption>
           </figure>
         </Reveal>

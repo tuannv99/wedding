@@ -39,7 +39,11 @@ export function Gallery() {
       className="w-full bg-ivory px-4 py-28 sm:px-6 md:px-10 md:py-40"
     >
       <div className="mx-auto w-full max-w-6xl">
-        <SectionHeading label="Moments" title="Gallery" className="px-2" />
+        <SectionHeading
+          label={wedding.copy.gallery.eyebrow}
+          title={wedding.copy.gallery.title}
+          className="px-2"
+        />
 
         <div className="mt-16 grid grid-cols-2 gap-3 sm:mt-20 sm:auto-rows-[clamp(8rem,14vw,14rem)] sm:grid-cols-6 sm:gap-4">
           {wedding.gallery.map((image, index) => {
@@ -79,7 +83,7 @@ export function Gallery() {
 
         <Reveal delay={0.1} className="mt-12 flex justify-center">
           <p className="wd-eyebrow text-center">
-            Chạm vào ảnh để xem lớn · vuốt để chuyển ảnh
+            {wedding.copy.gallery.hint}
           </p>
         </Reveal>
       </div>

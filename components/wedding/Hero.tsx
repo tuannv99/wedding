@@ -108,12 +108,12 @@ export function Hero() {
           {...rise(2.1)}
           className="wd-eyebrow mt-10 text-ink/60 md:mt-12"
         >
-          We are getting married
+          {wedding.copy.hero.tagline}
         </motion.p>
 
         <motion.div {...rise(2.45)} className="mt-12 md:mt-14">
           <button type="button" onClick={handleOpen} className="wd-btn-ghost">
-            Mở thiệp
+            {wedding.copy.hero.openButton}
           </button>
         </motion.div>
       </div>
