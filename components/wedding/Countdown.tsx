@@ -72,18 +72,27 @@ export function Countdown() {
           </Reveal>
         ) : (
           <Reveal delay={0.1} className="mt-14 flex w-full flex-col items-center md:mt-16">
+            {/*
+              Luôn 4 cột, kể cả mobile — khách xem trên điện thoại vẫn thấy
+              ngày/giờ/phút/giây trên cùng một dòng.
+              Để vừa màn hẹp: gap 24px, số hạ min xuống 2.5rem
+              (mốc này chỉ ăn dưới 400px nên desktop không đổi), và nhãn thu
+              letter-spacing lại vì 0.4em làm chữ "NGÀY" rộng hơn cả con số.
+            */}
             <div
-              className="grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-4 sm:gap-x-12 md:gap-x-16"
+              className="grid grid-cols-4 gap-x-6 sm:gap-x-12 md:gap-x-16"
               aria-live="off"
             >
               {UNITS.map(({ key, label }) => (
-                <div key={key} className="flex flex-col items-center gap-3">
-                  <span className="wd-numeral text-[clamp(2.75rem,10vw,4.5rem)] tracking-[0.04em] tabular-nums">
+                <div key={key} className="flex min-w-0 flex-col items-center gap-3">
+                  <span className="wd-numeral whitespace-nowrap text-[clamp(2.5rem,10vw,4.5rem)] tracking-[0.04em] tabular-nums">
                     {remaining
                       ? String(remaining[key]).padStart(2, "0")
                       : "--"}
                   </span>
-                  <span className="wd-eyebrow">{label}</span>
+                  <span className="wd-eyebrow tracking-[0.18em] sm:tracking-[0.4em]">
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>
