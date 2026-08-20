@@ -1,93 +1,118 @@
 import Image from "next/image";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/utils";
 
-export function OurStory() {
-  const { story } = wedding.images;
-
+/** Gạch ngang — ♡ — gạch ngang, dùng dưới heading và giữa các mốc. */
+function HeartRule({ className }: { className?: string }) {
   return (
-    <section
-      id="our-story"
-      className="w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
+    <div
+      aria-hidden="true"
+      className={cn("flex items-center justify-center gap-4", className)}
     >
-      {/* 2 cột lệch tỉ lệ (text hẹp hơn ảnh) cho cảm giác editorial.
-          Dùng 2 cột thay vì grid 12 cột: gap chỉ tính 1 lần nên không bao giờ tràn ngang. */}
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 lg:grid-cols-[1fr_1.15fr] lg:gap-20">
-        {/* Text */}
-        <div className="flex min-w-0 flex-col lg:pr-4">
-          <SectionHeading
-            label={wedding.copy.story.eyebrow}
-            title={wedding.copy.story.title}
-            align="left"
-          />
+      <span className="h-px w-14 bg-champagne/60 sm:w-20" />
+      <span className="text-[11px] leading-none text-champagne">♡</span>
+      <span className="h-px w-14 bg-champagne/60 sm:w-20" />
+    </div>
+  );
+}
 
-          {/* Timeline nhỏ cho các mốc trong câu chuyện — cùng ngôn ngữ thị giác
-              với "Ngày vui" phía dưới (số thứ tự + đường kẻ + điểm mốc),
-              chỉ đổi điểm mốc thành hình tim cho đúng tinh thần "our story". */}
-          <div className="mt-12 flex flex-col">
-            {wedding.story.map((paragraph, index) => {
-              const isLast = index === wedding.story.length - 1;
+export function OurStory() {
+  return (
+    <section id="our-story" className="w-full bg-ivory px-5 py-24 sm:px-6 md:py-32">
+      <div className="mx-auto w-full max-w-4xl">
+        <Reveal className="flex flex-col items-center">
+          <h2 className="wd-h1 text-center tracking-[0.16em] uppercase">
+            {wedding.copy.story.title}
+          </h2>
+          <HeartRule className="mt-6" />
+        </Reveal>
 
-              return (
-                <Reveal key={paragraph} delay={0.12 + index * 0.12}>
-                  <div className="relative grid grid-cols-[1.75rem_1px_1fr] items-stretch gap-x-5">
-                    <span className="wd-mono pt-1 text-right text-taupe">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+        <div className="mt-14 flex flex-col md:mt-16">
+          {wedding.story.map((step, index) => {
+            // Mốc chẵn (02) đảo ảnh sang trái để bố cục so le
+            const photoFirst = index % 2 === 1;
 
-                    <span
-                      aria-hidden="true"
+            return (
+              <div key={step.image.src}>
+                {index > 0 ? <HeartRule className="my-10 md:my-14" /> : null}
+
+                <Reveal delay={0.1} y={20}>
+                  <div className="grid grid-cols-[1fr_1.2fr] items-center gap-5 sm:gap-8 md:gap-12">
+                    {/* Số thứ tự + đường kẻ + chữ.
+                        Ở desktop kéo khối chữ về sát ảnh cho cặp trái/phải cân nhau. */}
+                    <div
                       className={cn(
-                        "relative w-px bg-taupe/25",
-                        isLast && "h-6",
+                        "min-w-0 md:max-w-[360px]",
+                        photoFirst
+                          ? "order-2 md:justify-self-start"
+                          : "md:justify-self-end",
                       )}
                     >
-                      <span className="absolute -top-1 -left-[7px] text-[13px] leading-none text-champagne">
-                        ♡
+                      <span className="font-display block text-[clamp(1.5rem,6.5vw,2.25rem)] leading-none tracking-[0.14em] text-champagne">
+                        {String(index + 1).padStart(2, "0")}
                       </span>
-                    </span>
 
-                    <p
+                      <div className="mt-4 grid grid-cols-[1px_1fr] gap-x-4 sm:gap-x-5">
+                        <span
+                          aria-hidden="true"
+                          className="relative w-px bg-champagne/45"
+                        >
+                          <span className="absolute top-2 -left-[2.5px] h-1.5 w-1.5 rounded-full bg-champagne" />
+                        </span>
+
+                        <p className="wd-body-serif text-[clamp(1.3rem,5.6vw,1.75rem)] leading-[1.55] whitespace-pre-line">
+                          {step.text}
+                          {step.emphasis ? (
+                            <>
+                              {"\n"}
+                              <span className="wd-quote text-[0.92em]">
+                                {step.emphasis}
+                              </span>
+                            </>
+                          ) : null}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Ảnh: khung viền mảnh, bo góc.
+                        Giới hạn bề rộng ở desktop để ảnh không lấn hết section. */}
+                    <div
                       className={cn(
-                        "whitespace-pre-line",
-                        isLast ? "wd-quote" : "wd-body-serif",
-                        isLast ? "pb-0" : "pb-10",
+                        "min-w-0 md:w-full md:max-w-[360px]",
+                        photoFirst ? "order-1 md:mr-auto" : "md:ml-auto",
                       )}
                     >
-                      {paragraph}
-                    </p>
+                      <div className="rounded-xl border border-champagne/45 bg-warm p-1.5">
+                        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-ivory">
+                          <Image
+                            src={step.image.src}
+                            alt={step.image.alt}
+                            fill
+                            loading="lazy"
+                            sizes="(max-width: 640px) 55vw, (max-width: 768px) 50vw, 420px"
+                            className="object-cover"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </Reveal>
-              );
-            })}
-          </div>
-
-          <Reveal delay={0.5} className="mt-12">
-            <p className="wd-eyebrow">
-              {wedding.groom.name} &nbsp;·&nbsp; {wedding.bride.name}
-            </p>
-          </Reveal>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Ảnh */}
-        <Reveal delay={0.2} className="mx-auto w-full max-w-md min-w-0 lg:max-w-none">
-          <figure className="relative">
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-warm">
-              <Image
-                src={story.src}
-                alt={story.alt}
-                fill
-                loading="lazy"
-                sizes="(max-width: 1024px) 100vw, 45vw"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="wd-eyebrow mt-5 text-right">
-              {wedding.copy.story.caption}
-            </figcaption>
-          </figure>
+        {/* Chữ ký: — VĂN TUẤN · MAI HOA — */}
+        <Reveal
+          delay={0.15}
+          className="mt-14 flex items-center justify-center gap-5 md:mt-16"
+        >
+          <span aria-hidden="true" className="h-px w-10 bg-champagne/60 sm:w-16" />
+          <p className="wd-eyebrow text-champagne">
+            {wedding.groom.name} · {wedding.bride.name}
+          </p>
+          <span aria-hidden="true" className="h-px w-10 bg-champagne/60 sm:w-16" />
         </Reveal>
       </div>
     </section>

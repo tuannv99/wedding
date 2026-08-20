@@ -16,6 +16,14 @@ export type TimelineItem = {
   title: string;
 };
 
+export type StoryStep = {
+  /** Phần chữ chính. Dùng \n để tự ngắt dòng theo ý muốn. */
+  text: string;
+  /** Phần chữ nhấn ở cuối (in nghiêng, màu taupe). Có thể bỏ trống. */
+  emphasis?: string;
+  image: GalleryImage;
+};
+
 export const wedding = {
   groom: {
     name: "Văn Tuấn",
@@ -81,11 +89,37 @@ export const wedding = {
     },
   },
 
+  /** Mỗi mốc trong câu chuyện đi kèm một ảnh riêng, bố trí so le trái/phải. */
   story: [
-    "Một ngày bình thường,\nchúng mình gặp nhau.",
-    "Rồi từ những điều rất nhỏ,\nchúng mình quyết định\nđi cùng nhau thật lâu.",
-    "Và rồi, chúng mình ở đây...",
-  ],
+    {
+      text: "Một ngày bình thường,\nchúng mình gặp nhau.",
+      image: {
+        src: "/images/wedding/story-01.jpg",
+        alt: "Tuấn và Hoa trong lần chụp ảnh cưới đầu tiên",
+        width: 1200,
+        height: 1500,
+      },
+    },
+    {
+      text: "Rồi từ những điều rất nhỏ,\nchúng mình quyết định\nđi cùng nhau thật lâu.",
+      image: {
+        src: "/images/wedding/story-02.jpg",
+        alt: "Tuấn bế Hoa trong sân vườn",
+        width: 1200,
+        height: 1500,
+      },
+    },
+    {
+      text: "Và rồi,\nchúng mình",
+      emphasis: "ở đây...",
+      image: {
+        src: "/images/wedding/story-03.jpg",
+        alt: "Tuấn và Hoa nắm tay nhau bước đi",
+        width: 1200,
+        height: 1500,
+      },
+    },
+  ] satisfies StoryStep[],
 
   timeline: [
     { time: "10:45", title: "Đón khách" },
@@ -100,12 +134,6 @@ export const wedding = {
       alt: "Văn Tuấn và Mai Hoa trong bộ ảnh cưới",
       width: 1600,
       height: 2000,
-    },
-    story: {
-      src: "/images/wedding/story.jpg",
-      alt: "Tuấn và Hoa nắm tay nhau",
-      width: 1200,
-      height: 1500,
     },
     closing: {
       src: "/images/wedding/closing.jpg",
@@ -180,9 +208,7 @@ export const wedding = {
       openButton: "Mở thiệp",
     },
     story: {
-      eyebrow: "Chương một",
       title: "Chuyện chúng mình",
-      caption: "Năm 2026",
     },
     details: {
       eyebrow: "Lưu lại ngày này",

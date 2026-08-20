@@ -85,7 +85,9 @@ function svg({ width, height, label, tone }) {
 
 const IMAGES = [
   { file: "hero.jpg", width: 1600, height: 2000, label: "Ảnh bìa · ảnh cưới tràn viền", tone: TONES[0] },
-  { file: "story.jpg", width: 1200, height: 1500, label: "Chuyện chúng mình · 4:5", tone: TONES[1] },
+  { file: "story-01.jpg", width: 1200, height: 1500, label: "Chuyện chúng mình 01 · 4:5", tone: TONES[1] },
+  { file: "story-02.jpg", width: 1200, height: 1500, label: "Chuyện chúng mình 02 · 4:5", tone: TONES[3] },
+  { file: "story-03.jpg", width: 1200, height: 1500, label: "Chuyện chúng mình 03 · 4:5", tone: TONES[2] },
   { file: "closing.jpg", width: 1800, height: 1200, label: "Ảnh kết · 3:2", tone: TONES[2] },
   { file: "gallery-01.jpg", width: 1200, height: 1500, label: "Ảnh cưới 01 · 4:5", tone: TONES[3] },
   { file: "gallery-02.jpg", width: 1200, height: 1200, label: "Ảnh cưới 02 · 1:1", tone: TONES[0] },

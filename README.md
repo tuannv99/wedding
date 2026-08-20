@@ -39,7 +39,7 @@ wedding = {
   date,                // ngày cưới + mốc countdown (ISO có timezone +07:00)
   ceremony, reception,  // giờ lễ / giờ tiệc
   venues,              // venues.bride, venues.groom — tên, địa chỉ, link + embed Google Maps ← đang là placeholder
-  story,               // các đoạn text "Our story"
+  story,               // các mốc "Chuyện chúng mình": chữ + ảnh riêng từng mốc
   timeline,            // lịch trình "Our day"
   images, gallery,     // đường dẫn + tỉ lệ ảnh
   music,               // file nhạc, âm lượng, có bật khi "Mở thiệp" hay không
@@ -67,7 +67,7 @@ Cần sửa trước khi gửi thiệp:
 | File                    | Vị trí dùng      | Tỉ lệ nên dùng |
 | ----------------------- | ---------------- | -------------- |
 | `hero.jpg`              | Section 01 Hero  | 4:5 (dọc)      |
-| `story.jpg`             | Our Story        | 4:5 (dọc)      |
+| `story-01/02/03.jpg`    | Chuyện chúng mình — 1 ảnh cho mỗi mốc | 4:5 (dọc) |
 | `gallery-01.jpg`        | Gallery — ảnh to | 4:5            |
 | `gallery-02/03.jpg`     | Gallery — 2 ảnh nhỏ | 1:1         |
 | `gallery-04.jpg`        | Gallery          | 3:4            |
