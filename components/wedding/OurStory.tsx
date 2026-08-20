@@ -23,21 +23,42 @@ export function OurStory() {
             align="left"
           />
 
-          <div className="mt-12 flex flex-col gap-8">
+          {/* Timeline nhỏ cho các mốc trong câu chuyện — cùng ngôn ngữ thị giác
+              với "Ngày vui" phía dưới (số thứ tự + đường kẻ + điểm mốc),
+              chỉ đổi điểm mốc thành hình tim cho đúng tinh thần "our story". */}
+          <div className="mt-12 flex flex-col">
             {wedding.story.map((paragraph, index) => {
-              // Câu chốt ("And here we are...") dùng style quote italic
-              const isClosingLine = index === wedding.story.length - 1;
+              const isLast = index === wedding.story.length - 1;
 
               return (
                 <Reveal key={paragraph} delay={0.12 + index * 0.12}>
-                  <p
-                    className={cn(
-                      "whitespace-pre-line",
-                      isClosingLine ? "wd-quote" : "wd-body-serif",
-                    )}
-                  >
-                    {paragraph}
-                  </p>
+                  <div className="relative grid grid-cols-[1.75rem_1px_1fr] items-stretch gap-x-5">
+                    <span className="wd-mono pt-1 text-right text-taupe">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        "relative w-px bg-taupe/25",
+                        isLast && "h-6",
+                      )}
+                    >
+                      <span className="absolute -top-1 -left-[7px] text-[13px] leading-none text-champagne">
+                        ♡
+                      </span>
+                    </span>
+
+                    <p
+                      className={cn(
+                        "whitespace-pre-line",
+                        isLast ? "wd-quote" : "wd-body-serif",
+                        isLast ? "pb-0" : "pb-10",
+                      )}
+                    >
+                      {paragraph}
+                    </p>
+                  </div>
                 </Reveal>
               );
             })}

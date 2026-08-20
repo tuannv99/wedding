@@ -26,44 +26,42 @@ export const wedding = {
     short: "HOA",
   },
 
-  /** Ngày cưới: 20/09/2026 (giờ Việt Nam, UTC+7). */
+  /** Ngày cưới: 25/10/2026 (giờ Việt Nam, UTC+7). */
   date: {
-    iso: "2026-09-20",
+    iso: "2026-10-25",
     /** Mốc countdown = giờ lễ thành hôn. */
-    target: "2026-09-20T18:00:00+07:00",
-    day: "20",
-    month: "09",
+    target: "2026-10-25T11:00:00+07:00",
+    day: "25",
+    month: "10",
     year: "2026",
     weekday: "Chủ Nhật",
-    display: "20 · 09 · 2026",
+    display: "25 · 10 · 2026",
   },
 
   ceremony: {
     label: "Lễ thành hôn",
-    time: "18:00",
+    time: "11:00",
   },
   reception: {
     label: "Tiệc cưới",
-    time: "18:30",
+    time: "12:00",
   },
 
   venues: {
-    // TODO: thay bằng thông tin thật trước khi gửi thiệp.
     bride: {
       label: "Nhà gái",
-      name: "[Tên nhà hàng / địa điểm — nhà gái]",
-      address: "[Số nhà, đường, phường/xã, tỉnh/thành phố]",
-      mapsUrl: "https://maps.google.com",
-      mapEmbedUrl:
-        "https://www.google.com/maps?q=%5BS%E1%BB%91+nh%C3%A0%2C+%C4%91%C6%B0%E1%BB%9Dng%2C+ph%C6%B0%E1%BB%9Dng%2Fx%C3%A3%2C+t%E1%BB%89nh%2Fth%C3%A0nh+ph%E1%BB%91%5D&output=embed",
+      name: "Xuân Phương  ,Ninh Bình",
+      address: "Nhà Văn Hóa Xóm 2, Xã Xuân Phương",
+      mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}`,
+      mapEmbedUrl: `https://www.google.com/maps?q=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}&output=embed`,
     },
     groom: {
       label: "Nhà trai",
-      name: "[Tên nhà hàng / địa điểm — nhà trai]",
-      address: "[Số nhà, đường, phường/xã, tỉnh/thành phố]",
-      mapsUrl: "https://maps.google.com",
-      mapEmbedUrl:
-        "https://www.google.com/maps?q=%5BS%E1%BB%91+nh%C3%A0%2C+%C4%91%C6%B0%E1%BB%9Dng%2C+ph%C6%B0%E1%BB%9Dng%2Fx%C3%A3%2C+t%E1%BB%89nh%2Fth%C3%A0nh+ph%E1%BB%91%5D&output=embed",
+      name: "Quỳnh Phụ  ,Hưng Yên",
+      address: "Xóm 3 Thôn Phụng Công, Xã Quỳnh Phụ",
+      // Link thật do gia đình cung cấp, trỏ đúng "Miếu Hạ thôn Phụng Công".
+      mapsUrl: "https://maps.app.goo.gl/WHHnQKhEMhDPR1kV7",
+      mapEmbedUrl: "https://www.google.com/maps?q=20.6540299,106.3614893&output=embed",
     },
   },
 
@@ -74,10 +72,10 @@ export const wedding = {
   ],
 
   timeline: [
-    { time: "17:30", title: "Đón khách" },
-    { time: "18:00", title: "Lễ thành hôn" },
-    { time: "18:30", title: "Tiệc cưới" },
-    { time: "21:00", title: "Nâng ly chúc mừng" },
+    { time: "10:45", title: "Đón khách" },
+    { time: "11:00", title: "Lễ thành hôn" },
+    { time: "12:00", title: "Tiệc cưới" },
+    { time: "12:10", title: "Nâng ly chúc mừng" },
   ] satisfies TimelineItem[],
 
   images: {
@@ -175,15 +173,17 @@ export const wedding = {
       title: "Ngày cưới",
       venueLabel: "Địa điểm tổ chức",
       mapsLabel: "Xem bản đồ",
+      calendarLabel: "Lưu ngày cưới",
     },
     countdown: {
-      eyebrow: "Đếm ngược",
+      eyebrow: "Chúng mình còn",
       units: {
         days: "Ngày",
         hours: "Giờ",
         minutes: "Phút",
         seconds: "Giây",
       },
+      untilLabel: "Đến ngày hạnh phúc",
       finished: "Hôm nay là ngày ấy",
     },
     timeline: {
@@ -210,9 +210,9 @@ export const wedding = {
 
   site: {
     url: "https://wedding-tuan-hoa.vercel.app",
-    title: "Tuấn & Hoa · 20.09.2026",
+    title: "Tuấn & Hoa · 25.10.2026",
     description:
-      "Văn Tuấn & Mai Hoa — chúng mình sẽ kết hôn ngày 20 tháng 09 năm 2026. Rất mong được đón bạn trong ngày hạnh phúc.",
+      "Văn Tuấn & Mai Hoa — chúng mình sẽ kết hôn ngày 25 tháng 10 năm 2026. Rất mong được đón bạn trong ngày hạnh phúc.",
   },
 } as const;
 

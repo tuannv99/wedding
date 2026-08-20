@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Manrope } from "next/font/google";
 import { wedding } from "@/lib/wedding";
 import { InvitationProvider } from "@/lib/invitation";
 import "./globals.css";
@@ -19,11 +19,19 @@ const manrope = Manrope({
   display: "swap",
 });
 
+/** Chỉ dùng cho các con số (.wd-numeral): ngày cưới, giờ lễ, đếm ngược. */
+const dmSans = DM_Sans({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(wedding.site.url),
   title: wedding.site.title,
   description: wedding.site.description,
-  keywords: ["thiệp cưới online", "wedding invitation", "Tuấn & Hoa", "20.09.2026"],
+  keywords: ["thiệp cưới online", "wedding invitation", "Tuấn & Hoa", "25.10.2026"],
   authors: [{ name: `${wedding.groom.name} & ${wedding.bride.name}` }],
   openGraph: {
     type: "website",
@@ -37,7 +45,7 @@ export const metadata: Metadata = {
         url: "/images/wedding/og.jpg",
         width: 1200,
         height: 630,
-        alt: `${wedding.groom.name} & ${wedding.bride.name} — 20.09.2026`,
+        alt: `${wedding.groom.name} & ${wedding.bride.name} — 25.10.2026`,
       },
     ],
   },
@@ -60,7 +68,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="vi" className={`${cormorant.variable} ${manrope.variable}`}>
+    <html
+      lang="vi"
+      className={`${cormorant.variable} ${manrope.variable} ${dmSans.variable}`}
+    >
       <body>
         <InvitationProvider>{children}</InvitationProvider>
       </body>

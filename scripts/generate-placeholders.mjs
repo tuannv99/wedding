@@ -113,7 +113,7 @@ async function main() {
   const ogSvg = svg({
     width: 1200,
     height: 630,
-    label: "20 · 09 · 2026",
+    label: "25 · 10 · 2026",
     tone: TONES[0],
   }).replace(
     "</svg>",

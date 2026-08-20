@@ -71,9 +71,9 @@ export function Countdown() {
             </p>
           </Reveal>
         ) : (
-          <Reveal delay={0.1} className="mt-14 w-full md:mt-16">
+          <Reveal delay={0.1} className="mt-14 flex w-full flex-col items-center md:mt-16">
             <div
-              className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-4 sm:gap-x-4"
+              className="grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-4 sm:gap-x-12 md:gap-x-16"
               aria-live="off"
             >
               {UNITS.map(({ key, label }) => (
@@ -87,6 +87,10 @@ export function Countdown() {
                 </div>
               ))}
             </div>
+
+            <span className="wd-eyebrow mt-12">
+              {wedding.copy.countdown.untilLabel}
+            </span>
           </Reveal>
         )}
       </div>

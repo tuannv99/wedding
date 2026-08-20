@@ -61,7 +61,10 @@ export function Gallery() {
                   type="button"
                   onClick={() => setOpenIndex(index)}
                   aria-label={"Mở ảnh lớn: " + image.alt}
-                  className="group relative block h-full w-full overflow-hidden bg-warm"
+                  /* Hiệu ứng "nhấc ảnh polaroid lên" khi hover: chỉ xảy ra lúc
+                     hover (không phá layout masonry lúc nghỉ), tôn trọng
+                     prefers-reduced-motion cho phần xoay/dịch chuyển. */
+                  className="group relative block h-full w-full overflow-hidden bg-warm transition-all duration-500 ease-out hover:z-10 hover:shadow-[0_20px_45px_-15px_rgba(61,57,53,0.4)] motion-safe:hover:-translate-y-1 motion-safe:hover:rotate-[0.6deg]"
                 >
                   <Image
                     src={image.src}

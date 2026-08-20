@@ -97,6 +97,21 @@ export default function RsvpForm({
         >
           {successBody}
         </p>
+
+        {data.note.trim() ? (
+          <motion.p
+            className="wd-eyebrow"
+            style={{ marginTop: 28 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0.3 : 0.8,
+              delay: reduceMotion ? 0 : 0.5,
+            }}
+          >
+            Lời chúc của bạn đã được gửi đi ♡
+          </motion.p>
+        ) : null}
       </motion.div>
     );
   }
@@ -167,12 +182,12 @@ export default function RsvpForm({
         ) : null}
 
         <label className="wd-field">
-          <span className="wd-field-label">Lời nhắn</span>
+          <span className="wd-field-label">Lời chúc gửi đến Tuấn &amp; Hoa</span>
           <textarea
             className="wd-textarea"
             name="note"
             rows={3}
-            placeholder="Chúc hai bạn trăm năm hạnh phúc"
+            placeholder="Viết lời chúc dành cho Tuấn & Hoa..."
             value={data.note}
             onChange={(e) => set("note", e.target.value)}
           />

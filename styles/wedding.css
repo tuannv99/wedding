@@ -22,6 +22,9 @@
   --wd-font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --wd-font-body: var(--font-manrope), "Manrope", system-ui, -apple-system, sans-serif;
   --wd-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Chỉ dùng cho số (.wd-numeral) — toàn chữ số/dấu ":" nên không cần subset
+     vietnamese như phần chữ có dấu. */
+  --wd-font-numeral: var(--font-dm-sans), "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ---------- Text styles ---------- */
@@ -47,9 +50,9 @@
   color: var(--wd-brown);
 }
 
-/* Số ngày/tháng/năm, giờ lễ */
+/* Số ngày/tháng/năm, giờ lễ, đếm ngược */
 .wd-numeral {
-  font-family: var(--wd-font-display);
+  font-family: var(--wd-font-numeral);
   font-weight: 300;
   font-size: clamp(62px, 13vw, 132px);
   line-height: 0.95;

@@ -1,6 +1,6 @@
 # Thiệp cưới online · Tuấn & Hoa
 
-Website thiệp cưới cho **Văn Tuấn & Mai Hoa** — ngày cưới **20.09.2026**.
+Website thiệp cưới cho **Văn Tuấn & Mai Hoa** — ngày cưới **25.10.2026**.
 Phong cách editorial / minimal, mobile-first, dựng bằng Next.js App Router.
 
 ```

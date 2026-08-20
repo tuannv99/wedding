@@ -1,7 +1,8 @@
-import { MapPin } from "lucide-react";
+import { CalendarHeart, MapPin } from "lucide-react";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { buildGoogleCalendarUrl } from "@/lib/calendar";
 
 export function WeddingDetails() {
   const { date, ceremony, reception, venues } = wedding;
@@ -34,6 +35,17 @@ export function WeddingDetails() {
         <Reveal delay={0.25} className="mt-12 flex flex-col items-center gap-6">
           <hr className="wd-rule w-16" />
           <p className="wd-label tracking-[0.3em]">{date.weekday}</p>
+
+          {/* Nút nhỏ, không nổi bật — chỉ mở Google Calendar điền sẵn sự kiện */}
+          <a
+            href={buildGoogleCalendarUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="wd-btn-ghost mt-2 gap-3"
+          >
+            <CalendarHeart className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
+            {wedding.copy.details.calendarLabel}
+          </a>
         </Reveal>
 
         {/* Ceremony · Reception */}
