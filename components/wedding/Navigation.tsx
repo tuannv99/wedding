@@ -5,9 +5,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { coupleShort, wedding } from "@/lib/wedding";
 import { scrollToSection } from "@/lib/utils";
+import { useInvitation } from "@/lib/invitation";
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const { opened } = useInvitation();
 
   // Khoá scroll + đóng bằng Escape khi menu mobile mở
   useEffect(() => {
@@ -33,13 +35,16 @@ export function Navigation() {
     window.setTimeout(() => scrollToSection(id), 120);
   }, []);
 
+  // Trước khi khách bấm "Mở thiệp", trang chỉ hiện Hero — chưa cần menu.
+  if (!opened) return null;
+
   return (
     <>
       {/* Thanh nav luôn có nền + gạch chân như bản design (không đổi theo scroll) */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-taupe/20 bg-ivory/85 backdrop-blur-md">
         <nav
           aria-label="Điều hướng chính"
-          className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 md:h-20 md:px-10"
+          className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 md:h-20 md:px-5"
         >
           <button
             type="button"
@@ -106,7 +111,7 @@ export function Navigation() {
                   <button
                     type="button"
                     onClick={() => goTo(item.id)}
-                    className="font-display text-center text-xl tracking-[0.14em] text-ink uppercase"
+                    className="font-display text-center text-[1.375rem] tracking-[0.14em] text-ink uppercase"
                   >
                     {item.label}
                   </button>

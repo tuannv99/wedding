@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { wedding } from "@/lib/wedding";
 import { OPEN_INVITATION_EVENT } from "@/lib/events";
 import { cn } from "@/lib/utils";
+import { useInvitation } from "@/lib/invitation";
 
 /**
  * Nhạc nền dạng opt-in.
@@ -16,6 +17,7 @@ export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [available, setAvailable] = useState(true);
+  const { opened } = useInvitation();
 
   const play = useCallback(async () => {
     const audio = audioRef.current;
@@ -72,29 +74,32 @@ export function MusicPlayer() {
         }}
       />
 
-      <motion.button
-        type="button"
-        onClick={toggle}
-        aria-pressed={playing}
-        aria-label={
-          playing
-            ? `Tắt nhạc nền: ${wedding.music.title}`
-            : `Bật nhạc nền: ${wedding.music.title}`
-        }
-        title={wedding.music.title}
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 3, ease: [0.22, 1, 0.36, 1] }}
-        /* Pill chữ ở góc trái dưới, đúng như bản design */
-        className={cn(
-          "wd-btn-ghost fixed bottom-5 left-5 z-50 min-h-11 gap-2 px-5 backdrop-blur-md md:bottom-8 md:left-8",
-          playing
-            ? "border-ink/40 bg-ivory/90"
-            : "border-taupe/50 bg-ivory/75",
-        )}
-      >
-        Nhạc: {playing ? "Bật" : "Tắt"}
-      </motion.button>
+      {/* Nút chỉ hiện sau khi khách bấm "Mở thiệp" — trước đó layout chỉ có Hero. */}
+      {opened ? (
+        <motion.button
+          type="button"
+          onClick={toggle}
+          aria-pressed={playing}
+          aria-label={
+            playing
+              ? `Tắt nhạc nền: ${wedding.music.title}`
+              : `Bật nhạc nền: ${wedding.music.title}`
+          }
+          title={wedding.music.title}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          /* Pill chữ ở góc trái dưới, đúng như bản design */
+          className={cn(
+            "wd-btn-ghost fixed bottom-5 left-5 z-50 min-h-11 gap-2 px-5 backdrop-blur-md md:bottom-8 md:left-8",
+            playing
+              ? "border-ink/40 bg-ivory/90"
+              : "border-taupe/50 bg-ivory/75",
+          )}
+        >
+          Nhạc: {playing ? "Bật" : "Tắt"}
+        </motion.button>
+      ) : null}
     </>
   );
 }

@@ -36,9 +36,17 @@
     overflow-x: clip;
   }
 
-  /* Chừa chỗ cho navigation sticky khi cuộn tới anchor */
+  /* Chừa chỗ cho navigation sticky khi cuộn tới anchor.
+     Phải khớp đúng chiều cao header (Navigation.tsx: h-16/md:h-20 + border-b 1px),
+     nếu không phần đáy section trước sẽ lộ ra dưới header thành một viền lệch màu. */
   section[id] {
-    scroll-margin-top: 5.5rem;
+    scroll-margin-top: 65px;
+  }
+
+  @media (min-width: 768px) {
+    section[id] {
+      scroll-margin-top: 81px;
+    }
   }
 
   h1,

@@ -4,12 +4,12 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export function WeddingDetails() {
-  const { date, ceremony, reception, venue } = wedding;
+  const { date, ceremony, reception, venues } = wedding;
 
   return (
     <section
       id="the-wedding"
-      className="w-full bg-warm px-6 py-28 md:px-10 md:py-40"
+      className="w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
         <SectionHeading
@@ -52,24 +52,44 @@ export function WeddingDetails() {
           ))}
         </div>
 
-        {/* Venue */}
+        {/* Venue: nhà gái + nhà trai, mỗi bên kèm Google Map riêng */}
         <Reveal delay={0.2} className="mt-20 flex w-full flex-col items-center md:mt-28">
           <span aria-hidden="true" className="mb-14 h-px w-full max-w-xs bg-taupe/30" />
           <span className="wd-eyebrow">{wedding.copy.details.venueLabel}</span>
-          <p className="wd-h1 mt-6 text-[clamp(1.75rem,5vw,2.75rem)] tracking-[0.08em]">
-            {venue.name}
-          </p>
-          <p className="wd-body-sm mt-5 max-w-md">{venue.address}</p>
 
-          <a
-            href={venue.mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wd-btn-ghost mt-10 gap-3"
-          >
-            <MapPin className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
-            {wedding.copy.details.mapsLabel}
-          </a>
+          <div className="mt-10 grid w-full grid-cols-1 gap-16 sm:grid-cols-2 sm:gap-10">
+            {[venues.bride, venues.groom].map((place) => (
+              <div key={place.label} className="flex flex-col items-center">
+                <span className="wd-label tracking-[0.3em] text-taupe">
+                  {place.label}
+                </span>
+                <p className="wd-h1 mt-4 text-[clamp(1.5rem,4vw,2.25rem)] tracking-[0.08em]">
+                  {place.name}
+                </p>
+                <p className="wd-body-sm mt-4 max-w-xs">{place.address}</p>
+
+                <div className="mt-8 aspect-[4/3] w-full max-w-sm overflow-hidden bg-warm">
+                  <iframe
+                    src={place.mapEmbedUrl}
+                    title={`Bản đồ ${place.label}: ${place.name}`}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="h-full w-full border-0"
+                  />
+                </div>
+
+                <a
+                  href={place.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="wd-btn-ghost mt-8 gap-3"
+                >
+                  <MapPin className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
+                  {wedding.copy.details.mapsLabel}
+                </a>
+              </div>
+            ))}
+          </div>
         </Reveal>
       </div>
     </section>

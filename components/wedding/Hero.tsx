@@ -5,12 +5,14 @@ import { motion, useReducedMotion } from "framer-motion";
 import { wedding } from "@/lib/wedding";
 import { scrollToSection } from "@/lib/utils";
 import { emitOpenInvitation } from "@/lib/events";
+import { useInvitation } from "@/lib/invitation";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
   const { hero } = wedding.images;
+  const { open } = useInvitation();
 
   /** Mỗi phần tử xuất hiện lần lượt: ngày → tên → "&" → button. */
   const rise = (delay: number, distance = 18) => ({
@@ -25,14 +27,16 @@ export function Hero() {
 
   const handleOpen = () => {
     if (wedding.music.startOnOpen) emitOpenInvitation();
-    scrollToSection("our-story");
+    open();
+    // Chờ các section còn lại mount xong (sau khi mở khoá scroll) mới cuộn.
+    window.setTimeout(() => scrollToSection("our-story"), 80);
   };
 
   return (
     <section
       id="hero"
       aria-label="Thiệp cưới Tuấn và Hoa"
-      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 pt-28 pb-24 md:pt-32"
+      className="relative flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 py-[clamp(20px,6svh,112px)]"
     >
       {/* Ảnh cưới nền */}
       <motion.div
@@ -60,7 +64,7 @@ export function Hero() {
         />
       </motion.div>
 
-      <div className="flex w-full max-w-3xl flex-col items-center text-center">
+      <div className="flex w-full max-w-3xl flex-col items-center justify-center gap-[clamp(10px,2.4svh,32px)] text-center">
         <motion.p {...rise(0.4)} className="wd-eyebrow text-ink/70">
           {wedding.date.display}
         </motion.p>
@@ -68,10 +72,10 @@ export function Hero() {
         <motion.span
           {...rise(0.6)}
           aria-hidden="true"
-          className="mt-8 block h-10 w-px bg-ink/25 md:mt-10 md:h-14"
+          className="block h-[clamp(20px,4svh,56px)] w-px bg-ink/25"
         />
 
-        <h1 className="mt-8 flex flex-col items-center gap-2 md:mt-10 md:gap-3">
+        <h1 className="flex flex-col items-center gap-1 md:gap-2">
           <span className="sr-only">
             {wedding.groom.name} và {wedding.bride.name} — chúng mình sẽ kết hôn
           </span>
@@ -91,7 +95,7 @@ export function Hero() {
               delay: reduceMotion ? 0 : 1.35,
               ease: "easeOut",
             }}
-            className="font-display block text-[clamp(2rem,8vw,3.5rem)] leading-none text-champagne italic"
+            className="font-display block text-[clamp(1.75rem,min(7vw,6svh),3.25rem)] leading-none text-champagne italic"
           >
             &amp;
           </motion.span>
@@ -104,14 +108,11 @@ export function Hero() {
           </motion.span>
         </h1>
 
-        <motion.p
-          {...rise(2.1)}
-          className="wd-eyebrow mt-10 text-ink/60 md:mt-12"
-        >
+        <motion.p {...rise(2.1)} className="wd-eyebrow text-ink/60">
           {wedding.copy.hero.tagline}
         </motion.p>
 
-        <motion.div {...rise(2.45)} className="mt-12 md:mt-14">
+        <motion.div {...rise(2.45)}>
           <button type="button" onClick={handleOpen} className="wd-btn-ghost">
             {wedding.copy.hero.openButton}
           </button>

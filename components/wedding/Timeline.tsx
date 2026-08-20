@@ -7,7 +7,7 @@ export function Timeline() {
   return (
     <section
       id="our-day"
-      className="w-full bg-warm px-6 py-28 md:px-10 md:py-40"
+      className="w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
     >
       <div className="mx-auto w-full max-w-3xl">
         <SectionHeading

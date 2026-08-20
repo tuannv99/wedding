@@ -32,7 +32,7 @@ export function RSVP() {
   return (
     <section
       id="rsvp"
-      className="w-full border-y border-taupe/20 bg-warm px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
+      className="w-full border-y border-taupe/20 bg-ivory px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
     >
       <div className="mx-auto w-full max-w-[620px]">
         <Reveal>

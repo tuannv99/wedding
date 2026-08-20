@@ -10,7 +10,7 @@ export function OurStory() {
   return (
     <section
       id="our-story"
-      className="w-full bg-ivory px-6 py-28 md:px-10 md:py-40"
+      className="w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
     >
       {/* 2 cột lệch tỉ lệ (text hẹp hơn ảnh) cho cảm giác editorial.
           Dùng 2 cột thay vì grid 12 cột: gap chỉ tính 1 lần nên không bao giờ tràn ngang. */}

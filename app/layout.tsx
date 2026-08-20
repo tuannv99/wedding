@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { wedding } from "@/lib/wedding";
+import { InvitationProvider } from "@/lib/invitation";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -60,7 +61,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="vi" className={`${cormorant.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        <InvitationProvider>{children}</InvitationProvider>
+      </body>
     </html>
   );
 }

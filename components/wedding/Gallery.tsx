@@ -36,7 +36,7 @@ export function Gallery() {
   return (
     <section
       id="gallery"
-      className="w-full bg-ivory px-4 py-28 sm:px-6 md:px-10 md:py-40"
+      className="w-full bg-ivory px-4 py-28 sm:px-6 md:px-5 md:py-40"
     >
       <div className="mx-auto w-full max-w-6xl">
         <SectionHeading

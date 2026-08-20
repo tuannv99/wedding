@@ -8,6 +8,7 @@ import { Gallery } from "@/components/wedding/Gallery";
 import { RSVP } from "@/components/wedding/RSVP";
 import { Closing } from "@/components/wedding/Closing";
 import { MusicPlayer } from "@/components/wedding/MusicPlayer";
+import { AfterOpen } from "@/components/wedding/AfterOpen";
 
 export default function Home() {
   return (
@@ -15,13 +16,15 @@ export default function Home() {
       <Navigation />
       <main id="main">
         <Hero />
-        <OurStory />
-        <WeddingDetails />
-        <Countdown />
-        <Timeline />
-        <Gallery />
-        <RSVP />
-        <Closing />
+        <AfterOpen>
+          <OurStory />
+          <WeddingDetails />
+          <Countdown />
+          <Timeline />
+          <Gallery />
+          <RSVP />
+          <Closing />
+        </AfterOpen>
       </main>
       <MusicPlayer />
     </>

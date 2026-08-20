@@ -47,11 +47,24 @@ export const wedding = {
     time: "18:30",
   },
 
-  venue: {
+  venues: {
     // TODO: thay bằng thông tin thật trước khi gửi thiệp.
-    name: "[Tên nhà hàng tiệc cưới]",
-    address: "[Số nhà, đường, phường/xã, tỉnh/thành phố]",
-    mapsUrl: "https://maps.google.com",
+    bride: {
+      label: "Nhà gái",
+      name: "[Tên nhà hàng / địa điểm — nhà gái]",
+      address: "[Số nhà, đường, phường/xã, tỉnh/thành phố]",
+      mapsUrl: "https://maps.google.com",
+      mapEmbedUrl:
+        "https://www.google.com/maps?q=%5BS%E1%BB%91+nh%C3%A0%2C+%C4%91%C6%B0%E1%BB%9Dng%2C+ph%C6%B0%E1%BB%9Dng%2Fx%C3%A3%2C+t%E1%BB%89nh%2Fth%C3%A0nh+ph%E1%BB%91%5D&output=embed",
+    },
+    groom: {
+      label: "Nhà trai",
+      name: "[Tên nhà hàng / địa điểm — nhà trai]",
+      address: "[Số nhà, đường, phường/xã, tỉnh/thành phố]",
+      mapsUrl: "https://maps.google.com",
+      mapEmbedUrl:
+        "https://www.google.com/maps?q=%5BS%E1%BB%91+nh%C3%A0%2C+%C4%91%C6%B0%E1%BB%9Dng%2C+ph%C6%B0%E1%BB%9Dng%2Fx%C3%A3%2C+t%E1%BB%89nh%2Fth%C3%A0nh+ph%E1%BB%91%5D&output=embed",
+    },
   },
 
   story: [
@@ -160,7 +173,7 @@ export const wedding = {
     details: {
       eyebrow: "Lưu lại ngày này",
       title: "Ngày cưới",
-      venueLabel: "Địa điểm",
+      venueLabel: "Địa điểm tổ chức",
       mapsLabel: "Xem bản đồ",
     },
     countdown: {

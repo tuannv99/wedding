@@ -26,11 +26,13 @@
 
 /* ---------- Text styles ---------- */
 
-/* Tên cô dâu chú rể — focal point */
+/* Tên cô dâu chú rể — focal point.
+   min(vw, svh) để màn laptop rộng nhưng thấp (viewport ngắn) không bị chữ
+   quá to làm tràn hero xuống dưới viewport — vì hero luôn khoá scroll. */
 .wd-display {
   font-family: var(--wd-font-display);
   font-weight: 300;
-  font-size: clamp(58px, 15vw, 148px);
+  font-size: clamp(56px, min(14vw, 15svh), 140px);
   line-height: 0.92;
   letter-spacing: 0.04em;
   color: var(--wd-brown);
@@ -40,7 +42,7 @@
 .wd-h1 {
   font-family: var(--wd-font-display);
   font-weight: 300;
-  font-size: clamp(34px, 5vw, 58px);
+  font-size: clamp(36px, 5vw, 60px);
   line-height: 1.15;
   color: var(--wd-brown);
 }
@@ -94,7 +96,7 @@
 
 .wd-nav-link {
   font-family: var(--wd-font-body);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--wd-brown);
