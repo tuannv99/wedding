@@ -47,13 +47,28 @@ export const wedding = {
     time: "12:00",
   },
 
+  /**
+   * mapEmbedUrl phải là URL /maps/embed?pb=… (URL cuối của Google).
+   *
+   * KHÔNG dùng dạng `maps?q=…&output=embed`: nó trả 301 và chặng redirect đó mang
+   * header `X-Frame-Options: SAMEORIGIN`, nên Chrome trên Android hay từ chối
+   * hiển thị iframe ("không khả dụng"). Dùng thẳng URL cuối thì chỉ còn 1 hop 200
+   * và không có X-Frame-Options.
+   *
+   * Cách lấy URL cho địa điểm mới: mở Google Maps → Chia sẻ → Nhúng bản đồ →
+   * copy phần src trong đoạn <iframe>. Hoặc chạy:
+   *   curl -sI "https://www.google.com/maps?q=<địa+chỉ>&output=embed" | grep -i location
+   * rồi lấy đúng URL trong header Location.
+   */
   venues: {
     bride: {
       label: "Nhà gái",
       name: "Xuân Phương  ,Ninh Bình",
       address: "Nhà Văn Hóa Xóm 2, Xã Xuân Phương",
       mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}`,
-      mapEmbedUrl: `https://www.google.com/maps?q=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}&output=embed`,
+      // "Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình" (query có dấu → base64url sau !1z)
+      mapEmbedUrl:
+        "https://www.google.com/maps/embed?origin=mfe&pb=!1m2!2m1!1zTmjDoCB2xINuIGjDs2EgeMOzbSAyLCB4w6MgWHXDom4gUGjGsMahbmcsIE5pbmggQsOsbmg",
     },
     groom: {
       label: "Nhà trai",
@@ -61,7 +76,8 @@ export const wedding = {
       address: "Xóm 3 Thôn Phụng Công, Xã Quỳnh Phụ",
       // Link thật do gia đình cung cấp, trỏ đúng "Miếu Hạ thôn Phụng Công".
       mapsUrl: "https://maps.app.goo.gl/WHHnQKhEMhDPR1kV7",
-      mapEmbedUrl: "https://www.google.com/maps?q=20.6540299,106.3614893&output=embed",
+      mapEmbedUrl:
+        "https://www.google.com/maps/embed?origin=mfe&pb=!1m2!2m1!1s20.6540299,106.3614893",
     },
   },
 
