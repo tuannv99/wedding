@@ -89,9 +89,12 @@ export function MusicPlayer() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          /* Pill chữ ở góc trái dưới, đúng như bản design */
+          /* Pill chữ ở góc trái dưới, đúng như bản design.
+             will-change-transform: ép lên layer GPU riêng, tránh backdrop-blur
+             gây flicker lúc cuộn trên mobile (framer-motion tự quản lý transform
+             qua inline style nên không dùng class transform ở đây). */
           className={cn(
-            "wd-btn-ghost fixed bottom-5 left-5 z-50 min-h-11 gap-2 px-5 backdrop-blur-md md:bottom-8 md:left-8",
+            "wd-btn-ghost fixed bottom-5 left-5 z-50 min-h-11 gap-2 px-5 backdrop-blur-md will-change-transform md:bottom-8 md:left-8",
             playing
               ? "border-ink/40 bg-ivory/90"
               : "border-taupe/50 bg-ivory/75",

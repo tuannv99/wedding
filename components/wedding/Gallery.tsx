@@ -59,7 +59,7 @@ export function Gallery() {
                 key={image.src}
                 delay={(index % 3) * 0.08}
                 y={18}
-                duration={0.9}
+                duration={0.4}
                 className={cn(layout.mobile, layout.desktop, "sm:aspect-auto")}
               >
                 <button

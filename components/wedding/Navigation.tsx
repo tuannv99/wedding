@@ -40,8 +40,12 @@ export function Navigation() {
 
   return (
     <>
-      {/* Thanh nav luôn có nền + gạch chân như bản design (không đổi theo scroll) */}
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-taupe/20 bg-ivory/85 backdrop-blur-md">
+      {/* Thanh nav luôn có nền + gạch chân như bản design (không đổi theo scroll).
+          will-change-transform + translateZ(0): ép header lên layer GPU riêng —
+          nếu không, backdrop-blur kết hợp với các section `isolate` (từ decoration
+          botanical) khiến trình duyệt phải tính lại blur/layout liên tục lúc cuộn,
+          gây flicker rõ trên mobile. Không đổi gì về hiển thị. */}
+      <header className="fixed inset-x-0 top-0 z-50 [transform:translateZ(0)] border-b border-taupe/20 bg-ivory/85 backdrop-blur-md will-change-transform">
         <nav
           aria-label="Điều hướng chính"
           className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 md:h-20 md:px-5"
