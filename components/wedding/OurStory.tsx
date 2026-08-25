@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
+import { BotanicalHeart } from "@/components/ui/BotanicalHeart";
 import { cn } from "@/lib/utils";
 
-/** Gạch ngang — ♡ — gạch ngang, dùng dưới heading và giữa các mốc. */
+/** Gạch ngang — vòng lá hình tim — gạch ngang, dùng dưới heading và giữa các mốc. */
 function HeartRule({ className }: { className?: string }) {
   return (
     <div
@@ -11,7 +13,7 @@ function HeartRule({ className }: { className?: string }) {
       className={cn("flex items-center justify-center gap-4", className)}
     >
       <span className="h-px w-14 bg-champagne/60 sm:w-20" />
-      <span className="text-[11px] leading-none text-champagne">♡</span>
+      <BotanicalHeart className="text-[20px]" />
       <span className="h-px w-14 bg-champagne/60 sm:w-20" />
     </div>
   );
@@ -19,7 +21,13 @@ function HeartRule({ className }: { className?: string }) {
 
 export function OurStory() {
   return (
-    <section id="our-story" className="w-full bg-ivory px-5 py-24 sm:px-6 md:py-32">
+    <section
+      id="our-story"
+      className="relative isolate w-full bg-ivory px-5 py-24 sm:px-6 md:py-32"
+    >
+      <BotanicalDecoration position="top-left" size="sm" />
+      <BotanicalDecoration position="bottom-right" size="sm" />
+
       <div className="mx-auto w-full max-w-4xl">
         <Reveal className="flex flex-col items-center">
           <h2 className="wd-h1 text-center tracking-[0.16em] uppercase">

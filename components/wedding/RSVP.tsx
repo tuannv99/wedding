@@ -2,6 +2,7 @@
 
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
 import RsvpForm, { type RsvpData } from "@/components/wedding/RsvpForm";
 
 /**
@@ -32,8 +33,11 @@ export function RSVP() {
   return (
     <section
       id="rsvp"
-      className="w-full border-y border-taupe/20 bg-ivory px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
+      className="relative isolate w-full border-y border-taupe/20 bg-ivory px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
     >
+      <BotanicalDecoration position="top-left" size="sm" />
+      <BotanicalDecoration position="bottom-right" size="sm" />
+
       <div className="mx-auto w-full max-w-[620px]">
         <Reveal>
           <RsvpForm

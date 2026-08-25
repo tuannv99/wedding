@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
+import { BotanicalHeart } from "@/components/ui/BotanicalHeart";
 
 type Remaining = {
   days: number;
@@ -55,8 +57,11 @@ export function Countdown() {
   return (
     <section
       aria-label="Đếm ngược tới ngày cưới"
-      className="w-full bg-ivory px-6 py-24 md:px-5 md:py-32"
+      className="relative isolate w-full bg-ivory px-6 py-24 md:px-5 md:py-32"
     >
+      <BotanicalDecoration position="top-right" size="sm" />
+      <BotanicalDecoration position="bottom-left" size="sm" />
+
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
         <Reveal className="flex flex-col items-center gap-5">
           <span className="wd-eyebrow">{wedding.copy.countdown.eyebrow}</span>
@@ -67,7 +72,7 @@ export function Countdown() {
           <Reveal delay={0.1} className="mt-14">
             <p className="wd-h1 tracking-[0.06em]">
               {wedding.copy.countdown.finished}{" "}
-              <span className="text-champagne">♡</span>
+              <BotanicalHeart className="text-[0.85em]" />
             </p>
           </Reveal>
         ) : (

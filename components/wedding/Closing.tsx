@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
+import { BotanicalHeart } from "@/components/ui/BotanicalHeart";
 
 export function Closing() {
   const { closing } = wedding.images;
 
   return (
-    <footer className="relative flex min-h-[85svh] w-full items-center justify-center overflow-hidden px-6 py-28">
+    <footer className="relative isolate flex min-h-[85svh] w-full items-center justify-center overflow-hidden px-6 py-28">
       <div className="absolute inset-0 -z-10">
         <Image
           src={closing.src}
@@ -22,6 +24,9 @@ export function Closing() {
           className="absolute inset-0 bg-gradient-to-b from-ivory/40 via-ivory/25 to-ivory/70"
         />
       </div>
+
+      <BotanicalDecoration position="top-right" size="sm" />
+      <BotanicalDecoration position="bottom-left" size="sm" />
 
       <div className="flex w-full max-w-2xl flex-col items-center text-center">
         <Reveal>
@@ -48,9 +53,7 @@ export function Closing() {
         </Reveal>
 
         <Reveal delay={0.48}>
-          <p aria-hidden="true" className="mt-10 text-2xl text-champagne">
-            ♡
-          </p>
+          <BotanicalHeart className="mt-10 block text-2xl" />
         </Reveal>
       </div>
     </footer>

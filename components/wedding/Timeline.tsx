@@ -1,14 +1,18 @@
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
 import { cn } from "@/lib/utils";
 
 export function Timeline() {
   return (
     <section
       id="our-day"
-      className="w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
+      className="relative isolate w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
     >
+      <BotanicalDecoration position="top-left" size="sm" />
+      <BotanicalDecoration position="bottom-right" size="sm" />
+
       <div className="mx-auto w-full max-w-3xl">
         <SectionHeading
           label={wedding.copy.timeline.eyebrow}

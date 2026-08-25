@@ -2,6 +2,7 @@ import { CalendarHeart, MapPin } from "lucide-react";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
 
 export function WeddingDetails() {
@@ -10,8 +11,11 @@ export function WeddingDetails() {
   return (
     <section
       id="the-wedding"
-      className="w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
+      className="relative isolate w-full bg-ivory px-6 py-28 md:px-5 md:py-40"
     >
+      <BotanicalDecoration position="top-left" size="md" />
+      <BotanicalDecoration position="bottom-right" size="md" />
+
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
         <SectionHeading
           label={wedding.copy.details.eyebrow}

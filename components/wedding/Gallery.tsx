@@ -6,6 +6,7 @@ import { wedding } from "@/lib/wedding";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
 import { Lightbox } from "@/components/wedding/Lightbox";
 
 /**
@@ -36,8 +37,12 @@ export function Gallery() {
   return (
     <section
       id="gallery"
-      className="w-full bg-ivory px-4 py-28 sm:px-6 md:px-5 md:py-40"
+      className="relative isolate w-full bg-ivory px-4 py-28 sm:px-6 md:px-5 md:py-40"
     >
+      {/* Ẩn trên mobile: padding ngang của gallery quá hẹp (16px) để chèn thêm decoration. */}
+      <BotanicalDecoration position="top-left" size="sm" className="hidden sm:block" />
+      <BotanicalDecoration position="bottom-right" size="sm" className="hidden sm:block" />
+
       <div className="mx-auto w-full max-w-6xl">
         <SectionHeading
           label={wedding.copy.gallery.eyebrow}

@@ -6,6 +6,8 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { wedding } from "@/lib/wedding";
 import { emitOpenInvitation } from "@/lib/events";
 import { useInvitation } from "@/lib/invitation";
+import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
+import { BotanicalHeart } from "@/components/ui/BotanicalHeart";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
@@ -69,7 +71,7 @@ export function Hero() {
     <section
       id="hero"
       aria-label="Thiệp cưới Tuấn và Hoa"
-      className="relative flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 py-[clamp(20px,6svh,112px)]"
+      className="relative isolate flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 py-[clamp(20px,6svh,112px)]"
     >
       {/* Ảnh cưới nền */}
       <motion.div
@@ -96,6 +98,12 @@ export function Hero() {
           className="absolute inset-0 bg-gradient-to-b from-ivory/70 via-ivory/20 to-ivory/80"
         />
       </motion.div>
+
+      {/* Nhánh lá mảnh ở 4 góc — chỉ trang trí, nằm sau nội dung/ảnh nền. */}
+      <BotanicalDecoration position="top-left" size="md" />
+      <BotanicalDecoration position="top-right" size="md" />
+      <BotanicalDecoration position="bottom-left" size="sm" />
+      <BotanicalDecoration position="bottom-right" size="sm" />
 
       <div className="flex w-full max-w-3xl flex-col items-center justify-center gap-[clamp(10px,2.4svh,32px)] text-center">
         <motion.p {...rise(0.4)} className="wd-eyebrow text-ink/70">
@@ -212,9 +220,9 @@ export function Hero() {
                   ease: EASE_OUT,
                 },
               }}
-              className="text-2xl text-champagne"
+              className="text-2xl"
             >
-              ♡
+              <BotanicalHeart />
             </motion.span>
           </motion.div>
         ) : null}
