@@ -2,13 +2,53 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { coupleShort, wedding } from "@/lib/wedding";
+import { Menu, Music2, X } from "lucide-react";
+import { wedding } from "@/lib/wedding";
 import { scrollToSection } from "@/lib/utils";
 import { useInvitation } from "@/lib/invitation";
+import { useMusic } from "@/lib/music";
+import { cn } from "@/lib/utils";
+
+/**
+ * Nút nhạc nằm ngay trên thanh nav (đúng bản design: nốt nhạc + đồng hồ mm:ss).
+ * Chỉ là consumer của MusicProvider — phần <audio> và logic phát/dừng nằm ở
+ * lib/music.tsx nên không có bản sao state nào ở đây.
+ */
+function MusicToggle({ className }: { className?: string }) {
+  const { available, playing, elapsed, toggle } = useMusic();
+  if (!available) return null;
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-pressed={playing}
+      aria-label={
+        playing
+          ? `Tắt nhạc nền: ${wedding.music.title}`
+          : `Bật nhạc nền: ${wedding.music.title}`
+      }
+      title={wedding.music.title}
+      className={cn(
+        "flex min-h-11 items-center gap-2.5 text-ink transition-opacity duration-500 hover:opacity-60",
+        className,
+      )}
+    >
+      <Music2
+        className={cn("h-3.5 w-3.5", playing ? "text-ink" : "text-taupe")}
+        strokeWidth={1.5}
+        aria-hidden="true"
+      />
+      <span className="wd-numeral text-[11px] leading-none tracking-[0.18em] tabular-nums text-ink/70">
+        {elapsed}
+      </span>
+    </button>
+  );
+}
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string>(wedding.nav[0].id);
   const { opened } = useInvitation();
 
   // Khoá scroll + đóng bằng Escape khi menu mobile mở
@@ -29,6 +69,33 @@ export function Navigation() {
     };
   }, [open]);
 
+  /**
+   * Gạch chân mục đang xem (bản design gạch chân "HOME").
+   * rootMargin kéo "đường ngắm" về khoảng 1/3 trên màn hình để mục sáng lên
+   * đúng lúc section đó chiếm phần nhìn chính, không phải lúc nó vừa ló ra.
+   */
+  useEffect(() => {
+    if (!opened) return;
+
+    const sections = wedding.nav
+      .map((item) => document.getElementById(item.id))
+      .filter((el): el is HTMLElement => Boolean(el));
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible) setActive(visible.target.id);
+      },
+      { rootMargin: "-20% 0px -65% 0px", threshold: 0 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [opened]);
+
   const goTo = useCallback((id: string) => {
     setOpen(false);
     // Chờ menu đóng xong mới cuộn để tránh giật layout
@@ -48,44 +115,66 @@ export function Navigation() {
       <header className="fixed inset-x-0 top-0 z-50 [transform:translateZ(0)] border-b border-taupe/20 bg-ivory/85 backdrop-blur-md will-change-transform">
         <nav
           aria-label="Điều hướng chính"
-          className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 md:h-20 md:px-5"
+          className="mx-auto flex h-16 w-full max-w-[104rem] items-center justify-between px-6 md:h-[72px] md:px-10"
         >
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase transition-opacity duration-500 hover:opacity-60 md:text-base md:tracking-[0.32em]"
-          >
-            {coupleShort}
-          </button>
-
-          <ul className="hidden items-center gap-10 md:flex">
-            {wedding.nav.map((item) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  onClick={() => goTo(item.id)}
-                  className="wd-nav-link inline-flex min-h-11 items-center transition-colors duration-500"
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
+          {/* Menu căn trái sát mép, đúng bản design */}
+          <ul className="hidden items-center gap-9 md:flex lg:gap-11">
+            {wedding.nav.map((item) => {
+              const isActive = active === item.id;
+              return (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    onClick={() => goTo(item.id)}
+                    aria-current={isActive ? "true" : undefined}
+                    className={cn(
+                      "wd-nav-link relative inline-flex min-h-11 items-center transition-colors duration-500",
+                      isActive ? "text-ink" : "text-ink/55",
+                    )}
+                  >
+                    {item.label}
+                    {/* Gạch chân mục đang xem — trượt mượt giữa các mục */}
+                    {isActive ? (
+                      <motion.span
+                        layoutId="nav-underline"
+                        aria-hidden="true"
+                        className="absolute inset-x-0 bottom-2.5 h-px bg-ink"
+                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                      />
+                    ) : null}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
 
+          {/* Mobile: tên cặp đôi giữ vai trò "về đầu trang" thay cho menu ngang */}
           <button
             type="button"
-            onClick={() => setOpen((value) => !value)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? "Đóng menu" : "Mở menu"}
-            className="-mr-3 flex h-12 w-12 items-center justify-center text-ink md:hidden"
+            onClick={() => goTo(wedding.nav[0].id)}
+            className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase md:hidden"
           >
-            {open ? (
-              <X className="h-5 w-5" strokeWidth={1.25} aria-hidden="true" />
-            ) : (
-              <Menu className="h-5 w-5" strokeWidth={1.25} aria-hidden="true" />
-            )}
+            {wedding.groom.short} &amp; {wedding.bride.short}
           </button>
+
+          <div className="flex items-center gap-1">
+            <MusicToggle />
+
+            <button
+              type="button"
+              onClick={() => setOpen((value) => !value)}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? "Đóng menu" : "Mở menu"}
+              className="-mr-3 flex h-12 w-12 items-center justify-center text-ink md:hidden"
+            >
+              {open ? (
+                <X className="h-5 w-5" strokeWidth={1.25} aria-hidden="true" />
+              ) : (
+                <Menu className="h-5 w-5" strokeWidth={1.25} aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </nav>
       </header>
 

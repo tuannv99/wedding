@@ -21,6 +21,7 @@
 
   --wd-font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --wd-font-body: var(--font-manrope), "Manrope", system-ui, -apple-system, sans-serif;
+  --wd-font-script: var(--font-parisienne), "Parisienne", "Apple Chancery", cursive;
   --wd-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   /* Chỉ dùng cho số (.wd-numeral) — toàn chữ số/dấu ":" nên không cần subset
      vietnamese như phần chữ có dấu. */
@@ -39,6 +40,17 @@
   line-height: 0.92;
   letter-spacing: 0.04em;
   color: var(--wd-brown);
+}
+
+/* Dòng chữ viết tay ("Our", "Save the date", lời cảm ơn ở footer).
+   Chỉ dùng cho chuỗi tiếng Anh không dấu — Parisienne không có subset vietnamese. */
+.wd-script {
+  font-family: var(--wd-font-script);
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: var(--wd-taupe);
 }
 
 /* Heading section lớn */
@@ -122,6 +134,22 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--wd-taupe);
+}
+
+/* Nhãn + giá trị trong dải thông tin 4 cột của "Ngày cưới" */
+.wd-fact-label {
+  font-family: var(--wd-font-body);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--wd-brown);
+}
+
+.wd-fact-value {
+  font-family: var(--wd-font-body);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--wd-brown-soft);
 }
 
 /* Gạch ngăn champagne */

@@ -6,30 +6,16 @@ import { wedding } from "@/lib/wedding";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { BotanicalDecoration } from "@/components/ui/BotanicalDecoration";
+import { Botanical } from "@/components/ui/Botanical";
 import { Lightbox } from "@/components/wedding/Lightbox";
 
 /**
- * Layout masonry bất đối xứng (cố tình không đều nhau).
- * Mobile: 2 cột · Desktop: 6 cột, dùng row-span để tạo nhịp editorial.
+ * Bản design xếp gallery thành MỘT hàng ảnh dọc, cao bằng nhau, khe hở nhỏ —
+ * thay cho masonry so le trước đây. Thu dần số cột xuống ở màn hẹp để mỗi ảnh
+ * không bao giờ nhỏ hơn khoảng một nửa bề ngang màn hình.
  */
-const LAYOUT = [
-  { mobile: "col-span-2 aspect-[4/5]", desktop: "sm:col-span-4 sm:row-span-2" },
-  { mobile: "col-span-1 aspect-square", desktop: "sm:col-span-2 sm:row-span-1" },
-  { mobile: "col-span-1 aspect-square", desktop: "sm:col-span-2 sm:row-span-1" },
-  { mobile: "col-span-2 aspect-[3/4]", desktop: "sm:col-span-3 sm:row-span-2" },
-  { mobile: "col-span-2 aspect-[3/2]", desktop: "sm:col-span-3 sm:row-span-2" },
-  { mobile: "col-span-2 aspect-[2/1]", desktop: "sm:col-span-6 sm:row-span-1" },
-];
-
-const SIZES = [
-  "(max-width: 640px) 100vw, 60vw",
-  "(max-width: 640px) 50vw, 30vw",
-  "(max-width: 640px) 50vw, 30vw",
-  "(max-width: 640px) 100vw, 45vw",
-  "(max-width: 640px) 100vw, 45vw",
-  "100vw",
-];
+const GALLERY_SIZES =
+  "(max-width: 640px) 48vw, (max-width: 1024px) 31vw, 16vw";
 
 export function Gallery() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -39,28 +25,23 @@ export function Gallery() {
       id="gallery"
       className="relative isolate w-full bg-ivory px-4 py-28 sm:px-6 md:px-5 md:py-40"
     >
-      {/* Ẩn trên mobile: padding ngang của gallery quá hẹp (16px) để chèn thêm decoration. */}
-      <BotanicalDecoration position="top-left" size="sm" className="hidden sm:block" />
-      <BotanicalDecoration position="bottom-right" size="sm" className="hidden sm:block" />
-
       <div className="mx-auto w-full max-w-6xl">
         <SectionHeading
           label={wedding.copy.gallery.eyebrow}
           title={wedding.copy.gallery.title}
+          rule={false}
           className="px-2"
         />
 
-        <div className="mt-16 grid grid-cols-2 gap-3 sm:mt-20 sm:auto-rows-[clamp(8rem,14vw,14rem)] sm:grid-cols-6 sm:gap-4">
+        <div className="mt-14 grid grid-cols-2 gap-2.5 sm:mt-16 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
           {wedding.gallery.map((image, index) => {
-            const layout = LAYOUT[index % LAYOUT.length];
-
             return (
               <Reveal
                 key={image.src}
                 delay={(index % 3) * 0.08}
                 y={18}
                 duration={0.4}
-                className={cn(layout.mobile, layout.desktop, "sm:aspect-auto")}
+                className={cn("aspect-[4/5]")}
               >
                 <button
                   type="button"
@@ -76,7 +57,7 @@ export function Gallery() {
                     alt={image.alt}
                     fill
                     loading="lazy"
-                    sizes={SIZES[index % SIZES.length]}
+                    sizes={GALLERY_SIZES}
                     className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.035]"
                   />
                   <span
@@ -89,7 +70,9 @@ export function Gallery() {
           })}
         </div>
 
-        <Reveal delay={0.1} className="mt-12 flex justify-center">
+        {/* Gallery thuộc về ảnh: botanical chỉ còn đúng một nét rất nhỏ khép lại. */}
+        <Reveal delay={0.1} className="mt-14 flex flex-col items-center gap-6">
+          <Botanical variant="mark" className="h-4 w-11 text-sage/60" />
           <p className="wd-eyebrow text-center">
             {wedding.copy.gallery.hint}
           </p>

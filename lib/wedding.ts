@@ -132,8 +132,8 @@ export const wedding = {
     hero: {
       src: "/images/wedding/hero.jpg",
       alt: "Văn Tuấn và Mai Hoa trong bộ ảnh cưới",
-      width: 1600,
-      height: 2000,
+      width: 1500,
+      height: 1900,
     },
     closing: {
       src: "/images/wedding/closing.jpg",
@@ -154,31 +154,31 @@ export const wedding = {
       src: "/images/wedding/gallery-02.jpg",
       alt: "Bó hoa cưới trên nền vải lụa",
       width: 1200,
-      height: 1200,
+      height: 1500,
     },
     {
       src: "/images/wedding/gallery-03.jpg",
       alt: "Nụ cười của cô dâu",
       width: 1200,
-      height: 1200,
+      height: 1500,
     },
     {
       src: "/images/wedding/gallery-04.jpg",
       alt: "Chân dung hai người bên khung cửa",
       width: 1200,
-      height: 1600,
+      height: 1500,
     },
     {
       src: "/images/wedding/gallery-05.jpg",
       alt: "Cùng nhau đi trên con đường nhỏ",
-      width: 1600,
-      height: 1067,
+      width: 1200,
+      height: 1500,
     },
     {
       src: "/images/wedding/gallery-06.jpg",
       alt: "Ảnh cưới toàn cảnh",
-      width: 2000,
-      height: 1000,
+      width: 1200,
+      height: 1500,
     },
   ] satisfies GalleryImage[],
 
@@ -192,6 +192,8 @@ export const wedding = {
   },
 
   nav: [
+    // "hero" là mục đầu, đúng như HOME trên bản design.
+    { label: "Trang chủ", id: "hero" },
     { label: "Chuyện chúng mình", id: "our-story" },
     { label: "Lễ cưới", id: "the-wedding" },
     { label: "Ảnh cưới", id: "gallery" },
@@ -203,6 +205,16 @@ export const wedding = {
    * Các nhãn nhỏ (eyebrow, label, nút) được CSS tự viết hoa, nên ở đây cứ ghi thường.
    */
   copy: {
+    /**
+     * Các dòng chữ viết tay (font script) trên bản design.
+     * Cố tình để tiếng Anh, không dấu: font script Parisienne không có subset
+     * vietnamese, chữ có dấu sẽ rơi về font hệ thống và vỡ kiểu chữ.
+     */
+    script: {
+      story: "Our",
+      details: "Save the date",
+      closing: "Thank you for\nbeing part of our story.",
+    },
     hero: {
       tagline: "Chúng mình sắp cưới",
       openButton: "Mở thiệp",
@@ -213,6 +225,13 @@ export const wedding = {
     details: {
       eyebrow: "Lưu lại ngày này",
       title: "Ngày cưới",
+      /** Dải thông tin nhanh 4 cột (ngày · lễ · tiệc · địa điểm). */
+      facts: {
+        date: "Ngày",
+        ceremony: "Lễ thành hôn",
+        reception: "Tiệc cưới",
+        venue: "Địa điểm",
+      },
       venueLabel: "Địa điểm tổ chức",
       mapsLabel: "Xem bản đồ",
       calendarLabel: "Lưu ngày cưới",

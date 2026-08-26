@@ -16,6 +16,7 @@
   /* ---- Typography ---- */
   --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-body: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-script: var(--font-parisienne), "Parisienne", "Apple Chancery", cursive;
 }
 
 @layer base {
