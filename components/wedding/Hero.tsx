@@ -167,38 +167,24 @@ export function Hero() {
         </motion.p>
 
         {/*
-          Chỉ báo cuộn kiểu bản design (gạch dọc + mũi tên + nhãn) — nhưng vẫn
-          là nút "Mở thiệp" thật: đây là user gesture duy nhất hợp lệ để bật
+          Nút "Mở thiệp" dạng pill (đúng kiểu wd-btn-ghost dùng xuyên suốt
+          site) — chữ + mũi tên nằm cùng hàng, một nét kẻ mảnh phía trên tách
+          nó khỏi câu tagline. Đây là user gesture duy nhất hợp lệ để bật
           nhạc và mở phần nội dung phía dưới.
         */}
-        <motion.div {...rise(2.45)} className="mt-[clamp(8px,2svh,28px)]">
+        <motion.div
+          {...rise(2.45)}
+          className="mt-[clamp(8px,2svh,28px)] flex flex-col items-center gap-5 md:items-start"
+        >
+          <span aria-hidden="true" className="h-px w-10 bg-ink/25" />
+
           <motion.button
             type="button"
             onClick={handleOpen}
             disabled={isOpening}
             whileTap={reduceMotion ? undefined : { scale: 0.96 }}
-            className="group flex flex-col items-center gap-3 md:items-start disabled:opacity-60"
+            className="wd-btn-ghost gap-3 disabled:opacity-60"
           >
-            <span
-              aria-hidden="true"
-              className="ml-0 flex flex-col items-center md:ml-[1.35em]"
-            >
-              <span className="block h-[clamp(28px,5svh,60px)] w-px bg-ink/25 transition-colors duration-500 group-hover:bg-ink/50" />
-              <svg
-                viewBox="0 0 12 12"
-                fill="none"
-                className="-mt-px h-3 w-3 text-ink/40 transition-colors duration-500 group-hover:text-ink/70"
-              >
-                <path
-                  d="M6 0v10M2 6.5 6 10.5l4-4"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
                 key={isOpening ? "opening" : "idle"}
@@ -206,11 +192,24 @@ export function Hero() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="wd-eyebrow text-ink/70 transition-colors duration-500 group-hover:text-ink"
               >
                 {isOpening ? "Đang mở…" : wedding.copy.hero.openButton}
               </motion.span>
             </AnimatePresence>
+            <svg
+              viewBox="0 0 12 12"
+              fill="none"
+              aria-hidden="true"
+              className="h-3 w-3"
+            >
+              <path
+                d="M6 0v10M2 6.5 6 10.5l4-4"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </motion.button>
         </motion.div>
       </div>
