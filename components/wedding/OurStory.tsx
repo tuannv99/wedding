@@ -16,29 +16,24 @@ export function OurStory() {
         gốc tràn khỏi viewport, ngọn vươn vào chồng nhẹ lên rìa cột ảnh — cảm
         giác nhánh "đi xuyên" qua layout thay vì đóng khung nó.
         Chỉ desktop: ở mobile ảnh chiếm trọn bề ngang nên nhánh sẽ đè vào nội dung.
+        Cỡ chuẩn hoá: branch 62vh/0.32.
+        (Không đặt thêm sprig mép trái: mục 02 có ảnh nằm bên trái nên sprig
+        từng đè trực tiếp lên ảnh.)
       */}
       <BotanicalAccent
         variant="branch"
-        opacity={0.34}
+        opacity={0.32}
         depth={7}
         flip
         className="top-[16%] -right-[3vw] hidden h-[62vh] w-[24vh] lg:block"
       />
 
       <div className="mx-auto w-full max-w-4xl">
-        {/* Tiêu đề kiểu bản design: chữ viết tay "Our" chờm lên góc trái tiêu đề,
-            căn trái từ md (mobile vẫn căn giữa cho cân với ảnh full-width). */}
         <Reveal className="flex flex-col items-center md:items-start">
-          <p
-            aria-hidden="true"
-            className="wd-script relative z-10 -mb-[0.35em] translate-x-0 md:-translate-x-1"
-          >
-            {wedding.copy.script.story}
-          </p>
           <h2 className="wd-h1 text-center tracking-[0.16em] uppercase md:text-left">
             {wedding.copy.story.title}
           </h2>
-          <span aria-hidden="true" className="mt-6 h-px w-14 bg-champagne/70" />
+          <BotanicalRule className="mt-6" lineClassName="w-10 sm:w-14" />
         </Reveal>
 
         <div className="mt-14 flex flex-col md:mt-16">

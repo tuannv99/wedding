@@ -2,6 +2,7 @@
 
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
+import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import RsvpForm, { type RsvpData } from "@/components/wedding/RsvpForm";
 
 /**
@@ -32,8 +33,17 @@ export function RSVP() {
   return (
     <section
       id="rsvp"
-      className="relative isolate w-full border-y border-taupe/20 bg-ivory px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
+      className="relative isolate w-full overflow-hidden border-y border-taupe/20 bg-ivory px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
     >
+      {/* Branch mép phải — cỡ chuẩn hoá dùng chung toàn site: 62vh/0.32. */}
+      <BotanicalAccent
+        variant="branch"
+        opacity={0.32}
+        depth={6}
+        flip
+        className="top-[8%] -right-[4vw] hidden h-[62vh] w-[24vh] lg:block"
+      />
+
       <div className="mx-auto w-full max-w-[620px]">
         <Reveal>
           <RsvpForm

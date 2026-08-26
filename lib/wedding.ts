@@ -205,16 +205,6 @@ export const wedding = {
    * Các nhãn nhỏ (eyebrow, label, nút) được CSS tự viết hoa, nên ở đây cứ ghi thường.
    */
   copy: {
-    /**
-     * Các dòng chữ viết tay (font script) trên bản design.
-     * Cố tình để tiếng Anh, không dấu: font script Parisienne không có subset
-     * vietnamese, chữ có dấu sẽ rơi về font hệ thống và vỡ kiểu chữ.
-     */
-    script: {
-      story: "Our",
-      details: "Save the date",
-      closing: "Thank you for\nbeing part of our story.",
-    },
     hero: {
       tagline: "Chúng mình sắp cưới",
       openButton: "Mở thiệp",
@@ -223,7 +213,6 @@ export const wedding = {
       title: "Chuyện chúng mình",
     },
     details: {
-      eyebrow: "Lưu lại ngày này",
       title: "Ngày cưới",
       /** Dải thông tin nhanh 4 cột (ngày · lễ · tiệc · địa điểm). */
       facts: {
@@ -265,7 +254,7 @@ export const wedding = {
     },
     closing: {
       eyebrow: "Thương mến",
-      thanks: "Cảm ơn bạn đã là một phần\ntrong câu chuyện của chúng mình.",
+      thanks: "Cảm ơn đã là một phần trong câu chuyện của chúng mình",
     },
   },
 

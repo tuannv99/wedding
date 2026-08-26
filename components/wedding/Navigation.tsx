@@ -129,7 +129,7 @@ export function Navigation() {
                     aria-current={isActive ? "true" : undefined}
                     className={cn(
                       "wd-nav-link relative inline-flex min-h-11 items-center transition-colors duration-500",
-                      isActive ? "text-ink" : "text-ink/55",
+                      isActive ? "text-ink" : "text-ink/68",
                     )}
                   >
                     {item.label}
@@ -138,7 +138,7 @@ export function Navigation() {
                       <motion.span
                         layoutId="nav-underline"
                         aria-hidden="true"
-                        className="absolute inset-x-0 bottom-2.5 h-px bg-ink"
+                        className="absolute inset-x-0 bottom-2.5 h-[1.5px] bg-ink"
                         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                       />
                     ) : null}

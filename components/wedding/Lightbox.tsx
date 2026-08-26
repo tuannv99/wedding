@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -22,6 +23,15 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const touchStartX = useRef<number | null>(null);
+
+  // Render qua portal thẳng vào <body>: nếu render tại chỗ (bên trong section
+  // Gallery), Lightbox sẽ bị "nhốt" trong stacking context riêng của section
+  // đó (do section dùng `isolate` để chứa đúng lớp botanical decoration),
+  // khiến header cố định (z-50, nằm ngoài mọi isolate) đè lên trên toàn bộ
+  // lightbox — nút đóng và số thứ tự ảnh bị che mất dù DOM vẫn có đủ.
+  // `document` không tồn tại lúc SSR nên phải đợi mount xong mới portal.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const goPrev = useCallback(() => {
     if (index === null) return;
@@ -83,7 +93,9 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
 
   const current = index === null ? null : images[index];
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && current ? (
         <motion.div
@@ -127,8 +139,15 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
             </button>
           </div>
 
-          {/* Ảnh */}
-          <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-2 md:px-20">
+          {/* Ảnh — click vào vùng nền quanh ảnh (không phải chính ảnh) để đóng.
+              Check target===currentTarget vì ảnh (fill) choán hết content-box,
+              chỉ phần padding của div này mới thật sự là "nền" bắt được click. */}
+          <div
+            className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-2 md:px-20"
+            onClick={(event) => {
+              if (event.target === event.currentTarget) onClose();
+            }}
+          >
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.src}
@@ -183,6 +202,7 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
           </div>
         </motion.div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

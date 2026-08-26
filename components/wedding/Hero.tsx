@@ -108,13 +108,14 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* Nhánh botanical mọc lên từ mép trái, đi sau chữ (-z-10) */}
+      {/* Nhánh botanical mọc lên từ mép trái, đi sau chữ (-z-10).
+          Cỡ chuẩn hoá dùng chung toàn site: branch 62vh/opacity 0.32. */}
       <BotanicalAccent
         variant="branch"
-        opacity={0.42}
+        opacity={0.32}
         depth={6}
         flip
-        className="-bottom-[6svh] -left-[8svh] h-[56svh] w-[21svh] md:-left-[5svh] md:h-[62svh] md:w-[23svh]"
+        className="-bottom-[6svh] -left-[8svh] h-[62vh] w-[24vh]"
       />
 
       <div className="flex flex-col items-center justify-center gap-[clamp(10px,2.4svh,30px)] px-6 text-center md:col-start-1 md:row-start-1 md:items-start md:px-[clamp(32px,6vw,104px)] md:text-left">

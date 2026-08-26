@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans, Manrope, Parisienne } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Manrope } from "next/font/google";
 import { wedding } from "@/lib/wedding";
 import { InvitationProvider } from "@/lib/invitation";
 import { MusicProvider } from "@/lib/music";
@@ -17,18 +17,6 @@ const manrope = Manrope({
   subsets: ["latin", "latin-ext", "vietnamese"],
   weight: ["300", "400", "500"],
   variable: "--font-manrope",
-  display: "swap",
-});
-
-/**
- * Chữ viết tay cho vài dòng nhấn ("Our", "Save the date", lời cảm ơn ở footer).
- * Chỉ có subset latin — mọi chuỗi dùng font này đều phải là tiếng Anh không dấu
- * (xem wedding.copy.script).
- */
-const parisienne = Parisienne({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-parisienne",
   display: "swap",
 });
 
@@ -83,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${cormorant.variable} ${manrope.variable} ${dmSans.variable} ${parisienne.variable}`}
+      className={`${cormorant.variable} ${manrope.variable} ${dmSans.variable}`}
     >
       <body>
         <InvitationProvider>

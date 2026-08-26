@@ -25,30 +25,28 @@ export function Closing() {
         />
       </div>
 
-      {/* Hai nhánh ở hai mép dưới như bản design — nhưng cố ý lệch nhau về kích
-          thước và độ mờ để không thành một cặp đối xứng kiểu template. */}
+      {/* Branch mép trái + sprig mép phải, đúng cỡ chuẩn hoá dùng chung toàn
+          site: branch 62vh/0.32, sprig 36vh/0.26. */}
       <BotanicalAccent
         variant="branch"
-        opacity={0.26}
+        opacity={0.32}
         depth={5}
         flip
-        className="-bottom-[8vh] -left-[4vw] hidden h-[52vh] w-[21vh] md:block"
+        className="-bottom-[8vh] -left-[4vw] hidden h-[62vh] w-[24vh] lg:block"
       />
       <BotanicalAccent
         variant="sprig"
-        opacity={0.2}
+        opacity={0.26}
         depth={4}
-        className="-right-[3vw] -bottom-[5vh] hidden h-[36vh] w-[20vh] md:block"
+        className="-right-[3vw] -bottom-[5vh] hidden h-[36vh] w-[20vh] lg:block"
       />
 
-      {/* Thứ tự theo bản design: lời cảm ơn viết tay → tên → ngày */}
+      {/* Thứ tự theo bản design: lời cảm ơn → tên → ngày */}
       <div className="flex w-full max-w-2xl flex-col items-center text-center">
         <Reveal>
-          <p aria-hidden="true" className="wd-script whitespace-pre-line text-taupe/85">
-            {wedding.copy.script.closing}
+          <p className="wd-body-serif whitespace-pre-line">
+            {wedding.copy.closing.thanks}
           </p>
-          {/* Bản tiếng Việt cho phần đọc màn hình + khách không thấy font script */}
-          <p className="sr-only">{wedding.copy.closing.thanks}</p>
         </Reveal>
 
         <Reveal delay={0.16}>

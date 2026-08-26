@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
-import { Botanical } from "@/components/ui/Botanical";
+import { Botanical, BotanicalRule } from "@/components/ui/Botanical";
+import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 
 type Remaining = {
   days: number;
@@ -56,12 +57,21 @@ export function Countdown() {
   return (
     <section
       aria-label="Đếm ngược tới ngày cưới"
-      className="relative isolate w-full bg-ivory px-6 py-24 md:px-5 md:py-32"
+      className="relative isolate w-full overflow-hidden bg-ivory px-6 pt-16 pb-14 md:px-5 md:pt-20 md:pb-16"
     >
+      {/* Sprig mép phải — giữ cỡ 36vh, opacity tăng nhẹ so với chuẩn chung
+          (0.26 → 0.30) để rõ hơn một chút trong khối Countdown → Timeline. */}
+      <BotanicalAccent
+        variant="sprig"
+        opacity={0.3}
+        depth={5}
+        className="top-[20%] -right-[2vw] hidden h-[36vh] w-[20vh] lg:block"
+      />
+
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
-        <Reveal className="flex flex-col items-center gap-5">
+        <Reveal className="flex flex-col items-center gap-4">
           <span className="wd-eyebrow">{wedding.copy.countdown.eyebrow}</span>
-          <hr className="wd-rule" />
+          <Botanical variant="mark" className="h-4 w-11 text-sage/70" />
         </Reveal>
 
         {isOver ? (
@@ -72,21 +82,20 @@ export function Countdown() {
             </p>
           </Reveal>
         ) : (
-          <Reveal delay={0.1} className="mt-14 flex w-full flex-col items-center md:mt-16">
+          <Reveal delay={0.1} className="mt-10 flex w-full flex-col items-center md:mt-12">
             {/*
-              Luôn 4 cột, kể cả mobile — khách xem trên điện thoại vẫn thấy
-              ngày/giờ/phút/giây trên cùng một dòng.
-              Để vừa màn hẹp: gap 24px, số hạ min xuống 2.5rem
-              (mốc này chỉ ăn dưới 400px nên desktop không đổi), và nhãn thu
-              letter-spacing lại vì 0.4em làm chữ "NGÀY" rộng hơn cả con số.
+              Mobile: 2×2 để mỗi số có đủ chỗ ngang khi phóng to; từ sm trở
+              lên quay về một hàng 4 cột như bản gốc.
+              Nhãn thu letter-spacing lại vì 0.4em làm chữ "NGÀY" rộng hơn
+              cả con số.
             */}
             <div
-              className="grid grid-cols-4 gap-x-6 sm:gap-x-12 md:gap-x-16"
+              className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-4 sm:gap-x-12 sm:gap-y-0 md:gap-x-16"
               aria-live="off"
             >
               {UNITS.map(({ key, label }) => (
                 <div key={key} className="flex min-w-0 flex-col items-center gap-3">
-                  <span className="wd-numeral whitespace-nowrap text-[clamp(2.5rem,10vw,4.5rem)] tracking-[0.04em] tabular-nums">
+                  <span className="wd-numeral whitespace-nowrap text-[clamp(3.25rem,12vw,6.25rem)] tracking-[0.04em] tabular-nums">
                     {remaining
                       ? String(remaining[key]).padStart(2, "0")
                       : "--"}
@@ -98,11 +107,15 @@ export function Countdown() {
               ))}
             </div>
 
-            <span className="wd-eyebrow mt-12">
+            <span className="wd-eyebrow mt-10">
               {wedding.copy.countdown.untilLabel}
             </span>
           </Reveal>
         )}
+
+        {/* Divider rất nhỏ nối sang "NGÀY VUI" — dùng lại đúng BotanicalRule
+            chung toàn site thay vì thêm asset/icon mới. */}
+        <BotanicalRule className="mt-10 md:mt-12" lineClassName="w-8 sm:w-12" />
       </div>
     </section>
   );

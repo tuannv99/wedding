@@ -1,14 +1,17 @@
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
+import { BotanicalRule } from "@/components/ui/Botanical";
 
 type SectionHeadingProps = {
   /** Nhãn nhỏ phía trên (.wd-eyebrow). */
   label?: string;
   title: string;
-  /** Gạch ngang champagne (.wd-rule) dưới tiêu đề. */
+  /** Nét — lá — nét dưới tiêu đề (đồng bộ với divider dùng trong Our Story). */
   rule?: boolean;
   align?: "left" | "center";
   className?: string;
+  /** Ghi đè cỡ chữ tiêu đề cho riêng một section — không đổi font/weight/tracking. */
+  titleClassName?: string;
 };
 
 export function SectionHeading({
@@ -17,6 +20,7 @@ export function SectionHeading({
   rule = true,
   align = "center",
   className,
+  titleClassName,
 }: SectionHeadingProps) {
   return (
     <Reveal
@@ -29,8 +33,10 @@ export function SectionHeading({
       )}
     >
       {label ? <span className="wd-eyebrow">{label}</span> : null}
-      <h2 className="wd-h1 tracking-[0.16em] uppercase">{title}</h2>
-      {rule ? <hr className="wd-rule" /> : null}
+      <h2 className={cn("wd-h1 tracking-[0.16em] uppercase", titleClassName)}>
+        {title}
+      </h2>
+      {rule ? <BotanicalRule lineClassName="w-10 sm:w-14" /> : null}
     </Reveal>
   );
 }

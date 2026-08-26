@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Botanical } from "@/components/ui/Botanical";
+import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { Lightbox } from "@/components/wedding/Lightbox";
 
 /**
@@ -23,8 +24,16 @@ export function Gallery() {
   return (
     <section
       id="gallery"
-      className="relative isolate w-full bg-ivory px-4 py-28 sm:px-6 md:px-5 md:py-40"
+      className="relative isolate w-full overflow-hidden bg-ivory px-4 py-28 sm:px-6 md:px-5 md:py-40"
     >
+      {/* Sprig mép trái — cỡ chuẩn hoá dùng chung toàn site: 36vh/0.26. */}
+      <BotanicalAccent
+        variant="sprig"
+        opacity={0.26}
+        depth={5}
+        className="top-[6%] -left-[2vw] hidden h-[36vh] w-[20vh] lg:block"
+      />
+
       <div className="mx-auto w-full max-w-6xl">
         <SectionHeading
           label={wedding.copy.gallery.eyebrow}

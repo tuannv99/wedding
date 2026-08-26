@@ -224,7 +224,7 @@ const IMAGES = [
   {
     file: "story-02.jpg", width: 1200, height: 1500, label: "Chuyện chúng mình 02 · 4:5",
     tint: TINTS[0], seed: 37,
-    branch: { x: 0.04, y: 1.0, rotate: -11, flip: true, scale: 0.66, opacity: 0.46 },
+    branch: null,
   },
   {
     file: "story-03.jpg", width: 1200, height: 1500, label: "Chuyện chúng mình 03 · 4:5",

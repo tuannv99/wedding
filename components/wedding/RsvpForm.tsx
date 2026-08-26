@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { BotanicalRule } from "@/components/ui/Botanical";
 
 export type RsvpData = {
   name: string;
@@ -86,7 +87,7 @@ export default function RsvpForm({
         >
           {successTitle}
         </p>
-        <hr className="wd-rule" style={{ margin: "32px auto" }} />
+        <BotanicalRule className="my-6" />
         <p
           className="wd-body-serif"
           style={{
@@ -122,10 +123,7 @@ export default function RsvpForm({
         <h2 className="wd-h1" style={{ whiteSpace: "pre-line" }}>
           {title}
         </h2>
-        <hr
-          className="wd-rule"
-          style={{ margin: "28px auto clamp(38px, 5vh, 58px)" }}
-        />
+        <BotanicalRule className="mt-[28px] mb-[clamp(38px,5vh,58px)]" />
       </div>
 
       <form className="wd-form" onSubmit={handleSubmit} noValidate>

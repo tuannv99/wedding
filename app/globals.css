@@ -16,7 +16,6 @@
   /* ---- Typography ---- */
   --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-body: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-script: var(--font-parisienne), "Parisienne", "Apple Chancery", cursive;
 }
 
 @layer base {
@@ -38,15 +37,16 @@
   }
 
   /* Chừa chỗ cho navigation sticky khi cuộn tới anchor.
-     Phải khớp đúng chiều cao header (Navigation.tsx: h-16/md:h-20 + border-b 1px),
-     nếu không phần đáy section trước sẽ lộ ra dưới header thành một viền lệch màu. */
+     Phải khớp đúng chiều cao header (Navigation.tsx: h-16/md:h-[72px] + border-b 1px),
+     nếu không phần đáy section trước sẽ lộ ra dưới header thành một viền lệch màu
+     hoặc một khoảng trắng thừa phía trên section vừa cuộn tới. */
   section[id] {
     scroll-margin-top: 65px;
   }
 
   @media (min-width: 768px) {
     section[id] {
-      scroll-margin-top: 81px;
+      scroll-margin-top: 73px;
     }
   }
 
