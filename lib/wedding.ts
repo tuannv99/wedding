@@ -247,10 +247,10 @@ export const wedding = {
     },
     rsvp: {
       title: "RẤT MONG\nĐƯỢC GẶP BẠN",
-      submitLabel: "Xác nhận",
+      submitLabel: "Gửi lời chúc",
       successTitle: "Cảm ơn bạn ♡",
       successBody:
-        "Sự hiện diện của bạn\nlà món quà tuyệt vời\nđối với chúng mình.",
+        "Sự hiện diện của bạn là món quà tuyệt vời đối với chúng mình.",
     },
     closing: {
       eyebrow: "Thương mến",

@@ -10,8 +10,9 @@ import RsvpForm, { type RsvpData } from "@/components/wedding/RsvpForm";
  * Toàn bộ giao diện form nằm trong RsvpForm (export từ Claude Design),
  * nên sau này đổi thiết kế form không phải đụng tới chỗ gọi API.
  *
- * Spacing theo spec: padding clamp(84px,13vh,168px) / clamp(24px,6vw,120px),
- * nền warm white, viền trên dưới 1px taupe 20%, khung form rộng tối đa 620px.
+ * Spacing dùng chung hệ padding chuẩn của mọi section (px-6 py-28 md:px-5
+ * md:py-40), nền warm white, viền trên dưới 1px taupe 20%, khung form rộng
+ * tối đa 720px.
  */
 export function RSVP() {
   async function handleSubmit(data: RsvpData) {
@@ -33,7 +34,7 @@ export function RSVP() {
   return (
     <section
       id="rsvp"
-      className="relative isolate w-full overflow-hidden border-y border-taupe/20 bg-ivory px-[clamp(24px,6vw,120px)] py-[clamp(84px,13vh,168px)]"
+      className="relative isolate w-full overflow-hidden border-y border-taupe/20 bg-ivory px-6 py-28 md:px-5 md:py-40"
     >
       {/* Branch mép phải — cỡ chuẩn hoá dùng chung toàn site: 62vh/0.32. */}
       <BotanicalAccent
@@ -44,7 +45,7 @@ export function RSVP() {
         className="top-[8%] -right-[4vw] hidden h-[62vh] w-[24vh] lg:block"
       />
 
-      <div className="mx-auto w-full max-w-[620px]">
+      <div className="mx-auto w-full max-w-[720px]">
         <Reveal>
           <RsvpForm
             title={wedding.copy.rsvp.title}

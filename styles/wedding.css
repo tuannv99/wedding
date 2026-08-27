@@ -150,7 +150,10 @@
 
 /* ---------- Form ---------- */
 
-.wd-form { display: grid; gap: 28px; font-family: var(--wd-font-body); }
+/* Nhịp giữa các field điều khiển riêng bằng margin-top trên từng field
+   (xem RsvpForm.tsx) theo đúng thang 36–56px trong spec — không dùng gap
+   đều ở đây vì "Số người tham dự" ẩn/hiện tuỳ lựa chọn tham dự. */
+.wd-form { display: grid; font-family: var(--wd-font-body); }
 
 .wd-field { display: grid; gap: 10px; }
 
@@ -176,45 +179,106 @@
 }
 .wd-textarea { resize: vertical; }
 .wd-input:focus,
-.wd-textarea:focus { border-bottom-color: var(--wd-brown); }
+.wd-textarea:focus { border-bottom-color: var(--wd-champagne); }
 .wd-input::placeholder,
 .wd-textarea::placeholder { color: var(--wd-taupe); }
 
-.wd-pill-group { display: flex; flex-wrap: wrap; gap: 12px; }
+/* Lựa chọn tham dự: chấm tròn nhỏ thay cho pill — giống đánh dấu trên thiệp
+   hơn là hai nút CTA. Xếp dọc mobile, ngang hàng từ sm nếu đủ chỗ. */
+.wd-rsvp-options { display: flex; flex-direction: column; gap: 16px; }
+@media (min-width: 640px) {
+  .wd-rsvp-options { flex-direction: row; gap: 44px; }
+}
 
-.wd-pill {
+.wd-rsvp-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--wd-font-body);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wd-taupe);
+  cursor: pointer;
+  transition: color 0.3s ease-out;
+}
+.wd-rsvp-option:hover { color: var(--wd-brown); }
+.wd-rsvp-option[aria-pressed="true"] { color: var(--wd-brown); }
+
+.wd-rsvp-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  transition: background-color 0.3s ease-out, border-color 0.3s ease-out;
+}
+.wd-rsvp-option[aria-pressed="true"] .wd-rsvp-dot {
+  background: var(--wd-champagne);
+  border-color: var(--wd-champagne);
+}
+
+/* Số người tham dự: control tối giản − 1 + trên một đường underline mảnh,
+   không box/card — số ở giữa là trọng tâm. */
+.wd-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
   min-height: 48px;
-  padding: 0 26px;
-  border-radius: 999px;
-  border: 1px solid var(--wd-taupe);
+  border-bottom: 1px solid var(--wd-line-strong);
+  padding: 8px 2px;
+}
+.wd-stepper-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  background: transparent;
+  font-family: var(--wd-font-body);
+  font-size: 17px;
+  line-height: 1;
+  color: var(--wd-brown-soft);
+  cursor: pointer;
+  transition: color 0.3s ease-out;
+}
+.wd-stepper-btn:hover:not(:disabled) { color: var(--wd-champagne); }
+.wd-stepper-btn:disabled { opacity: 0.3; cursor: default; }
+
+.wd-stepper-value {
+  min-width: 2ch;
+  text-align: center;
+  font-family: var(--wd-font-numeral);
+  font-size: 20px;
+  color: var(--wd-brown);
+}
+
+/* CTA gửi — text button mảnh, không pill/không nền, giống một lời mời hành
+   động trên thiệp hơn là button web. */
+.wd-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 2px;
+  border: 0;
   background: transparent;
   font-family: var(--wd-font-body);
   font-size: 11px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--wd-brown);
   cursor: pointer;
-  transition: opacity 0.3s ease-out, border-color 0.3s ease-out;
+  transition: color 0.3s ease-out;
 }
-.wd-pill:hover { border-color: var(--wd-brown); }
-.wd-pill[aria-pressed="false"] { opacity: 0.4; }
-
-.wd-btn {
-  min-height: 52px;
-  padding: 0 32px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--wd-brown);
-  color: var(--wd-ivory);
-  font-family: var(--wd-font-body);
-  font-size: 10px;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.3s ease-out;
-}
-.wd-btn:hover { background: var(--wd-taupe); }
-.wd-btn:disabled { opacity: 0.45; cursor: default; }
+.wd-cta:hover { color: var(--wd-champagne); }
+.wd-cta:disabled { opacity: 0.45; cursor: default; }
+.wd-cta-arrow { transition: transform 0.3s ease-out; }
+.wd-cta:hover .wd-cta-arrow { transform: translateX(3px); }
 
 .wd-btn-ghost {
   display: inline-flex;
@@ -241,5 +305,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wd-input, .wd-textarea, .wd-pill, .wd-btn, .wd-btn-ghost { transition: none; }
+  .wd-input, .wd-textarea, .wd-btn-ghost,
+  .wd-rsvp-option, .wd-rsvp-dot, .wd-stepper-btn, .wd-cta, .wd-cta-arrow {
+    transition: none;
+  }
 }

@@ -11,12 +11,30 @@ import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { Lightbox } from "@/components/wedding/Lightbox";
 
 /**
- * Bản design xếp gallery thành MỘT hàng ảnh dọc, cao bằng nhau, khe hở nhỏ —
- * thay cho masonry so le trước đây. Thu dần số cột xuống ở màn hẹp để mỗi ảnh
- * không bao giờ nhỏ hơn khoảng một nửa bề ngang màn hình.
+ * Từ sm trở lên: mosaic bất đối xứng 3 cột — một ảnh lớn làm điểm nhấn, hai
+ * ảnh nhỏ xếp chồng bên phải, hàng dưới ba ảnh nhỏ đều nhau. Thay cho một
+ * hàng ngang 6 ảnh bằng nhau (nhìn phẳng, thiếu điểm nhấn) trước đây.
+ * Dưới sm vẫn giữ lưới 2 cột đơn giản — mosaic co vào 2 cột hẹp sẽ vụn.
+ *
+ *   ┌───────┬───┐
+ *   │       │ 2 │
+ *   │   1   ├───┤
+ *   │       │ 3 │
+ *   ├───┬───┼───┤
+ *   │ 4 │ 5 │ 6 │
+ *   └───┴───┴───┘
  */
+const MOSAIC_LAYOUT = [
+  "sm:col-start-1 sm:col-span-2 sm:row-start-1 sm:row-span-2",
+  "sm:col-start-3 sm:row-start-1",
+  "sm:col-start-3 sm:row-start-2",
+  "sm:col-start-1 sm:row-start-3",
+  "sm:col-start-2 sm:row-start-3",
+  "sm:col-start-3 sm:row-start-3",
+];
+
 const GALLERY_SIZES =
-  "(max-width: 640px) 48vw, (max-width: 1024px) 31vw, 16vw";
+  "(max-width: 639px) 48vw, (max-width: 1023px) 55vw, 620px";
 
 export function Gallery() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -24,7 +42,7 @@ export function Gallery() {
   return (
     <section
       id="gallery"
-      className="relative isolate w-full overflow-hidden bg-ivory px-4 py-28 sm:px-6 md:px-5 md:py-40"
+      className="relative isolate w-full overflow-hidden bg-ivory px-6 py-28 md:px-5 md:py-40"
     >
       {/* Sprig mép trái — cỡ chuẩn hoá dùng chung toàn site: 36vh/0.26. */}
       <BotanicalAccent
@@ -42,7 +60,7 @@ export function Gallery() {
           className="px-2"
         />
 
-        <div className="mt-14 grid grid-cols-2 gap-2.5 sm:mt-16 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+        <div className="mt-14 grid grid-cols-2 gap-2.5 sm:mt-16 sm:grid-cols-3 sm:auto-rows-[clamp(180px,26vw,380px)] sm:gap-3">
           {wedding.gallery.map((image, index) => {
             return (
               <Reveal
@@ -50,7 +68,7 @@ export function Gallery() {
                 delay={(index % 3) * 0.08}
                 y={18}
                 duration={0.4}
-                className={cn("aspect-[4/5]")}
+                className={cn("aspect-[4/5] sm:aspect-auto", MOSAIC_LAYOUT[index])}
               >
                 <button
                   type="button"
