@@ -59,7 +59,10 @@ export function OurStory() {
                           : "md:order-1 md:justify-self-end",
                       )}
                     >
-                      <span className="font-display block text-[clamp(1.5rem,6.5vw,2.25rem)] leading-none tracking-[0.14em] text-champagne">
+                      {/* Dùng đúng wd-body-serif (font-weight 300, không kéo
+                          letter-spacing) như đoạn text bên cạnh — chỉ phóng
+                          cỡ chữ lớn hơn để vẫn đọc ra là số thứ tự. */}
+                      <span className="wd-body-serif block text-[clamp(1.5rem,6.5vw,2.25rem)] leading-none">
                         {String(index + 1).padStart(2, "0")}
                       </span>
 

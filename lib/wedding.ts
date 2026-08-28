@@ -94,8 +94,8 @@ export const wedding = {
     {
       text: "Một ngày bình thường,\nchúng mình gặp nhau.",
       image: {
-        src: "/images/wedding/story-01.jpg",
-        alt: "Tuấn và Hoa trong lần chụp ảnh cưới đầu tiên",
+        src: "/images/wedding/anh-05.jpg",
+        alt: "Tuấn và Hoa cùng chú cún nhỏ bên vách biển",
         width: 1200,
         height: 1500,
       },
@@ -103,8 +103,8 @@ export const wedding = {
     {
       text: "Rồi từ những điều rất nhỏ,\nchúng mình quyết định\nđi cùng nhau thật lâu.",
       image: {
-        src: "/images/wedding/story-02.jpg",
-        alt: "Tuấn bế Hoa trong sân vườn",
+        src: "/images/wedding/anh-06.jpg",
+        alt: "Tuấn và Hoa nắm tay bước đi trên thảm cỏ xanh",
         width: 1200,
         height: 1500,
       },
@@ -113,8 +113,8 @@ export const wedding = {
       text: "Và rồi,\nchúng mình",
       emphasis: "ở đây...",
       image: {
-        src: "/images/wedding/story-03.jpg",
-        alt: "Tuấn và Hoa nắm tay nhau bước đi",
+        src: "/images/wedding/anh-02.jpg",
+        alt: "Tuấn và Hoa trao nhau nụ hôn dưới giàn hoa",
         width: 1200,
         height: 1500,
       },
@@ -130,14 +130,14 @@ export const wedding = {
 
   images: {
     hero: {
-      src: "/images/wedding/hero.jpg",
-      alt: "Văn Tuấn và Mai Hoa trong bộ ảnh cưới",
+      src: "/images/wedding/anh-01.jpg",
+      alt: "Tuấn và Hoa tung hoa cưới trên bãi biển",
       width: 1500,
       height: 1900,
     },
     closing: {
-      src: "/images/wedding/closing.jpg",
-      alt: "Tuấn và Hoa trong ánh chiều",
+      src: "/images/wedding/anh-03.jpg",
+      alt: "Tuấn và Hoa sánh bước trong vườn",
       width: 1800,
       height: 1200,
     },
@@ -145,38 +145,38 @@ export const wedding = {
 
   gallery: [
     {
-      src: "/images/wedding/gallery-01.jpg",
-      alt: "Khoảnh khắc đầu tiên của buổi chụp",
+      src: "/images/wedding/anh-01.jpg",
+      alt: "Tuấn và Hoa tung hoa cưới bên bờ biển",
       width: 1200,
       height: 1500,
     },
     {
-      src: "/images/wedding/gallery-02.jpg",
-      alt: "Bó hoa cưới trên nền vải lụa",
+      src: "/images/wedding/anh-02.jpg",
+      alt: "Nụ hôn của Tuấn và Hoa dưới giàn hoa",
       width: 1200,
       height: 1500,
     },
     {
-      src: "/images/wedding/gallery-03.jpg",
-      alt: "Nụ cười của cô dâu",
+      src: "/images/wedding/anh-04.jpg",
+      alt: "Tuấn và Hoa tạo dáng trái tim",
       width: 1200,
       height: 1500,
     },
     {
-      src: "/images/wedding/gallery-04.jpg",
-      alt: "Chân dung hai người bên khung cửa",
+      src: "/images/wedding/anh-03.jpg",
+      alt: "Tuấn và Hoa sánh bước trong vườn",
       width: 1200,
       height: 1500,
     },
     {
-      src: "/images/wedding/gallery-05.jpg",
-      alt: "Cùng nhau đi trên con đường nhỏ",
+      src: "/images/wedding/anh-05.jpg",
+      alt: "Tuấn, Hoa và chú cún nhỏ bên vách biển",
       width: 1200,
       height: 1500,
     },
     {
-      src: "/images/wedding/gallery-06.jpg",
-      alt: "Ảnh cưới toàn cảnh",
+      src: "/images/wedding/anh-06.jpg",
+      alt: "Tuấn và Hoa trên thảm cỏ xanh",
       width: 1200,
       height: 1500,
     },

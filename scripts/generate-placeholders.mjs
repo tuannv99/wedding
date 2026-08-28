@@ -114,15 +114,30 @@ function escapeXml(value) {
 /**
  * "Quầng sáng xoá phông": vài vòng tròn mềm, to nhỏ khác nhau, đặt theo PRNG —
  * đủ để mắt đọc ra là một tấm ảnh chụp thiếu nét chứ không phải ô màu phẳng.
+ *
+ * Rải quanh 2 "cụm" thay vì rải đều toàn khung: ảnh chụp xoá phông thật luôn
+ * có một vùng sáng chính lệch về một phía, không đối xứng đều tăm tắp — nhờ
+ * vậy mỗi ảnh trong bộ demo cũng có một "điểm nhìn" riêng thay vì lặp lại
+ * đúng một bố cục tròn đều ở giữa.
  */
 function bokeh({ width, height, seed, tint }) {
   const random = makeRandom(seed);
   const short = Math.min(width, height);
 
-  return Array.from({ length: 14 }, (_, i) => {
-    const r = short * (0.05 + random() * 0.22);
-    const cx = width * (random() * 1.1 - 0.05);
-    const cy = height * (random() * 1.1 - 0.05);
+  const clusters = Array.from({ length: 2 }, () => ({
+    cx: width * (0.16 + random() * 0.68),
+    cy: height * (0.12 + random() * 0.64),
+    spread: short * (0.16 + random() * 0.18),
+  }));
+
+  return Array.from({ length: 16 }, (_, i) => {
+    const cluster = clusters[i % clusters.length];
+    const angle = random() * Math.PI * 2;
+    // sqrt(random()) trải điểm ĐỀU trong hình tròn thay vì dồn về tâm.
+    const dist = cluster.spread * Math.sqrt(random());
+    const cx = cluster.cx + Math.cos(angle) * dist;
+    const cy = cluster.cy + Math.sin(angle) * dist;
+    const r = short * (0.045 + random() * 0.2);
     const fill = i % 3 === 0 ? PALETTE.warm : tint;
     const alpha = 0.12 + random() * 0.26;
 
@@ -135,6 +150,18 @@ function svg({ width, height, label, tint, seed, branch }) {
   const short = Math.min(width, height);
   const pad = Math.round(short * 0.045);
   const labelSize = Math.max(11, Math.round(short * 0.018));
+
+  // Seed riêng (lệch khỏi seed của bokeh) cho vị trí "nắng"/vignette/light-leak
+  // — mỗi ảnh một bố cục hơi khác nhau thay vì luôn đối xứng y hệt nhau.
+  const rand = makeRandom(seed + 101);
+  const sunX = round(16 + rand() * 26);
+  const sunY = round(8 + rand() * 22);
+  const vigX = round(42 + rand() * 16);
+  const vigY = round(36 + rand() * 18);
+  const vigR = round(64 + rand() * 14);
+  const leakX1 = round(rand() * 55);
+  const leakX2 = round(leakX1 + 30 + rand() * 30);
+  const leakFromTop = rand() > 0.5;
 
   /*
     Nhánh neo theo GỐC cành (điểm 138,374 trong hệ toạ độ artwork), không theo
@@ -159,17 +186,22 @@ function svg({ width, height, label, tint, seed, branch }) {
       <stop offset="40%" stop-color="${PALETTE.ivory}"/>
       <stop offset="100%" stop-color="${tint}" stop-opacity="0.85"/>
     </linearGradient>
-    <radialGradient id="sun" cx="24%" cy="14%" r="68%">
+    <radialGradient id="sun" cx="${sunX}%" cy="${sunY}%" r="68%">
       <stop offset="0%" stop-color="${PALETTE.warm}" stop-opacity="0.6"/>
       <stop offset="100%" stop-color="${PALETTE.warm}" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="vignette" cx="50%" cy="45%" r="72%">
+    <radialGradient id="vignette" cx="${vigX}%" cy="${vigY}%" r="${vigR}%">
       <stop offset="55%" stop-color="${PALETTE.taupe}" stop-opacity="0"/>
       <stop offset="100%" stop-color="${PALETTE.taupe}" stop-opacity="0.34"/>
     </radialGradient>
     <linearGradient id="floor" x1="0" y1="0.55" x2="0" y2="1">
       <stop offset="0%" stop-color="${PALETTE.taupe}" stop-opacity="0"/>
       <stop offset="100%" stop-color="${PALETTE.taupe}" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="leak" x1="${leakX1}%" y1="${leakFromTop ? 0 : 100}%" x2="${leakX2}%" y2="${leakFromTop ? 100 : 0}%">
+      <stop offset="0%" stop-color="${PALETTE.champagne}" stop-opacity="0"/>
+      <stop offset="50%" stop-color="${PALETTE.champagne}" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="${PALETTE.champagne}" stop-opacity="0"/>
     </linearGradient>
     <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="${round(short * 0.028)}"/>
@@ -181,6 +213,7 @@ function svg({ width, height, label, tint, seed, branch }) {
     ${bokeh({ width, height, seed, tint })}
   </g>
   <rect width="${width}" height="${height}" fill="url(#sun)"/>
+  <rect width="${width}" height="${height}" fill="url(#leak)"/>
   <rect width="${width}" height="${height}" fill="url(#floor)"/>
   ${branchLayer}
   <rect width="${width}" height="${height}" fill="url(#vignette)"/>
@@ -188,7 +221,7 @@ function svg({ width, height, label, tint, seed, branch }) {
   <text x="${width - pad}" y="${height - pad}" text-anchor="end"
         font-family="Consolas, 'Courier New', monospace" font-size="${labelSize}"
         letter-spacing="${Math.max(1, Math.round(labelSize * 0.14))}"
-        fill="${PALETTE.taupe}" fill-opacity="0.75">${escapeXml(label.toUpperCase())}</text>
+        fill="${PALETTE.taupe}" fill-opacity="0.22">${escapeXml(label.toUpperCase())}</text>
 </svg>`;
 }
 
