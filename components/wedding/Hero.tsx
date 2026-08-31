@@ -121,7 +121,7 @@ export function Hero() {
       <div className="flex flex-col items-center justify-center gap-[clamp(10px,2.4svh,30px)] px-6 text-center md:col-start-1 md:row-start-1 md:items-start md:px-[clamp(32px,6vw,104px)] md:text-left">
         <motion.p
           {...rise(0.4)}
-          className="wd-eyebrow text-ink/70 md:tracking-[0.5em]"
+          className="wd-eyebrow wd-num text-ink/70 md:tracking-[0.5em]"
         >
           {wedding.date.display}
         </motion.p>

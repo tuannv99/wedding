@@ -46,27 +46,27 @@ export function OurStory() {
                 {index > 0 ? <BotanicalRule className="my-12 md:my-16" /> : null}
 
                 <Reveal delay={0.1} y={20}>
-                  {/* Mobile xếp dọc — ẢNH trước, CHỮ sau — thay vì ép hai cột
-                      hẹp cạnh nhau; từ md mới thành hai cột so le trái/phải. */}
-                  <div className="flex flex-col gap-8 md:grid md:grid-cols-[1fr_1.15fr] md:items-center md:gap-14">
+                  {/* Chữ và ảnh luôn nằm CÙNG MỘT HÀNG, kể cả mobile; thứ tự
+                      trái/phải đảo so le theo mốc ở mọi bề rộng màn hình. */}
+                  <div className="grid grid-cols-[1fr_1.15fr] items-center gap-5 sm:gap-8 md:gap-14">
                     {/* Số thứ tự + đường kẻ + chữ.
                         Ở desktop kéo khối chữ về sát ảnh cho cặp trái/phải cân nhau. */}
                     <div
                       className={cn(
-                        "order-2 min-w-0 md:max-w-[380px]",
+                        "min-w-0 md:max-w-[380px]",
                         photoFirst
-                          ? "md:order-2 md:justify-self-start"
-                          : "md:order-1 md:justify-self-end",
+                          ? "order-2 md:justify-self-start"
+                          : "order-1 md:justify-self-end",
                       )}
                     >
                       {/* Dùng đúng wd-body-serif (font-weight 300, không kéo
                           letter-spacing) như đoạn text bên cạnh — chỉ phóng
                           cỡ chữ lớn hơn để vẫn đọc ra là số thứ tự. */}
-                      <span className="wd-body-serif block text-[clamp(1.5rem,6.5vw,2.25rem)] leading-none">
+                      <span className="wd-body-serif wd-num block text-[clamp(1.5rem,6.5vw,2.25rem)] leading-none">
                         {String(index + 1).padStart(2, "0")}
                       </span>
 
-                      <div className="mt-4 grid grid-cols-[1px_1fr] gap-x-4 sm:gap-x-5">
+                      <div className="mt-3 grid grid-cols-[1px_1fr] gap-x-3 sm:mt-4 sm:gap-x-5">
                         <span
                           aria-hidden="true"
                           className="relative w-px bg-champagne/45"
@@ -74,7 +74,7 @@ export function OurStory() {
                           <span className="absolute top-2 -left-[2.5px] h-1.5 w-1.5 rounded-full bg-champagne" />
                         </span>
 
-                        <p className="wd-body-serif text-[clamp(1.35rem,4.6vw,1.8rem)] leading-[1.6] whitespace-pre-line">
+                        <p className="wd-body-serif text-[clamp(1.25rem,4.6vw,1.8rem)] leading-[1.5] whitespace-pre-line sm:leading-[1.6]">
                           {step.text}
                           {step.emphasis ? (
                             <>
@@ -89,12 +89,12 @@ export function OurStory() {
                     </div>
 
                     {/* Ảnh editorial: bỏ khung viền/nền kiểu card, chỉ còn
-                        khối ảnh sạch bo góc rất nhẹ. Mobile ảnh chiếm trọn bề
-                        ngang; desktop giới hạn bề rộng để không lấn section. */}
+                        khối ảnh sạch bo góc rất nhẹ. Desktop giới hạn bề rộng
+                        để ảnh không lấn hết section. */}
                     <div
                       className={cn(
-                        "order-1 min-w-0 md:w-full md:max-w-[400px]",
-                        photoFirst ? "md:order-1 md:mr-auto" : "md:order-2 md:ml-auto",
+                        "min-w-0 md:w-full md:max-w-[400px]",
+                        photoFirst ? "order-1 md:mr-auto" : "order-2 md:ml-auto",
                       )}
                     >
                       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3px] bg-warm">
@@ -103,7 +103,7 @@ export function OurStory() {
                           alt={step.image.alt}
                           fill
                           loading="lazy"
-                          sizes="(max-width: 768px) 92vw, 400px"
+                          sizes="(max-width: 768px) 50vw, 400px"
                           className="object-cover"
                         />
                       </div>

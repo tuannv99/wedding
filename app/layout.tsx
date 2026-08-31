@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans, Manrope } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { wedding } from "@/lib/wedding";
 import { InvitationProvider } from "@/lib/invitation";
 import { MusicProvider } from "@/lib/music";
@@ -7,16 +7,10 @@ import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin", "latin-ext", "vietnamese"],
-  weight: ["300", "400", "500", "600"],
+  // 600 không class nào dùng — bỏ đi để khỏi tải thừa 2 file font.
+  weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
-  display: "swap",
-});
-
-const manrope = Manrope({
-  subsets: ["latin", "latin-ext", "vietnamese"],
-  weight: ["300", "400", "500"],
-  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -71,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${cormorant.variable} ${manrope.variable} ${dmSans.variable}`}
+      className={`${cormorant.variable} ${dmSans.variable}`}
     >
       <body>
         <InvitationProvider>

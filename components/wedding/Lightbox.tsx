@@ -124,7 +124,7 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
         >
           {/* Thanh trên: số thứ tự + nút đóng */}
           <div className="flex items-center justify-between px-5 py-4 md:px-8">
-            <span className="wd-eyebrow text-warm/60">
+            <span className="wd-eyebrow wd-num text-warm/60">
               {String(index + 1).padStart(2, "0")} /{" "}
               {String(images.length).padStart(2, "0")}
             </span>

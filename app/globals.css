@@ -15,7 +15,8 @@
 
   /* ---- Typography ---- */
   --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --font-body: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
+  /* Một font cho cả trang — xem ghi chú ở styles/wedding.css. */
+  --font-body: var(--font-display);
 }
 
 @layer base {
@@ -28,7 +29,8 @@
     background-color: var(--color-ivory);
     color: var(--color-ink);
     font-family: var(--font-body);
-    font-weight: 300;
+    /* 400 chứ không phải 300: Cormorant Light quá mảnh cho chữ cỡ thường. */
+    font-weight: 400;
     line-height: 1.75;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

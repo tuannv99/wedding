@@ -38,7 +38,7 @@ export function Timeline() {
                 <li className="relative grid grid-cols-[4.5rem_1px_1fr] items-stretch gap-x-6 sm:grid-cols-[7rem_1px_1fr] sm:gap-x-10">
                   <span
                     className={cn(
-                      "wd-label pt-2 text-right text-ink/70",
+                      "wd-label wd-num pt-2 text-right text-ink/70",
                       isLast ? "pb-0" : "pb-12 sm:pb-14",
                     )}
                   >

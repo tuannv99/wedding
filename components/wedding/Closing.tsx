@@ -59,7 +59,7 @@ export function Closing() {
 
         <Reveal delay={0.3} className="mt-8 flex flex-col items-center gap-7">
           <span aria-hidden="true" className="h-px w-16 bg-ink/25" />
-          <p className="wd-eyebrow text-ink/70">{wedding.date.display}</p>
+          <p className="wd-eyebrow wd-num text-ink/70">{wedding.date.display}</p>
         </Reveal>
 
         <Reveal delay={0.42}>

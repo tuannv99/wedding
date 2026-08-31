@@ -117,8 +117,10 @@ export function Navigation() {
           aria-label="Điều hướng chính"
           className="mx-auto flex h-16 w-full max-w-[104rem] items-center justify-between px-6 md:h-[72px] md:px-10"
         >
-          {/* Menu căn trái sát mép, đúng bản design */}
-          <ul className="hidden items-center gap-9 md:flex lg:gap-11">
+          {/* Menu căn trái sát mép, đúng bản design.
+              Khoảng cách phải hẹp ở md: chữ serif rộng hơn sans khá nhiều nên
+              với gap cũ (36px) hàng menu chạm đúng vào nút nhạc ở 768–900px. */}
+          <ul className="hidden items-center gap-5 md:flex lg:gap-8 xl:gap-11">
             {wedding.nav.map((item) => {
               const isActive = active === item.id;
               return (
@@ -128,7 +130,9 @@ export function Navigation() {
                     onClick={() => goTo(item.id)}
                     aria-current={isActive ? "true" : undefined}
                     className={cn(
-                      "wd-nav-link relative inline-flex min-h-11 items-center transition-colors duration-500",
+                      // 13px ở md rồi mới lên 15px từ lg: chữ serif rộng hơn
+                      // sans nên ở 768–900px hàng menu dí sát nút nhạc.
+                      "wd-nav-link relative inline-flex min-h-11 items-center text-[13px] transition-colors duration-500 lg:text-[15px]",
                       isActive ? "text-ink" : "text-ink/68",
                     )}
                   >
@@ -213,7 +217,7 @@ export function Navigation() {
             </ul>
 
             <hr className="wd-rule" />
-            <p className="wd-eyebrow">{wedding.date.display}</p>
+            <p className="wd-eyebrow wd-num">{wedding.date.display}</p>
           </motion.div>
         ) : null}
       </AnimatePresence>

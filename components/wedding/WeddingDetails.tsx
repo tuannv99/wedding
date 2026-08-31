@@ -7,6 +7,13 @@ import { BotanicalRule } from "@/components/ui/Botanical";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
 import { cn } from "@/lib/utils";
 
+/**
+ * Chuỗi chỉ gồm chữ số và dấu ngăn (ngày, giờ). Dải 4 cột trộn cả số lẫn chữ
+ * trong cùng một mảng `lines` (ví dụ "25 . 10 . 2026" đứng cạnh "Chủ Nhật",
+ * "Xuân Phương ,Ninh Bình"), nên phải lọc từng dòng chứ không đổi font cả cụm.
+ */
+const IS_NUMBER = /^[0-9 .:·/-]+$/;
+
 type Fact = {
   icon: LucideIcon;
   label: string;
@@ -110,7 +117,13 @@ export function WeddingDetails() {
                 />
                 <span className="wd-fact-label mt-1">{fact.label}</span>
                 {fact.lines.map((line) => (
-                  <span key={line} className="wd-fact-value -mt-1.5 text-balance">
+                  <span
+                    key={line}
+                    className={cn(
+                      "wd-fact-value -mt-1.5 text-balance",
+                      IS_NUMBER.test(line) && "wd-num",
+                    )}
+                  >
                     {line}
                   </span>
                 ))}

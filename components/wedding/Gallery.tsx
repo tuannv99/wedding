@@ -11,10 +11,10 @@ import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { Lightbox } from "@/components/wedding/Lightbox";
 
 /**
- * Từ sm trở lên: mosaic bất đối xứng 3 cột — một ảnh lớn làm điểm nhấn, hai
- * ảnh nhỏ xếp chồng bên phải, hàng dưới ba ảnh nhỏ đều nhau. Thay cho một
- * hàng ngang 6 ảnh bằng nhau (nhìn phẳng, thiếu điểm nhấn) trước đây.
- * Dưới sm vẫn giữ lưới 2 cột đơn giản — mosaic co vào 2 cột hẹp sẽ vụn.
+ * Mosaic bất đối xứng 3 cột — một ảnh lớn làm điểm nhấn, hai ảnh nhỏ xếp
+ * chồng bên phải, hàng dưới ba ảnh nhỏ đều nhau. Dùng ở MỌI bề rộng màn hình
+ * (kể cả mobile) để bố cục ảnh cưới trên điện thoại giống hệt trên desktop;
+ * chỉ chiều cao hàng là co lại theo màn.
  *
  *   ┌───────┬───┐
  *   │       │ 2 │
@@ -25,16 +25,16 @@ import { Lightbox } from "@/components/wedding/Lightbox";
  *   └───┴───┴───┘
  */
 const MOSAIC_LAYOUT = [
-  "sm:col-start-1 sm:col-span-2 sm:row-start-1 sm:row-span-2",
-  "sm:col-start-3 sm:row-start-1",
-  "sm:col-start-3 sm:row-start-2",
-  "sm:col-start-1 sm:row-start-3",
-  "sm:col-start-2 sm:row-start-3",
-  "sm:col-start-3 sm:row-start-3",
+  "col-start-1 col-span-2 row-start-1 row-span-2",
+  "col-start-3 row-start-1",
+  "col-start-3 row-start-2",
+  "col-start-1 row-start-3",
+  "col-start-2 row-start-3",
+  "col-start-3 row-start-3",
 ];
 
 const GALLERY_SIZES =
-  "(max-width: 639px) 48vw, (max-width: 1023px) 55vw, 620px";
+  "(max-width: 639px) 66vw, (max-width: 1023px) 55vw, 620px";
 
 export function Gallery() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -60,7 +60,7 @@ export function Gallery() {
           className="px-2"
         />
 
-        <div className="mt-14 grid grid-cols-2 gap-2.5 sm:mt-16 sm:grid-cols-3 sm:auto-rows-[clamp(180px,26vw,380px)] sm:gap-3">
+        <div className="mt-14 grid auto-rows-[clamp(104px,30vw,380px)] grid-cols-3 gap-2 sm:mt-16 sm:auto-rows-[clamp(180px,26vw,380px)] sm:gap-3">
           {wedding.gallery.map((image, index) => {
             return (
               <Reveal
@@ -68,7 +68,7 @@ export function Gallery() {
                 delay={(index % 3) * 0.08}
                 y={18}
                 duration={0.4}
-                className={cn("aspect-[4/5] sm:aspect-auto", MOSAIC_LAYOUT[index])}
+                className={cn(MOSAIC_LAYOUT[index])}
               >
                 <button
                   type="button"
@@ -98,11 +98,8 @@ export function Gallery() {
         </div>
 
         {/* Gallery thuộc về ảnh: botanical chỉ còn đúng một nét rất nhỏ khép lại. */}
-        <Reveal delay={0.1} className="mt-14 flex flex-col items-center gap-6">
+        <Reveal delay={0.1} className="mt-14 flex justify-center">
           <Botanical variant="mark" className="h-4 w-11 text-sage/60" />
-          <p className="wd-eyebrow text-center">
-            {wedding.copy.gallery.hint}
-          </p>
         </Reveal>
       </div>
 

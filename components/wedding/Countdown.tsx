@@ -84,18 +84,20 @@ export function Countdown() {
         ) : (
           <Reveal delay={0.1} className="mt-10 flex w-full flex-col items-center md:mt-12">
             {/*
-              Mobile: 2×2 để mỗi số có đủ chỗ ngang khi phóng to; từ sm trở
-              lên quay về một hàng 4 cột như bản gốc.
+              Luôn MỘT hàng 4 cột, kể cả mobile: khách xem trên điện thoại vẫn
+              thấy ngày/giờ/phút/giây trên cùng một dòng.
+              Để vừa màn hẹp thì chỉ mobile bị thu lại (gap 20px, số hạ xuống
+              10vw); từ sm trở lên giữ nguyên cỡ cũ.
               Nhãn thu letter-spacing lại vì 0.4em làm chữ "NGÀY" rộng hơn
               cả con số.
             */}
             <div
-              className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-4 sm:gap-x-12 sm:gap-y-0 md:gap-x-16"
+              className="grid grid-cols-4 gap-x-5 sm:gap-x-12 md:gap-x-16"
               aria-live="off"
             >
               {UNITS.map(({ key, label }) => (
                 <div key={key} className="flex min-w-0 flex-col items-center gap-3">
-                  <span className="wd-numeral whitespace-nowrap text-[clamp(3.25rem,12vw,6.25rem)] tracking-[0.04em] tabular-nums">
+                  <span className="wd-numeral whitespace-nowrap text-[clamp(2.25rem,10vw,6.25rem)] tracking-[0.04em] tabular-nums sm:text-[clamp(3.25rem,12vw,6.25rem)]">
                     {remaining
                       ? String(remaining[key]).padStart(2, "0")
                       : "--"}

@@ -4,9 +4,11 @@
 
    Font: đã bỏ @import Google Fonts CDN và map sang biến của next/font
    (xem app/layout.tsx) để tránh tải font 2 lần và tránh render-blocking.
-   Body dùng Manrope thay DM Sans: DM Sans trên Google Fonts chỉ có subset
-   latin + latin-ext, không có subset vietnamese (U+1EA0–1EF1), nên chữ có
-   dấu sẽ rơi về font hệ thống. Manrope có đủ subset vietnamese. */
+   Toàn bộ chữ dùng một font duy nhất: Cormorant Garamond (có đủ subset
+   vietnamese). Riêng CHỮ SỐ vẫn để DM Sans — xem --wd-font-numeral.
+   Lưu ý nếu sau này muốn đổi: DM Sans trên Google Fonts chỉ có subset
+   latin + latin-ext, KHÔNG có vietnamese (U+1EA0–1EF1), nên không dùng nó
+   cho chữ có dấu được — chữ sẽ rơi về font hệ thống. */
 
 :root {
   --wd-ivory: #f9f7f2;
@@ -20,7 +22,11 @@
   --wd-line-strong: rgba(169, 159, 149, 0.5);
 
   --wd-font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  --wd-font-body: var(--font-manrope), "Manrope", system-ui, -apple-system, sans-serif;
+  /* Toàn site dùng MỘT font chữ. --wd-font-body được giữ lại như một "khe"
+     riêng cho chữ nhỏ/giao diện nhưng hiện trỏ thẳng về font display — muốn
+     tách lại thành hai font thì chỉ sửa đúng dòng này, không phải đi sửa
+     từng class. Chữ số vẫn dùng --wd-font-numeral (DM Sans) như cũ. */
+  --wd-font-body: var(--wd-font-display);
   --wd-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   /* Chỉ dùng cho số (.wd-numeral) — toàn chữ số/dấu ":" nên không cần subset
      vietnamese như phần chữ có dấu. */
@@ -82,8 +88,9 @@
 /* Nhãn section (OUR STORY / CHUYỆN CHÚNG MÌNH) */
 .wd-eyebrow {
   font-family: var(--wd-font-body);
-  font-size: 10px;
-  letter-spacing: 0.4em;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--wd-taupe);
 }
@@ -91,7 +98,8 @@
 /* Nhãn timeline, menu desktop */
 .wd-label {
   font-family: var(--wd-font-body);
-  font-size: 13px;
+  font-weight: 500;
+  font-size: 16px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--wd-brown);
@@ -99,8 +107,9 @@
 
 .wd-nav-link {
   font-family: var(--wd-font-body);
-  font-size: 12px;
-  letter-spacing: 0.24em;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--wd-brown);
   text-decoration: none;
@@ -110,7 +119,8 @@
 /* Thông tin phụ: địa chỉ, ghi chú */
 .wd-body-sm {
   font-family: var(--wd-font-body);
-  font-size: 13px;
+  font-weight: 400;
+  font-size: 16px;
   line-height: 1.8;
   color: var(--wd-brown-soft);
 }
@@ -127,17 +137,29 @@
 /* Nhãn + giá trị trong dải thông tin 4 cột của "Ngày cưới" */
 .wd-fact-label {
   font-family: var(--wd-font-body);
-  font-size: 10px;
-  letter-spacing: 0.28em;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--wd-brown);
 }
 
 .wd-fact-value {
   font-family: var(--wd-font-body);
-  font-size: 13px;
+  font-weight: 400;
+  font-size: 16px;
   line-height: 1.7;
   color: var(--wd-brown-soft);
+}
+
+/* Chỉ đổi MẶT CHỮ sang DM Sans cho những đoạn text thuần số (ngày, giờ, số
+   thứ tự…). Cố ý không đặt cỡ chữ / màu / giãn chữ: mọi thứ đó vẫn kế thừa
+   từ class gốc (wd-eyebrow, wd-label, wd-fact-value…), nên chỉ cần thêm
+   class này vào cạnh class gốc là đủ.
+   Phải khai báo SAU các class kia: cùng độ ưu tiên một class nên cái viết
+   sau mới thắng. */
+.wd-num {
+  font-family: var(--wd-font-numeral);
 }
 
 /* Gạch ngăn champagne */
@@ -158,8 +180,9 @@
 .wd-field { display: grid; gap: 10px; }
 
 .wd-field-label {
-  font-size: 9px;
-  letter-spacing: 0.3em;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--wd-taupe);
 }
@@ -172,7 +195,8 @@
   border-bottom: 1px solid var(--wd-line-strong);
   padding: 8px 2px;
   font-family: var(--wd-font-body);
-  font-size: 15px;
+  font-weight: 400;
+  font-size: 18px;
   color: var(--wd-brown);
   outline: none;
   transition: border-color 0.3s ease-out;
@@ -198,7 +222,8 @@
   border: 0;
   background: transparent;
   font-family: var(--wd-font-body);
-  font-size: 13px;
+  font-weight: 500;
+  font-size: 16px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--wd-taupe);
@@ -241,7 +266,8 @@
   border: 0;
   background: transparent;
   font-family: var(--wd-font-body);
-  font-size: 17px;
+  font-weight: 400;
+  font-size: 20px;
   line-height: 1;
   color: var(--wd-brown-soft);
   cursor: pointer;
@@ -268,8 +294,9 @@
   border: 0;
   background: transparent;
   font-family: var(--wd-font-body);
-  font-size: 11px;
-  letter-spacing: 0.34em;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--wd-brown);
   cursor: pointer;
@@ -290,8 +317,9 @@
   border-radius: 999px;
   background: transparent;
   font-family: var(--wd-font-body);
-  font-size: 10px;
-  letter-spacing: 0.32em;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--wd-brown);
   text-decoration: none;

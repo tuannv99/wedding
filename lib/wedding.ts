@@ -243,7 +243,6 @@ export const wedding = {
     gallery: {
       eyebrow: "Khoảnh khắc",
       title: "Ảnh cưới",
-      hint: "Chạm vào ảnh để xem lớn · vuốt để chuyển ảnh",
     },
     rsvp: {
       title: "RẤT MONG\nĐƯỢC GẶP BẠN",
