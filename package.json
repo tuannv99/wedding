@@ -11,6 +11,8 @@
     "gen:images": "node scripts/generate-placeholders.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.58.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.469.0",
     "next": "^15.5.4",

@@ -3,6 +3,7 @@ import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
+import { GiftCTA } from "@/components/wedding/GiftCTA";
 
 export function Closing() {
   const { closing } = wedding.images;
@@ -64,6 +65,11 @@ export function Closing() {
 
         <Reveal delay={0.42}>
           <Botanical variant="mark" className="mt-12 h-5 w-16 text-sage/75" />
+        </Reveal>
+
+        {/* Kín đáo, đặt cuối cùng — không phải một section mừng cưới lớn. */}
+        <Reveal delay={0.5} className="mt-10">
+          <GiftCTA />
         </Reveal>
       </div>
     </footer>

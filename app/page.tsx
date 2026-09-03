@@ -6,6 +6,7 @@ import { Countdown } from "@/components/wedding/Countdown";
 import { Timeline } from "@/components/wedding/Timeline";
 import { Gallery } from "@/components/wedding/Gallery";
 import { RSVP } from "@/components/wedding/RSVP";
+import { WishesPreview } from "@/components/wedding/WishesPreview";
 import { Closing } from "@/components/wedding/Closing";
 import { AfterOpen } from "@/components/wedding/AfterOpen";
 
@@ -22,6 +23,7 @@ export default function Home() {
           <Timeline />
           <Gallery />
           <RSVP />
+          <WishesPreview />
           <Closing />
         </AfterOpen>
       </main>
