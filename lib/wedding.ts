@@ -193,11 +193,14 @@ export const wedding = {
 
   nav: [
     // "hero" là mục đầu, đúng như HOME trên bản design.
+    // Mục có `id`: cuộn trong cùng trang. Mục có `href`: chuyển hẳn sang
+    // trang khác (Navigation.tsx render Link thay vì nút cuộn).
     { label: "Trang chủ", id: "hero" },
     { label: "Chuyện chúng mình", id: "our-story" },
     { label: "Lễ cưới", id: "the-wedding" },
     { label: "Ảnh cưới", id: "gallery" },
     { label: "Xác nhận", id: "rsvp" },
+    { label: "Những lời yêu thương", href: "/wishes" },
   ],
 
   /**

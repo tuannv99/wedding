@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Music2, X } from "lucide-react";
 import { wedding } from "@/lib/wedding";
@@ -78,6 +79,7 @@ export function Navigation() {
     if (!opened) return;
 
     const sections = wedding.nav
+      .filter((item) => "id" in item)
       .map((item) => document.getElementById(item.id))
       .filter((el): el is HTMLElement => Boolean(el));
     if (!sections.length) return;
@@ -122,9 +124,24 @@ export function Navigation() {
               với gap cũ (36px) hàng menu chạm đúng vào nút nhạc ở 768–900px. */}
           <ul className="hidden items-center gap-5 md:flex lg:gap-8 xl:gap-11">
             {wedding.nav.map((item) => {
+              // Mục có `href`: chuyển hẳn sang trang khác (vd. /wishes) —
+              // không tham gia cuộn/gạch chân "đang xem" như mục có `id`.
+              if ("href" in item) {
+                return (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="wd-nav-link relative inline-flex min-h-11 items-center text-[13px] text-ink/68 transition-colors duration-500 lg:text-[15px]"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              }
+
               const isActive = active === item.id;
               return (
-                <li key={item.id}>
+                <li key={item.label}>
                   <button
                     type="button"
                     onClick={() => goTo(item.id)}
@@ -196,7 +213,7 @@ export function Navigation() {
             <ul className="flex flex-col items-center gap-8">
               {wedding.nav.map((item, index) => (
                 <motion.li
-                  key={item.id}
+                  key={item.label}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
@@ -205,13 +222,23 @@ export function Navigation() {
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  <button
-                    type="button"
-                    onClick={() => goTo(item.id)}
-                    className="font-display text-center text-[1.375rem] tracking-[0.14em] text-ink uppercase"
-                  >
-                    {item.label}
-                  </button>
+                  {"href" in item ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="font-display text-center text-[1.375rem] tracking-[0.14em] text-ink uppercase"
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => goTo(item.id)}
+                      className="font-display text-center text-[1.375rem] tracking-[0.14em] text-ink uppercase"
+                    >
+                      {item.label}
+                    </button>
+                  )}
                 </motion.li>
               ))}
             </ul>

@@ -30,13 +30,15 @@ create policy "public can read approved wishes"
   to anon
   using (is_approved = true);
 
--- Khách: được phép gửi lời chúc mới, nhưng bắt buộc is_approved = false
--- ngay ở tầng database — không thể tự set true dù có sửa request thế nào.
+-- Được phép gửi lời chúc mới (cả khách chưa đăng nhập lẫn admin đang đăng
+-- nhập sẵn khi tự dùng form RSVP/wishes trên trình duyệt của mình), nhưng
+-- bắt buộc is_approved = false ngay ở tầng database — không thể tự set true
+-- dù có sửa request thế nào.
 drop policy if exists "guests can insert unapproved wishes" on public.wedding_wishes;
 create policy "guests can insert unapproved wishes"
   on public.wedding_wishes
   for insert
-  to anon
+  to anon, authenticated
   with check (is_approved = false);
 
 -- Khách: KHÔNG có policy update/delete nào cho role anon → mặc định bị từ chối.
