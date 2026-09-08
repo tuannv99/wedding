@@ -1,39 +1,52 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SimpleHeader } from "@/components/ui/SimpleHeader";
 import { EnsureOpened } from "@/components/ui/EnsureOpened";
-import { Reveal } from "@/components/ui/Reveal";
 import { BotanicalRule } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
-import { WishForm } from "@/components/wedding/WishForm";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { formatWishDate, type Wish } from "@/lib/wishes";
+import { type Wish } from "@/lib/wishes";
 import { wedding } from "@/lib/wedding";
+import { WishCard } from "@/app/wishes/WishCard";
+import { WishesPagination } from "@/app/wishes/WishesPagination";
 
 export const metadata: Metadata = {
   title: `Những lời yêu thương · ${wedding.site.title}`,
   description: "Lời chúc từ những người thân yêu gửi đến Tuấn & Hoa.",
 };
 
-// Luôn lấy dữ liệu mới — trang này đổi ngay khi admin duyệt/xoá một lời chúc.
+// Luôn lấy dữ liệu mới — trang đổi ngay khi admin duyệt/xoá, và mỗi lần đổi
+// trang (?page=n) là một request khác cần fetch lại.
 export const dynamic = "force-dynamic";
 
-async function getApprovedWishes(): Promise<{ wishes: Wish[]; configured: boolean }> {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) return { wishes: [], configured: false };
+const PAGE_SIZE = 12;
 
-  const { data, error } = await supabase
+async function getApprovedWishes(
+  page: number,
+): Promise<{ wishes: Wish[]; total: number; configured: boolean }> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return { wishes: [], total: 0, configured: false };
+
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
+  // { count: "exact" }: chỉ đếm, KHÔNG kéo hết dữ liệu về — range() giới hạn
+  // đúng 1 trang (12 dòng) dù bảng có 10 hay 5000 lời chúc.
+  const { data, error, count } = await supabase
     .from("wedding_wishes")
-    .select("id, name, message, created_at, is_approved")
+    .select("id, name, message, created_at, is_approved", { count: "exact" })
     .eq("is_approved", true)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error("[wishes] fetch failed:", error.message);
-    return { wishes: [], configured: true };
+    return { wishes: [], total: 0, configured: true };
   }
 
   return {
     configured: true,
+    total: count ?? 0,
     wishes: (data ?? []).map((row) => ({
       id: row.id,
       name: row.name,
@@ -44,73 +57,89 @@ async function getApprovedWishes(): Promise<{ wishes: Wish[]; configured: boolea
   };
 }
 
-export default async function WishesPage() {
-  const { wishes, configured } = await getApprovedWishes();
+/**
+ * Trang này CHỈ hiển thị lời chúc đã duyệt — không có form gửi ở đây. Nơi
+ * duy nhất để gửi lời chúc là ô "Lời chúc" trong form RSVP ở trang chủ (xem
+ * app/api/rsvp/route.ts), cùng chảy vào bảng wedding_wishes.
+ *
+ * Phân trang qua URL (?page=n), render hoàn toàn ở server — hoạt động không
+ * cần JS, dễ đọc bằng bàn phím/screen reader vì là link thật. Không có
+ * client component nào trong trang này.
+ */
+export default async function WishesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const requestedPage = Math.max(1, Math.trunc(Number(params.page)) || 1);
+  const { wishes, total, configured } = await getApprovedWishes(requestedPage);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(requestedPage, totalPages);
+  const pageOutOfRange = configured && total > 0 && wishes.length === 0;
 
   return (
     <>
       <EnsureOpened />
       <SimpleHeader />
 
-      <main className="relative isolate w-full overflow-hidden bg-ivory px-6 py-28 md:px-5 md:py-40">
+      <main className="relative isolate w-full overflow-hidden bg-ivory px-6 pt-5 pb-28 md:px-5 md:pt-16 md:pb-40">
         <BotanicalAccent
           variant="sprig"
           opacity={0.26}
           depth={5}
           flip
-          className="top-[6%] -right-[2vw] hidden h-[36vh] w-[20vh] lg:block"
+          className="top-[4%] -right-[2vw] hidden h-[30vh] w-[16vh] lg:block"
         />
 
-        <div className="mx-auto w-full max-w-[720px]">
-          <Reveal className="flex flex-col items-center text-center">
-            <h1 className="wd-h1 tracking-[0.16em] uppercase">
-              Những lời yêu thương
-            </h1>
-            <BotanicalRule className="mt-6" lineClassName="w-10 sm:w-14" />
-            <p className="wd-body-sm mx-auto mt-6 max-w-[420px]">
-              Cảm ơn bạn đã dành những lời chúc tốt đẹp cho hành trình mới của
-              chúng mình.
-            </p>
-          </Reveal>
+        {/* Hero rút gọn: divider nhỏ → title → mô tả ngắn (sát nhau, không
+            chia nhỏ bằng divider thứ hai) — mục tiêu ~250-320px desktop /
+            ~180-240px mobile trước khi vào grid. */}
+        <div className="mx-auto flex max-w-[700px] flex-col items-center text-center">
+          <BotanicalRule lineClassName="w-8 sm:w-12" />
+          <h1 className="wd-h1 mt-4 text-[clamp(26px,4.5vw,44px)] tracking-[0.16em] uppercase md:mt-5">
+            Những lời yêu thương
+          </h1>
+          <p className="wd-body-sm mx-auto mt-3 max-w-[420px]">
+            Cảm ơn bạn đã dành những lời chúc tốt đẹp cho hành trình mới của
+            chúng mình.
+          </p>
+        </div>
 
-          <Reveal delay={0.1} className="mt-20 md:mt-24">
-            <WishForm />
-          </Reveal>
-
-          <BotanicalRule className="my-20 md:my-24" />
-
+        <div className="mx-auto mt-5 w-full max-w-[1300px] md:mt-12">
           {!configured ? (
             <p className="wd-body-sm text-center">
               Trang lời chúc chưa được kết nối database — bạn quay lại sau
               giúp mình nhé.
             </p>
-          ) : wishes.length === 0 ? (
-            <Reveal className="flex flex-col items-center gap-4 text-center">
+          ) : total === 0 ? (
+            <div className="flex flex-col items-center gap-2 text-center">
+              <p className="wd-body-sm">Chưa có lời chúc nào.</p>
               <p className="wd-body-sm">
-                Chưa có lời chúc nào được duyệt — hãy là người đầu tiên gửi
-                lời yêu thương cho chúng mình!
+                Hãy là người đầu tiên gửi lời yêu thương đến Tuấn &amp; Hoa —{" "}
+                <Link href="/#rsvp" className="text-ink underline underline-offset-4">
+                  để lại khi xác nhận tham dự
+                </Link>
+                .
               </p>
-            </Reveal>
+            </div>
+          ) : pageOutOfRange ? (
+            <div className="flex flex-col items-center gap-2 text-center">
+              <p className="wd-body-sm">Trang này không có lời chúc nào.</p>
+              <Link href="/wishes" className="text-ink underline underline-offset-4">
+                Về trang đầu
+              </Link>
+            </div>
           ) : (
-            <ul className="flex flex-col">
-              {wishes.map((wish, index) => (
-                <li key={wish.id}>
-                  {index > 0 ? <BotanicalRule className="my-12 md:my-14" /> : null}
-                  <Reveal
-                    delay={Math.min(index, 3) * 0.06}
-                    className="flex flex-col items-center text-center"
-                  >
-                    <p className="wd-body-serif text-[clamp(1.15rem,3vw,1.4rem)] leading-[1.7] whitespace-pre-line">
-                      {wish.message}
-                    </p>
-                    <p className="wd-eyebrow mt-6">{wish.name}</p>
-                    <p className="wd-eyebrow wd-num mt-2 text-ink/50">
-                      {formatWishDate(wish.createdAt)}
-                    </p>
-                  </Reveal>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                {wishes.map((wish, index) => (
+                  <WishCard key={wish.id} wish={wish} index={index} />
+                ))}
+              </ul>
+
+              <WishesPagination currentPage={currentPage} totalPages={totalPages} />
+            </>
           )}
         </div>
       </main>
