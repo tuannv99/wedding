@@ -13,7 +13,7 @@ const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 function QrBlock({ account }: { account: BankAccount }) {
   return (
-    <div className="flex flex-col items-center gap-4 text-center">
+    <div className="flex flex-col items-center gap-4 text-center sm:gap-3">
       <p className="wd-label text-ink">{account.displayName}</p>
 
       {account.qrImage ? (
@@ -44,7 +44,13 @@ function QrBlock({ account }: { account: BankAccount }) {
         <p className="wd-body-sm text-ink/60">{account.accountName}</p>
       </div>
 
-      <CopyButton value={account.accountNumber} label="Sao chép số tài khoản" />
+      <CopyButton
+        value={account.accountNumber}
+        label="Sao chép số tài khoản"
+        // Label dài hơn các nút wd-btn-ghost khác — tracking hẹp hơn một chút
+        // riêng ở đây để không bị xuống 2 dòng trên khung modal hẹp ở mobile.
+        className="tracking-[0.15em]"
+      />
     </div>
   );
 }
@@ -133,7 +139,7 @@ export function GiftCTA() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.97, y: reduceMotion ? 0 : 8 }}
                     transition={{ duration: 0.4, ease: EASE_OUT }}
-                    className="relative max-h-[90svh] w-full max-w-[560px] overflow-y-auto bg-ivory px-6 py-12 sm:px-10 sm:py-14"
+                    className="relative max-h-[90svh] w-full max-w-[560px] overflow-y-auto bg-ivory px-6 py-12 sm:max-w-[680px] sm:px-10 sm:py-8"
                   >
                     <button
                       ref={closeRef}
@@ -153,7 +159,7 @@ export function GiftCTA() {
                       >
                         Mừng cưới
                       </h2>
-                      <p className="wd-body-sm mx-auto mt-6 max-w-[380px]">
+                      <p className="wd-body-sm mx-auto mt-6 max-w-[380px] sm:max-w-[440px]">
                         Sự hiện diện của bạn đã là món quà quý giá đối với
                         chúng mình.
                         <br />
@@ -162,7 +168,7 @@ export function GiftCTA() {
                       </p>
                     </div>
 
-                    <div className="mt-12 flex flex-col items-center gap-12 sm:flex-row sm:items-start sm:justify-center sm:gap-10">
+                    <div className="mt-12 flex flex-col items-center gap-12 sm:mt-7 sm:flex-row sm:items-start sm:justify-center sm:gap-12">
                       <QrBlock account={weddingBankAccounts.groom} />
                       <div aria-hidden="true" className="h-px w-16 bg-taupe/25 sm:h-auto sm:w-px sm:self-stretch" />
                       <QrBlock account={weddingBankAccounts.bride} />
