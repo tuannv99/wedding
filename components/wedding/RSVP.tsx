@@ -24,6 +24,8 @@ export function RSVP() {
         attending: data.attending ?? "yes",
         guests: data.attending === "no" ? 0 : data.guests,
         message: data.note.trim(),
+        company: data.company,
+        formLoadedAt: data.formLoadedAt,
       }),
     });
 

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { toWishRow } from "@/lib/wishes";
+import { isRateLimited } from "@/lib/rate-limit";
+
+const MIN_FILL_TIME_MS = 1500;
 
 /**
  * Endpoint nhận xác nhận tham dự.
@@ -20,9 +23,25 @@ type RsvpBody = {
   attending?: unknown;
   guests?: unknown;
   message?: unknown;
+  /** Honeypot — bot tự điền hết field thường điền luôn cả field ẩn này. */
+  company?: unknown;
+  /** Thời điểm form load (ms) phía client, để phát hiện submit "quá nhanh". */
+  formLoadedAt?: unknown;
 };
 
 export async function POST(request: Request) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { ok: false, error: "RATE_LIMITED" },
+      { status: 429 },
+    );
+  }
+
   let body: RsvpBody;
 
   try {
@@ -32,6 +51,18 @@ export async function POST(request: Request) {
       { ok: false, error: "INVALID_JSON" },
       { status: 400 },
     );
+  }
+
+  // Bot lộ diện qua honeypot hoặc submit nhanh bất thường — trả về "thành
+  // công" giả để không cho bot biết nó đã bị phát hiện (chỉ là không ghi gì
+  // cả), thay vì trả lỗi giúp bot tự hiệu chỉnh lại hành vi.
+  const honeypot = typeof body.company === "string" ? body.company.trim() : "";
+  const formLoadedAt =
+    typeof body.formLoadedAt === "number" ? body.formLoadedAt : 0;
+  const filledInMs = Date.now() - formLoadedAt;
+
+  if (honeypot.length > 0 || !formLoadedAt || filledInMs < MIN_FILL_TIME_MS) {
+    return NextResponse.json({ ok: true });
   }
 
   const name = typeof body.name === "string" ? body.name.trim() : "";

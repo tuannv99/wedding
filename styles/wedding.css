@@ -351,3 +351,16 @@
 .wd-wish-card {
   animation: wd-fade-up 350ms ease-out both;
 }
+
+/* Honeypot chống bot: field thật tồn tại trong DOM/tab order để trình
+   scraper tự-điền-mọi-field vẫn thấy và điền vào, nhưng nằm ngoài khung nhìn
+   nên người dùng thật (và screen reader nhờ tabIndex=-1/aria-hidden) không
+   bao giờ chạm tới. Không dùng display:none/visibility:hidden vì một số bot
+   biết bỏ qua đúng hai kiểu ẩn đó. */
+.wd-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

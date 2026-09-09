@@ -68,3 +68,27 @@ create policy "authenticated can delete wishes"
   for delete
   to authenticated
   using (true);
+
+-- Policy "update approval" ở trên chỉ kiểm tra ROLE, không kiểm tra CỘT nào
+-- bị đổi — về lý thuyết một request update() tuỳ ý vẫn có thể kèm theo
+-- name/message mới. Trigger dưới đây chặn đúng phần đó ở tầng database:
+-- update chỉ được phép đổi is_approved, mọi cột khác giữ nguyên giá trị cũ.
+create or replace function public.wedding_wishes_restrict_update()
+returns trigger
+language plpgsql
+as $$
+begin
+  if new.name is distinct from old.name
+     or new.message is distinct from old.message
+     or new.created_at is distinct from old.created_at then
+    raise exception 'only is_approved can be changed on wedding_wishes';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists wedding_wishes_restrict_update_trigger on public.wedding_wishes;
+create trigger wedding_wishes_restrict_update_trigger
+  before update on public.wedding_wishes
+  for each row
+  execute function public.wedding_wishes_restrict_update();

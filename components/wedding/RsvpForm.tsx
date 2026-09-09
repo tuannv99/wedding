@@ -10,6 +10,10 @@ export type RsvpData = {
   attending: "yes" | "no" | null;
   guests: number;
   note: string;
+  /** Honeypot — luôn rỗng với người dùng thật, khác rỗng nếu bot tự điền hết field. */
+  company: string;
+  /** Thời điểm form load (ms) — submit quá nhanh sau đó là dấu hiệu bot. */
+  formLoadedAt: number;
 };
 
 type Props = {
@@ -38,11 +42,18 @@ export default function RsvpForm({
     attending: "yes",
     guests: 1,
     note: "",
+    company: "",
+    formLoadedAt: 0,
   });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const successRef = useRef<HTMLDivElement>(null);
+  // Đặt sau mount (không phải trong useState initializer) để đúng là thời
+  // điểm form thực sự sẵn sàng cho người dùng tương tác trên trình duyệt.
+  useEffect(() => {
+    setData((d) => ({ ...d, formLoadedAt: Date.now() }));
+  }, []);
 
   const set = <K extends keyof RsvpData>(key: K, value: RsvpData[K]) =>
     setData((d) => ({ ...d, [key]: value }));
@@ -153,6 +164,20 @@ export default function RsvpForm({
       </div>
 
       <form className="wd-form" onSubmit={handleSubmit} noValidate>
+        {/* Honeypot chống bot — người dùng thật không bao giờ thấy field này,
+            xem .wd-hp trong styles/wedding.css. */}
+        <label className="wd-hp" aria-hidden="true">
+          Để trống trường này
+          <input
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            value={data.company}
+            onChange={(e) => set("company", e.target.value)}
+          />
+        </label>
+
         <label className="wd-field">
           <span className="wd-field-label">Tên của bạn</span>
           <input
