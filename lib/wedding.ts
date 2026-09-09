@@ -71,7 +71,7 @@ export const wedding = {
   venues: {
     bride: {
       label: "Nhà gái",
-      name: "Xuân Phương  ,Ninh Bình",
+      name: "Xuân Phương, Ninh Bình",
       address: "Nhà Văn Hóa Xóm 2, Xã Xuân Phương",
       mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}`,
       // "Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình" (query có dấu → base64url sau !1z)
@@ -80,7 +80,7 @@ export const wedding = {
     },
     groom: {
       label: "Nhà trai",
-      name: "Quỳnh Phụ  ,Hưng Yên",
+      name: "Quỳnh Phụ, Hưng Yên",
       address: "Xóm 3 Thôn Phụng Công, Xã Quỳnh Phụ",
       // Link thật do gia đình cung cấp, trỏ đúng "Miếu Hạ thôn Phụng Công".
       mapsUrl: "https://maps.app.goo.gl/WHHnQKhEMhDPR1kV7",

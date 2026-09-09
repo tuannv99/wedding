@@ -226,7 +226,7 @@ export function Navigation() {
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      className="font-display text-center text-[1.375rem] tracking-[0.14em] text-ink uppercase"
+                      className="font-display text-center text-[1.375rem] tracking-[0.1em] text-ink uppercase"
                     >
                       {item.label}
                     </Link>
@@ -234,7 +234,7 @@ export function Navigation() {
                     <button
                       type="button"
                       onClick={() => goTo(item.id)}
-                      className="font-display text-center text-[1.375rem] tracking-[0.14em] text-ink uppercase"
+                      className="font-display text-center text-[1.375rem] tracking-[0.1em] text-ink uppercase"
                     >
                       {item.label}
                     </button>
