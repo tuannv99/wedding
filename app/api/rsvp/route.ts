@@ -6,16 +6,14 @@ import { isRateLimited } from "@/lib/rate-limit";
 const MIN_FILL_TIME_MS = 1500;
 
 /**
- * Endpoint nhận xác nhận tham dự.
+ * Endpoint nhận xác nhận tham dự — lưu vào bảng rsvp_responses (admin xem ở
+ * /admin/rsvp). Nếu chưa cấu hình Supabase (env trống — vd. ai đó fork repo
+ * này để dùng riêng mà chưa setup), rơi về console.log để trang RSVP vẫn
+ * chạy được luôn mà không cần cấu hình gì trước.
  *
- * Việc tham dự (name/attending/guests) hiện chỉ validate + ghi log (chạy tốt
- * trên Vercel mà không cần cấu hình gì) — khi cần lưu thật, thay phần "TODO"
- * bằng một trong các cách sau: Google Sheets API/Form, Postgres, Notion,
- * Airtable, hoặc gửi email qua Resend.
- *
- * Riêng ô "Lời chúc" thì ĐÃ nối vào cùng bảng wedding_wishes với form ở
- * /wishes — khách RSVP kèm lời chúc không cần gửi lại ở trang riêng, lời
- * chúc vẫn vào hàng chờ is_approved=false như mọi lời chúc khác.
+ * Riêng ô "Lời chúc" thì NGOÀI RA còn được nối vào bảng wedding_wishes với
+ * form ở /wishes — khách RSVP kèm lời chúc không cần gửi lại ở trang riêng,
+ * lời chúc vẫn vào hàng chờ is_approved=false như mọi lời chúc khác.
  */
 
 type RsvpBody = {
@@ -85,25 +83,42 @@ export async function POST(request: Request) {
     attending,
     guests,
     message: message.slice(0, 1000),
-    createdAt: new Date().toISOString(),
   };
 
-  // TODO: lưu `entry` vào database / Google Sheets / gửi email.
-  console.log("[RSVP]", entry);
+  const supabase = await createSupabaseServerClient();
 
-  // Có viết lời chúc thì lưu luôn vào wedding_wishes — best-effort, không
-  // chặn việc xác nhận tham dự nếu bước này lỗi (chưa cấu hình Supabase,
-  // mất mạng...): khách đã chờ đủ lâu cho một request rồi.
+  if (!supabase) {
+    // Chưa cấu hình Supabase (env trống) — vẫn cho qua để trang RSVP không
+    // vỡ, nhưng dữ liệu chỉ nằm trong log server, không tra cứu lại được.
+    console.log("[RSVP] (chưa cấu hình Supabase, chỉ log)", entry);
+    return NextResponse.json({ ok: true });
+  }
+
+  const { error: rsvpError } = await supabase.from("rsvp_responses").insert({
+    name: entry.name,
+    attending: entry.attending,
+    guests: entry.guests,
+    message: entry.message,
+  });
+
+  if (rsvpError) {
+    console.error("[rsvp] insert failed:", rsvpError.message);
+    return NextResponse.json(
+      { ok: false, error: "SAVE_FAILED" },
+      { status: 500 },
+    );
+  }
+
+  // Có viết lời chúc thì lưu thêm vào wedding_wishes — best-effort, không
+  // chặn việc xác nhận tham dự nếu riêng bước này lỗi: RSVP đã lưu thành
+  // công ở trên rồi, khách không cần biết/chờ thêm cho phần phụ này.
   if (entry.message) {
     try {
-      const supabase = await createSupabaseServerClient();
-      if (supabase) {
-        const wishRow = toWishRow(entry.name, entry.message);
-        const { error } = await supabase
-          .from("wedding_wishes")
-          .insert({ name: wishRow.name, message: wishRow.message, is_approved: false });
-        if (error) console.error("[rsvp] wish insert failed:", error.message);
-      }
+      const wishRow = toWishRow(entry.name, entry.message);
+      const { error } = await supabase
+        .from("wedding_wishes")
+        .insert({ name: wishRow.name, message: wishRow.message, is_approved: false });
+      if (error) console.error("[rsvp] wish insert failed:", error.message);
     } catch (err) {
       console.error("[rsvp] wish insert threw:", err);
     }

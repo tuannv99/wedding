@@ -92,3 +92,51 @@ create trigger wedding_wishes_restrict_update_trigger
   before update on public.wedding_wishes
   for each row
   execute function public.wedding_wishes_restrict_update();
+
+-- Xác nhận tham dự (RSVP) — trước đây /api/rsvp chỉ console.log, không lưu
+-- đâu cả. Bảng này lưu thật để admin xem được danh sách khách + số người đi
+-- kèm. `message` lưu lại luôn lời chúc kèm theo (nếu có) để admin thấy đủ ngữ
+-- cảnh một lượt gửi — dù nội dung đó cũng đã vào wedding_wishes để hiển thị
+-- công khai ở /wishes, đây chỉ là bản sao riêng cho mục đích quản lý RSVP.
+create table if not exists public.rsvp_responses (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  attending text not null,
+  guests integer not null default 0,
+  message text not null default '',
+  created_at timestamptz not null default now(),
+  constraint rsvp_responses_name_length check (char_length(name) between 1 and 120),
+  constraint rsvp_responses_attending_valid check (attending in ('yes', 'no')),
+  constraint rsvp_responses_guests_range check (guests between 0 and 20),
+  constraint rsvp_responses_message_length check (char_length(message) <= 1000)
+);
+
+create index if not exists rsvp_responses_created_at_idx
+  on public.rsvp_responses (created_at desc);
+
+alter table public.rsvp_responses enable row level security;
+
+-- Khách: chỉ được gửi (insert), không đọc/sửa/xoá được RSVP của ai —
+-- kể cả của chính mình gửi trước đó (không có policy select cho anon).
+drop policy if exists "guests can insert rsvp" on public.rsvp_responses;
+create policy "guests can insert rsvp"
+  on public.rsvp_responses
+  for insert
+  to anon, authenticated
+  with check (true);
+
+-- Admin: đọc toàn bộ danh sách đã xác nhận.
+drop policy if exists "authenticated can read all rsvp" on public.rsvp_responses;
+create policy "authenticated can read all rsvp"
+  on public.rsvp_responses
+  for select
+  to authenticated
+  using (true);
+
+-- Admin: xoá một RSVP (vd. gửi trùng/thử nghiệm).
+drop policy if exists "authenticated can delete rsvp" on public.rsvp_responses;
+create policy "authenticated can delete rsvp"
+  on public.rsvp_responses
+  for delete
+  to authenticated
+  using (true);

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { approveWish, deleteWish, unapproveWish } from "@/app/admin/wishes/actions";
-import { type Wish } from "@/lib/wishes";
+import { deleteRsvp } from "@/app/admin/rsvp/actions";
+import { type RsvpResponse } from "@/lib/rsvp";
 import { formatShortDate } from "@/lib/utils";
 
-export function WishRow({ wish }: { wish: Wish }) {
+export function RsvpRow({ rsvp }: { rsvp: RsvpResponse }) {
   const [isPending, startTransition] = useTransition();
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -24,52 +24,35 @@ export function WishRow({ wish }: { wish: Wish }) {
     <li className="border-b border-taupe/20 py-6">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="wd-label text-ink">{wish.name}</p>
+          <p className="wd-label text-ink">{rsvp.name}</p>
           <p className="wd-eyebrow wd-num mt-1 text-ink/50">
-            {formatShortDate(wish.createdAt)}
+            {formatShortDate(rsvp.createdAt)}
           </p>
-          <p className="wd-body-sm mt-3 whitespace-pre-line">{wish.message}</p>
+          {rsvp.message ? (
+            <p className="wd-body-sm mt-3 whitespace-pre-line">{rsvp.message}</p>
+          ) : null}
         </div>
 
         <span
           className={
             "wd-eyebrow shrink-0 rounded-full border px-3 py-1 " +
-            (wish.isApproved
+            (rsvp.attending === "yes"
               ? "border-sage text-sage"
               : "border-taupe text-taupe")
           }
         >
-          {wish.isApproved ? "Đã duyệt" : "Chưa duyệt"}
+          {rsvp.attending === "yes" ? `Đến · ${rsvp.guests} người` : "Không đến"}
         </span>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-3">
-        {wish.isApproved ? (
-          <button
-            type="button"
-            className="wd-btn-ghost"
-            disabled={isPending}
-            onClick={() => run(() => unapproveWish(wish.id))}
-          >
-            Bỏ duyệt
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="wd-btn-ghost"
-            disabled={isPending}
-            onClick={() => run(() => approveWish(wish.id))}
-          >
-            Duyệt
-          </button>
-        )}
         <button
           type="button"
           className="wd-btn-ghost disabled:opacity-40"
           disabled={isPending}
           onClick={() => {
-            if (window.confirm(`Xoá lời chúc của "${wish.name}"?`)) {
-              run(() => deleteWish(wish.id));
+            if (window.confirm(`Xoá RSVP của "${rsvp.name}"?`)) {
+              run(() => deleteRsvp(rsvp.id));
             }
           }}
         >

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { SimpleHeader } from "@/components/ui/SimpleHeader";
+import { EnsureOpened } from "@/components/ui/EnsureOpened";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { type Wish } from "@/lib/wishes";
-import { signOutAdmin } from "@/app/admin/wishes/actions";
+import { signOutAdmin } from "@/app/admin/actions";
+import { AdminNav } from "@/app/admin/AdminNav";
 import { WishRow } from "@/app/admin/wishes/WishRow";
 
 export const metadata: Metadata = { title: "Quản lý lời chúc" };
@@ -41,6 +43,7 @@ export default async function AdminWishesPage() {
 
   return (
     <>
+      <EnsureOpened />
       <SimpleHeader />
       <main className="mx-auto w-full max-w-3xl px-6 py-16 md:px-5">
         <div className="flex items-center justify-between gap-4">
@@ -51,6 +54,8 @@ export default async function AdminWishesPage() {
             </button>
           </form>
         </div>
+
+        <AdminNav active="wishes" />
 
         {!configured ? (
           <p className="wd-body-sm mt-10">

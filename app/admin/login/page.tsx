@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SimpleHeader } from "@/components/ui/SimpleHeader";
+import { EnsureOpened } from "@/components/ui/EnsureOpened";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 /**
@@ -49,6 +50,7 @@ export default function AdminLoginPage() {
 
   return (
     <>
+      <EnsureOpened />
       <SimpleHeader />
       <main className="flex min-h-[70svh] w-full items-center justify-center bg-ivory px-6 py-28">
         <div className="w-full max-w-[380px]">
