@@ -29,3 +29,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# ảnh cưới gốc (~332MB) — chỉ dùng để sinh ảnh web, không commit
+/public/images/anh_cuoi/

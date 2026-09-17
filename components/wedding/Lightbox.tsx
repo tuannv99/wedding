@@ -5,13 +5,18 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import type { GalleryImage } from "@/lib/wedding";
+/**
+ * Chỉ cần src + alt. Cố ý KHÔNG dùng GalleryImage: trang chủ truyền
+ * GalleryImage (có thêm width/height) còn /album truyền AlbumPhoto — kiểu hẹp
+ * này nhận được cả hai mà không phải ép kiểu ở nơi gọi.
+ */
+type LightboxPhoto = { src: string; alt: string };
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 const SWIPE_THRESHOLD = 48;
 
 type LightboxProps = {
-  images: readonly GalleryImage[];
+  images: readonly LightboxPhoto[];
   /** null = đang đóng. */
   index: number | null;
   onClose: () => void;
@@ -122,12 +127,9 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
             else goNext();
           }}
         >
-          {/* Thanh trên: số thứ tự + nút đóng */}
-          <div className="flex items-center justify-between px-5 py-4 md:px-8">
-            <span className="wd-eyebrow wd-num text-warm/60">
-              {String(index + 1).padStart(2, "0")} /{" "}
-              {String(images.length).padStart(2, "0")}
-            </span>
+          {/* Thanh trên: chỉ còn nút đóng — số thứ tự đã chuyển xuống giữa
+              hai nút mũi tên ở thanh dưới. */}
+          <div className="flex items-center justify-end px-5 py-4 md:px-8">
             <button
               ref={closeRef}
               type="button"
@@ -168,33 +170,39 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
             </AnimatePresence>
           </div>
 
-          {/* Thanh dưới: caption + điều hướng */}
-          <div className="flex items-center justify-between gap-4 px-5 py-5 md:px-8">
+          {/* Thanh dưới: mũi tên tròn 44px — bộ đếm — mũi tên tròn 44px.
+              Bỏ hẳn dòng caption dưới ảnh (alt vẫn còn trên <img> cho trình
+              đọc màn hình), theo đúng art direction: chỉ ảnh và một con số. */}
+          <div className="flex items-center justify-center gap-6 px-5 py-5 md:gap-8 md:px-8">
             <button
               type="button"
               onClick={goPrev}
               aria-label="Ảnh trước"
-              className="flex h-12 w-12 shrink-0 items-center justify-center text-warm/70 transition-colors duration-500 hover:text-warm"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-warm/25 text-warm/70 transition-colors duration-500 hover:border-warm/60 hover:text-warm"
             >
               <ChevronLeft
-                className="h-6 w-6"
+                className="h-5 w-5"
                 strokeWidth={1.25}
                 aria-hidden="true"
               />
             </button>
 
-            <p className="wd-eyebrow max-w-md truncate text-center text-warm/50">
-              {current.alt}
+            <p
+              className="wd-eyebrow wd-num tabular-nums text-warm/60"
+              aria-live="polite"
+            >
+              {String(index + 1).padStart(2, "0")} /{" "}
+              {String(images.length).padStart(2, "0")}
             </p>
 
             <button
               type="button"
               onClick={goNext}
               aria-label="Ảnh tiếp theo"
-              className="flex h-12 w-12 shrink-0 items-center justify-center text-warm/70 transition-colors duration-500 hover:text-warm"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-warm/25 text-warm/70 transition-colors duration-500 hover:border-warm/60 hover:text-warm"
             >
               <ChevronRight
-                className="h-6 w-6"
+                className="h-5 w-5"
                 strokeWidth={1.25}
                 aria-hidden="true"
               />

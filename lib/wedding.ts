@@ -11,6 +11,24 @@ export type GalleryImage = {
   height: number;
 };
 
+export type AlbumPhoto = {
+  src: string;
+  alt: string;
+};
+
+export type AlbumChapter = {
+  /** Dùng làm anchor (#chapter-<id>) và làm thư mục ảnh. */
+  id: string;
+  title: string;
+  /**
+   * Ảnh NGANG tràn viền mở đầu chapter — trang trí, KHÔNG nằm trong lightbox
+   * (nhờ vậy bộ đếm lightbox chỉ đếm đúng số ảnh thật của album).
+   * Bỏ trống nếu buổi chụp đó không có khung ảnh ngang nào.
+   */
+  cover?: string;
+  photos: AlbumPhoto[];
+};
+
 export type TimelineItem = {
   time: string;
   title: string;
@@ -94,29 +112,29 @@ export const wedding = {
     {
       text: "Một ngày bình thường,\nchúng mình gặp nhau.",
       image: {
-        src: "/images/wedding/anh-05.jpg",
-        alt: "Tuấn và Hoa cùng chú cún nhỏ bên vách biển",
+        src: "/images/wedding/home-story-01.jpg",
+        alt: "Tuấn và Hoa nắm tay bước trên lối vườn",
         width: 1200,
-        height: 1500,
+        height: 1800,
       },
     },
     {
       text: "Rồi từ những điều rất nhỏ,\nchúng mình quyết định\nđi cùng nhau thật lâu.",
       image: {
-        src: "/images/wedding/anh-06.jpg",
-        alt: "Tuấn và Hoa nắm tay bước đi trên thảm cỏ xanh",
+        src: "/images/wedding/home-story-02.jpg",
+        alt: "Tuấn quỳ gối trao hoa cho Hoa giữa vườn",
         width: 1200,
-        height: 1500,
+        height: 1800,
       },
     },
     {
       text: "Và rồi,\nchúng mình",
       emphasis: "ở đây...",
       image: {
-        src: "/images/wedding/anh-02.jpg",
-        alt: "Tuấn và Hoa trao nhau nụ hôn dưới giàn hoa",
+        src: "/images/wedding/home-story-03.jpg",
+        alt: "Tuấn và Hoa cùng cầm tấm thiệp cưới trong studio",
         width: 1200,
-        height: 1500,
+        height: 1800,
       },
     },
   ] satisfies StoryStep[],
@@ -130,57 +148,137 @@ export const wedding = {
 
   images: {
     hero: {
-      src: "/images/wedding/anh-01.jpg",
-      alt: "Tuấn và Hoa tung hoa cưới trên bãi biển",
-      width: 1500,
-      height: 1900,
+      src: "/images/wedding/home-hero.jpg",
+      alt: "Tuấn và Hoa nắm tay trước mái vòm, Hoa giơ cao bó hoa cưới",
+      width: 1200,
+      height: 1800,
     },
     closing: {
-      src: "/images/wedding/anh-03.jpg",
-      alt: "Tuấn và Hoa sánh bước trong vườn",
-      width: 1800,
-      height: 1200,
+      src: "/images/wedding/home-closing.jpg",
+      alt: "Hoa trong tà voan dài bên vòm đá, Tuấn đứng phía sau",
+      width: 2200,
+      height: 1467,
     },
   },
 
   gallery: [
     {
-      src: "/images/wedding/anh-01.jpg",
-      alt: "Tuấn và Hoa tung hoa cưới bên bờ biển",
+      src: "/images/wedding/home-gallery-01.jpg",
+      alt: "Tuấn và Hoa trên lối đi giữa hàng cây bên đài phun nước",
       width: 1200,
-      height: 1500,
+      height: 1800,
     },
     {
-      src: "/images/wedding/anh-02.jpg",
-      alt: "Nụ hôn của Tuấn và Hoa dưới giàn hoa",
+      src: "/images/wedding/home-gallery-02.jpg",
+      alt: "Tuấn và Hoa trong tà áo dài truyền thống",
       width: 1200,
-      height: 1500,
+      height: 1800,
     },
     {
-      src: "/images/wedding/anh-04.jpg",
-      alt: "Tuấn và Hoa tạo dáng trái tim",
+      src: "/images/wedding/home-gallery-03.jpg",
+      alt: "Tuấn và Hoa trong studio nền sáng",
       width: 1200,
-      height: 1500,
+      height: 1800,
     },
     {
-      src: "/images/wedding/anh-03.jpg",
-      alt: "Tuấn và Hoa sánh bước trong vườn",
+      src: "/images/wedding/home-gallery-04.jpg",
+      alt: "Tuấn và Hoa nắm tay bên bồn nước đá",
       width: 1200,
-      height: 1500,
+      height: 1800,
     },
     {
-      src: "/images/wedding/anh-05.jpg",
-      alt: "Tuấn, Hoa và chú cún nhỏ bên vách biển",
-      width: 1200,
-      height: 1500,
+      src: "/images/wedding/home-gallery-05.jpg",
+      alt: "Tuấn và Hoa bước về phía nhau trong vườn",
+      width: 2200,
+      height: 1467,
     },
     {
-      src: "/images/wedding/anh-06.jpg",
-      alt: "Tuấn và Hoa trên thảm cỏ xanh",
+      src: "/images/wedding/home-gallery-06.jpg",
+      alt: "Tuấn và Hoa giơ cao tấm thiệp cưới",
       width: 1200,
-      height: 1500,
+      height: 1800,
     },
   ] satisfies GalleryImage[],
+
+  /**
+   * Album ảnh cưới đầy đủ (trang /album), chia theo buổi chụp.
+   *
+   * Ảnh nằm ở public/images/album/<chapter-id>/NN.jpg, được nén sẵn từ bộ ảnh
+   * gốc trong public/images/anh_cuoi/ (xem scripts/build-album-images.mjs).
+   * Bản gốc ~332MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra.
+   *
+   * `cover` chỉ có ở chapter nào thật sự có khung ảnh NGANG: cả bộ chỉ có 6
+   * khung ngang và đều thuộc buổi ngoại cảnh, nên Studio và Áo dài không có
+   * dải ảnh tràn viền mở đầu.
+   */
+  album: {
+    /** Hai ảnh dọc lệch tầng ở nửa phải hero. */
+    hero: [
+      { src: "/images/album/hero-01.jpg", alt: "Tuấn và Hoa dưới mái vòm, tà voan bay trong gió" },
+      { src: "/images/album/hero-02.jpg", alt: "Tuấn và Hoa trao nhau chiếc nhẫn trong studio" },
+    ] satisfies AlbumPhoto[],
+
+    /** Ảnh ngang khép lại cả album, đặt ngay trước footer. */
+    closing: {
+      src: "/images/album/closing.jpg",
+      alt: "Tuấn và Hoa trên bậc thềm đá giữa vườn cây",
+    } satisfies AlbumPhoto,
+
+    chapters: [
+      {
+        id: "santori",
+        title: "Santori",
+        cover: "/images/album/santori/cover.jpg",
+        photos: [
+          { src: "/images/album/santori/01.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 01" },
+          { src: "/images/album/santori/02.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 02" },
+          { src: "/images/album/santori/03.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 03" },
+          { src: "/images/album/santori/04.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 04" },
+          { src: "/images/album/santori/05.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 05" },
+          { src: "/images/album/santori/06.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 06" },
+          { src: "/images/album/santori/07.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 07" },
+          { src: "/images/album/santori/08.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 08" },
+          { src: "/images/album/santori/09.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 09" },
+          { src: "/images/album/santori/10.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 10" },
+          { src: "/images/album/santori/11.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 11" },
+          { src: "/images/album/santori/12.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 12" },
+          { src: "/images/album/santori/13.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 13" },
+          { src: "/images/album/santori/14.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 14" },
+          { src: "/images/album/santori/15.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 15" },
+          { src: "/images/album/santori/16.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 16" },
+          { src: "/images/album/santori/17.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 17" },
+          { src: "/images/album/santori/18.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 18" },
+        ],
+      },
+      {
+        id: "studio",
+        title: "Studio",
+        photos: [
+          { src: "/images/album/studio/01.jpg", alt: "Tuấn và Hoa chụp trong studio — 01" },
+          { src: "/images/album/studio/02.jpg", alt: "Tuấn và Hoa chụp trong studio — 02" },
+          { src: "/images/album/studio/03.jpg", alt: "Tuấn và Hoa chụp trong studio — 03" },
+          { src: "/images/album/studio/04.jpg", alt: "Tuấn và Hoa chụp trong studio — 04" },
+          { src: "/images/album/studio/05.jpg", alt: "Tuấn và Hoa chụp trong studio — 05" },
+          { src: "/images/album/studio/06.jpg", alt: "Tuấn và Hoa chụp trong studio — 06" },
+          { src: "/images/album/studio/07.jpg", alt: "Tuấn và Hoa chụp trong studio — 07" },
+          { src: "/images/album/studio/08.jpg", alt: "Tuấn và Hoa chụp trong studio — 08" },
+          { src: "/images/album/studio/09.jpg", alt: "Tuấn và Hoa chụp trong studio — 09" },
+          { src: "/images/album/studio/10.jpg", alt: "Tuấn và Hoa chụp trong studio — 10" },
+          { src: "/images/album/studio/11.jpg", alt: "Tuấn và Hoa chụp trong studio — 11" },
+          { src: "/images/album/studio/12.jpg", alt: "Tuấn và Hoa chụp trong studio — 12" },
+        ],
+      },
+      {
+        id: "ao-dai",
+        title: "Áo dài",
+        photos: [
+          { src: "/images/album/ao-dai/01.jpg", alt: "Tuấn và Hoa trong tà áo dài — 01" },
+          { src: "/images/album/ao-dai/02.jpg", alt: "Tuấn và Hoa trong tà áo dài — 02" },
+          { src: "/images/album/ao-dai/03.jpg", alt: "Tuấn và Hoa trong tà áo dài — 03" },
+        ],
+      },
+    ] satisfies AlbumChapter[],
+  },
 
   music: {
     /** File nhạc trong public/audio. Nếu file lỗi hoặc thiếu, nút nhạc sẽ tự ẩn. */
@@ -199,6 +297,7 @@ export const wedding = {
     { label: "Chuyện chúng mình", id: "our-story" },
     { label: "Lễ cưới", id: "the-wedding" },
     { label: "Ảnh cưới", id: "gallery" },
+    { label: "Album", href: "/album" },
     { label: "Xác nhận", id: "rsvp" },
     { label: "Những lời yêu thương", href: "/wishes" },
   ],

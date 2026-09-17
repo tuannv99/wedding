@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Music2, X } from "lucide-react";
 import { wedding } from "@/lib/wedding";
@@ -52,6 +53,14 @@ export function Navigation() {
   const [active, setActive] = useState<string>(wedding.nav[0].id);
   const { opened } = useInvitation();
 
+  /**
+   * Nav này giờ dùng ở cả trang chủ lẫn các route thật (/album). Ngoài trang
+   * chủ thì không có section nào để cuộn tới, nên mọi mục neo phải đổi thành
+   * link "/#id" và scroll-spy phải tắt hẳn.
+   */
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
   // Khoá scroll + đóng bằng Escape khi menu mobile mở
   useEffect(() => {
     if (!open) return;
@@ -76,7 +85,7 @@ export function Navigation() {
    * đúng lúc section đó chiếm phần nhìn chính, không phải lúc nó vừa ló ra.
    */
   useEffect(() => {
-    if (!opened) return;
+    if (!opened || !isHome) return;
 
     const sections = wedding.nav
       .filter((item) => "id" in item)
@@ -96,7 +105,7 @@ export function Navigation() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, [opened]);
+  }, [opened, isHome]);
 
   const goTo = useCallback((id: string) => {
     setOpen(false);
@@ -104,8 +113,8 @@ export function Navigation() {
     window.setTimeout(() => scrollToSection(id), 120);
   }, []);
 
-  // Trước khi khách bấm "Mở thiệp", trang chỉ hiện Hero — chưa cần menu.
-  if (!opened) return null;
+  // Trước khi khách bấm "Mở thiệp", trang chủ chỉ hiện Hero — chưa cần menu.
+  if (!opened && isHome) return null;
 
   return (
     <>
@@ -119,50 +128,72 @@ export function Navigation() {
           aria-label="Điều hướng chính"
           className="mx-auto flex h-16 w-full max-w-[104rem] items-center justify-between px-6 md:h-[72px] md:px-10"
         >
-          {/* Menu căn trái sát mép, đúng bản design.
-              Khoảng cách phải hẹp ở md: chữ serif rộng hơn sans khá nhiều nên
-              với gap cũ (36px) hàng menu chạm đúng vào nút nhạc ở 768–900px. */}
-          <ul className="hidden items-center gap-5 md:flex lg:gap-8 xl:gap-11">
+          {/*
+            Menu căn trái sát mép, đúng bản design.
+
+            Chỉ hiện từ lg — KHÔNG phải md. Bảy mục với nhãn tiếng Việt dài
+            ("Những lời yêu thương") đo được ~640px chữ ở 13px; cộng khoảng
+            cách và nút nhạc thì cần ~795px, trong khi ở 768px chỉ còn ~688px
+            khả dụng. Trước đây hàng menu tự xuống dòng thứ hai và bị header
+            (chiều cao cố định) cắt mất — mục cuối không bấm được ở mọi bề
+            ngang 768–1280px.
+
+            Mốc xl (1280px) là mốc đo được đầu tiên còn dư chỗ (~140px) sau khi
+            trừ nút nhạc; ở 1024px vẫn thiếu. Dưới xl dùng nút hamburger.
+          */}
+          <ul className="hidden items-center gap-6 xl:flex 2xl:gap-9">
             {wedding.nav.map((item) => {
-              // Mục có `href`: chuyển hẳn sang trang khác (vd. /wishes) —
-              // không tham gia cuộn/gạch chân "đang xem" như mục có `id`.
-              if ("href" in item) {
+              // Mục có `href` là route thật (/album, /wishes) -> sáng khi đang
+              // đứng ở đúng route đó. Mục có `id` chỉ sáng ở trang chủ, theo
+              // section đang xem.
+              const isActive =
+                "href" in item ? pathname === item.href : isHome && active === item.id;
+
+              // Cỡ chữ lên dần theo bề ngang thật sự có: chữ serif rộng hơn
+              // sans nên nới sớm là hàng menu lại chạm nút nhạc.
+              const linkClass = cn(
+                "wd-nav-link relative inline-flex min-h-11 items-center text-[14px] transition-colors duration-500 2xl:text-[15px]",
+                isActive ? "text-ink" : "text-ink/68",
+              );
+
+              // Gạch chân mục đang xem — trượt mượt giữa các mục
+              const underline = isActive ? (
+                <motion.span
+                  layoutId="nav-underline"
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-2.5 h-[1.5px] bg-ink"
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                />
+              ) : null;
+
+              // Ngoài trang chủ, mục neo cũng phải là link thật về "/#id":
+              // section tương ứng không tồn tại trên trang này để mà cuộn tới.
+              if ("href" in item || !isHome) {
+                const href = "href" in item ? item.href : `/#${item.id}`;
                 return (
                   <li key={item.label}>
                     <Link
-                      href={item.href}
-                      className="wd-nav-link relative inline-flex min-h-11 items-center text-[13px] text-ink/68 transition-colors duration-500 lg:text-[15px]"
+                      href={href}
+                      aria-current={isActive ? "page" : undefined}
+                      className={linkClass}
                     >
                       {item.label}
+                      {underline}
                     </Link>
                   </li>
                 );
               }
 
-              const isActive = active === item.id;
               return (
                 <li key={item.label}>
                   <button
                     type="button"
                     onClick={() => goTo(item.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={cn(
-                      // 13px ở md rồi mới lên 15px từ lg: chữ serif rộng hơn
-                      // sans nên ở 768–900px hàng menu dí sát nút nhạc.
-                      "wd-nav-link relative inline-flex min-h-11 items-center text-[13px] transition-colors duration-500 lg:text-[15px]",
-                      isActive ? "text-ink" : "text-ink/68",
-                    )}
+                    className={linkClass}
                   >
                     {item.label}
-                    {/* Gạch chân mục đang xem — trượt mượt giữa các mục */}
-                    {isActive ? (
-                      <motion.span
-                        layoutId="nav-underline"
-                        aria-hidden="true"
-                        className="absolute inset-x-0 bottom-2.5 h-[1.5px] bg-ink"
-                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                      />
-                    ) : null}
+                    {underline}
                   </button>
                 </li>
               );
@@ -170,13 +201,22 @@ export function Navigation() {
           </ul>
 
           {/* Mobile: tên cặp đôi giữ vai trò "về đầu trang" thay cho menu ngang */}
-          <button
-            type="button"
-            onClick={() => goTo(wedding.nav[0].id)}
-            className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase md:hidden"
-          >
-            {wedding.groom.short} &amp; {wedding.bride.short}
-          </button>
+          {isHome ? (
+            <button
+              type="button"
+              onClick={() => goTo(wedding.nav[0].id)}
+              className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase xl:hidden"
+            >
+              {wedding.groom.short} &amp; {wedding.bride.short}
+            </button>
+          ) : (
+            <Link
+              href="/"
+              className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase xl:hidden"
+            >
+              {wedding.groom.short} &amp; {wedding.bride.short}
+            </Link>
+          )}
 
           <div className="flex items-center gap-1">
             <MusicToggle />
@@ -187,7 +227,7 @@ export function Navigation() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Đóng menu" : "Mở menu"}
-              className="-mr-3 flex h-12 w-12 items-center justify-center text-ink md:hidden"
+              className="-mr-3 flex h-12 w-12 items-center justify-center text-ink xl:hidden"
             >
               {open ? (
                 <X className="h-5 w-5" strokeWidth={1.25} aria-hidden="true" />
@@ -208,7 +248,7 @@ export function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-10 bg-ivory px-6 md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-10 bg-ivory px-6 xl:hidden"
           >
             <ul className="flex flex-col items-center gap-8">
               {wedding.nav.map((item, index) => (
@@ -222,11 +262,19 @@ export function Navigation() {
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  {"href" in item ? (
+                  {"href" in item || !isHome ? (
                     <Link
-                      href={item.href}
+                      href={"href" in item ? item.href : `/#${item.id}`}
                       onClick={() => setOpen(false)}
-                      className="font-display text-center text-[1.375rem] tracking-[0.1em] text-ink uppercase"
+                      aria-current={
+                        "href" in item && pathname === item.href ? "page" : undefined
+                      }
+                      className={cn(
+                        "font-display text-center text-[1.375rem] tracking-[0.1em] uppercase",
+                        "href" in item && pathname === item.href
+                          ? "text-ink underline underline-offset-8"
+                          : "text-ink",
+                      )}
                     >
                       {item.label}
                     </Link>
