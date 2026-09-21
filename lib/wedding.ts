@@ -392,7 +392,7 @@ export const wedding = {
   },
 
   site: {
-    url: "https://wedding-tuan-hoa.vercel.app",
+    url: "https://tuanhoa-wedding-invatation.vercel.app",
     title: "Tuấn & Hoa · 25.10.2026",
     description:
       "Văn Tuấn & Mai Hoa — chúng mình sẽ kết hôn ngày 25 tháng 10 năm 2026. Rất mong được đón bạn trong ngày hạnh phúc.",
