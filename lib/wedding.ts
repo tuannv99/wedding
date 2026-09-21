@@ -34,6 +34,16 @@ export type TimelineItem = {
   title: string;
 };
 
+export type TimelineSchedule = {
+  /** Dùng làm React key + để tab nhớ đang chọn nghi lễ nào. */
+  id: string;
+  /** Nhãn trên tab, ví dụ "Lễ Vu Quy". */
+  label: string;
+  /** Nhà tổ chức nghi lễ này, ví dụ "Nhà gái". */
+  venue: string;
+  items: TimelineItem[];
+};
+
 export type StoryStep = {
   /** Phần chữ chính. Dùng \n để tự ngắt dòng theo ý muốn. */
   text: string;
@@ -46,10 +56,26 @@ export const wedding = {
   groom: {
     name: "Văn Tuấn",
     short: "TUẤN",
+    // TODO: thay bằng SĐT thật của chú rể — hiện tạm dùng chung một số với cô dâu.
+    phone: "0973002464",
+    portrait: {
+      src: "/images/wedding/chu_re.jpg",
+      alt: "Chú rể Văn Tuấn trong bộ vest cưới",
+      width: 1365,
+      height: 2048,
+    },
   },
   bride: {
     name: "Mai Hoa",
     short: "HOA",
+    // TODO: thay bằng SĐT thật của cô dâu — hiện tạm dùng chung một số với chú rể.
+    phone: "0973002464",
+    portrait: {
+      src: "/images/wedding/co_dau.jpg",
+      alt: "Cô dâu Mai Hoa trong váy cưới",
+      width: 1365,
+      height: 2048,
+    },
   },
 
   /** Ngày cưới: 25/10/2026 (giờ Việt Nam, UTC+7). */
@@ -62,6 +88,8 @@ export const wedding = {
     year: "2026",
     weekday: "Chủ Nhật",
     display: "25 · 10 · 2026",
+    /** Các ngày được khoanh trái tim trên lịch cưới (WeddingCalendar). */
+    highlightDays: ["24", "25"],
   },
 
   ceremony: {
@@ -73,19 +101,7 @@ export const wedding = {
     time: "12:00",
   },
 
-  /**
-   * mapEmbedUrl phải là URL /maps/embed?pb=… (URL cuối của Google).
-   *
-   * KHÔNG dùng dạng `maps?q=…&output=embed`: nó trả 301 và chặng redirect đó mang
-   * header `X-Frame-Options: SAMEORIGIN`, nên Chrome trên Android hay từ chối
-   * hiển thị iframe ("không khả dụng"). Dùng thẳng URL cuối thì chỉ còn 1 hop 200
-   * và không có X-Frame-Options.
-   *
-   * Cách lấy URL cho địa điểm mới: mở Google Maps → Chia sẻ → Nhúng bản đồ →
-   * copy phần src trong đoạn <iframe>. Hoặc chạy:
-   *   curl -sI "https://www.google.com/maps?q=<địa+chỉ>&output=embed" | grep -i location
-   * rồi lấy đúng URL trong header Location.
-   */
+  /** Cách lấy mapsUrl cho địa điểm mới: mở Google Maps → Chia sẻ → Sao chép liên kết. */
   venues: {
     bride: {
       label: "Nhà gái",
@@ -93,8 +109,6 @@ export const wedding = {
       address: "Nhà Văn Hóa Xóm 2, Xã Xuân Phương",
       mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}`,
       // "Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình" (query có dấu → base64url sau !1z)
-      mapEmbedUrl:
-        "https://www.google.com/maps/embed?origin=mfe&pb=!1m2!2m1!1zTmjDoCB2xINuIGjDs2EgeMOzbSAyLCB4w6MgWHXDom4gUGjGsMahbmcsIE5pbmggQsOsbmg",
     },
     groom: {
       label: "Nhà trai",
@@ -102,8 +116,6 @@ export const wedding = {
       address: "Xóm 3 Thôn Phụng Công, Xã Quỳnh Phụ",
       // Link thật do gia đình cung cấp, trỏ đúng "Miếu Hạ thôn Phụng Công".
       mapsUrl: "https://maps.app.goo.gl/WHHnQKhEMhDPR1kV7",
-      mapEmbedUrl:
-        "https://www.google.com/maps/embed?origin=mfe&pb=!1m2!2m1!1s20.6540299,106.3614893",
     },
   },
 
@@ -139,12 +151,33 @@ export const wedding = {
     },
   ] satisfies StoryStep[],
 
+  /**
+   * Chương trình gồm 2 nghi lễ riêng — Timeline.tsx hiển thị dạng tab, mặc
+   * định chọn mục đầu tiên (Lễ Vu Quy).
+   */
   timeline: [
-    { time: "10:45", title: "Đón khách" },
-    { time: "11:00", title: "Lễ thành hôn" },
-    { time: "12:00", title: "Tiệc cưới" },
-    { time: "12:10", title: "Nâng ly chúc mừng" },
-  ] satisfies TimelineItem[],
+    {
+      id: "vu-quy",
+      label: "Lễ Vu Quy",
+      venue: "Nhà gái",
+      items: [
+        { time: "10:30", title: "Đón khách" },
+        { time: "11:00", title: "Lễ Vu Quy" },
+        { time: "11:30", title: "Tiệc thân mật" },
+      ],
+    },
+    {
+      id: "thanh-hon",
+      label: "Lễ Thành Hôn",
+      venue: "Nhà trai",
+      items: [
+        { time: "10:45", title: "Đón khách" },
+        { time: "11:00", title: "Lễ Thành Hôn" },
+        { time: "12:00", title: "Tiệc cưới" },
+        { time: "12:10", title: "Nâng ly chúc mừng" },
+      ],
+    },
+  ] satisfies TimelineSchedule[],
 
   images: {
     hero: {
@@ -316,15 +349,14 @@ export const wedding = {
     },
     details: {
       title: "Ngày cưới",
-      /** Dải thông tin nhanh 4 cột (ngày · lễ · tiệc · địa điểm). */
-      facts: {
-        date: "Ngày",
-        ceremony: "Lễ thành hôn",
-        reception: "Tiệc cưới",
-        venue: "Địa điểm",
-      },
       venueLabel: "Địa điểm tổ chức",
+      /** Tiền tố cho tiêu đề mỗi khối tiệc: "{partyLabel} {venues.*.label}" → "Tiệc Nhà Trai". */
+      partyLabel: "Tiệc",
+      atLabel: "Tổ chức vào lúc",
+      /** Tiền tố dòng địa chỉ: "{atHome} {venues.*.label}" → "Tại tư gia Nhà trai". */
+      atHome: "Tại tư gia",
       mapsLabel: "Xem bản đồ",
+      contactLabel: "Liên hệ",
       calendarLabel: "Lưu ngày cưới",
     },
     countdown: {

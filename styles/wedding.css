@@ -170,6 +170,36 @@
   border: 0;
 }
 
+/* Nội dung nổi lên khi tấm thiệp mở ra (xem Hero.tsx + AfterOpen.tsx).
+   Delay 0.42s khớp với lúc hai cánh bắt đầu xoay mở — nội dung mount đúng lúc
+   đó nên chạy animation-delay là đủ, không cần đồng bộ qua state. */
+@keyframes wd-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.wd-rise {
+  animation: wd-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+}
+
+/* Icon nút nhạc xoay chậm khi đang phát (xem Navigation.tsx).
+   prefers-reduced-motion đã bị globals.css ép animation-duration: 0.01ms nên
+   không cần override riêng ở đây. */
+@keyframes wd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.wd-spin {
+  animation: wd-spin 7s linear infinite;
+  transform-origin: 50% 50%;
+}
+
 /* ---------- Form ---------- */
 
 /* Nhịp giữa các field điều khiển riêng bằng margin-top trên từng field

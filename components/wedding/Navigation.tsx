@@ -12,54 +12,77 @@ import { useMusic } from "@/lib/music";
 import { cn } from "@/lib/utils";
 
 /**
- * Nút nhạc nằm ngay trên thanh nav (đúng bản design: nốt nhạc + đồng hồ mm:ss).
+ * Nút nhạc nằm ngay trên thanh nav: ô vuông 44×44px, chỉ một icon nốt nhạc —
+ * không hiển thị thời gian. Icon tự xoay chậm khi đang phát; khi tắt thì
+ * đứng yên và có một nét gạch chéo đè lên.
  * Chỉ là consumer của MusicProvider — phần <audio> và logic phát/dừng nằm ở
  * lib/music.tsx nên không có bản sao state nào ở đây.
  */
 function MusicToggle({ className }: { className?: string }) {
-  const { available, playing, elapsed, toggle } = useMusic();
+  const { available, playing, toggle } = useMusic();
   if (!available) return null;
+
+  const label = playing
+    ? `Tắt nhạc · ${wedding.music.title}`
+    : `Bật nhạc · ${wedding.music.title}`;
 
   return (
     <button
       type="button"
       onClick={toggle}
       aria-pressed={playing}
-      aria-label={
-        playing
-          ? `Tắt nhạc nền: ${wedding.music.title}`
-          : `Bật nhạc nền: ${wedding.music.title}`
-      }
-      title={wedding.music.title}
+      aria-label={label}
+      title={label}
       className={cn(
-        "flex min-h-11 items-center gap-2.5 text-ink transition-opacity duration-500 hover:opacity-60",
+        "flex h-11 w-11 items-center justify-center text-ink transition-opacity duration-500 hover:opacity-60",
         className,
       )}
     >
-      <Music2
-        className={cn("h-3.5 w-3.5", playing ? "text-ink" : "text-taupe")}
-        strokeWidth={1.5}
-        aria-hidden="true"
-      />
-      <span className="wd-numeral text-[11px] leading-none tracking-[0.18em] tabular-nums text-ink/70">
-        {elapsed}
+      <span className="relative inline-flex h-[17px] w-[17px]">
+        <Music2
+          className={cn(
+            "h-[17px] w-[17px]",
+            playing ? "text-ink wd-spin" : "text-taupe",
+          )}
+          strokeWidth={1.5}
+          aria-hidden="true"
+        />
+        {!playing ? (
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full"
+          >
+            <path
+              d="M3 21 21 3"
+              stroke="var(--color-ink)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              opacity="0.65"
+            />
+          </svg>
+        ) : null}
       </span>
     </button>
   );
 }
+
+/**
+ * Nav dùng ở trang chủ "/", ở mọi URL thiệp cá nhân hoá "/[guest]" (xem
+ * app/[guest]/page.tsx — render cùng HomeView, cùng các section id), lẫn ở
+ * các route thật khác (/album). Chỉ nhóm route thật mới không có section để
+ * cuộn tới, nên liệt kê đúng nhóm đó thay vì so sánh "/" tuyệt đối — nhờ vậy
+ * Navigation không cần biết từng slug khách mời.
+ */
+const NON_HOME_ROUTES = ["/album", "/wishes", "/admin", "/create-link"];
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>(wedding.nav[0].id);
   const { opened } = useInvitation();
 
-  /**
-   * Nav này giờ dùng ở cả trang chủ lẫn các route thật (/album). Ngoài trang
-   * chủ thì không có section nào để cuộn tới, nên mọi mục neo phải đổi thành
-   * link "/#id" và scroll-spy phải tắt hẳn.
-   */
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const isHome = !NON_HOME_ROUTES.some((route) => pathname.startsWith(route));
 
   // Khoá scroll + đóng bằng Escape khi menu mobile mở
   useEffect(() => {

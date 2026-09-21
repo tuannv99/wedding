@@ -38,7 +38,7 @@ wedding = {
   groom, bride,        // tên chú rể / cô dâu (dạng đầy đủ + dạng ngắn in hoa)
   date,                // ngày cưới + mốc countdown (ISO có timezone +07:00)
   ceremony, reception,  // giờ lễ / giờ tiệc
-  venues,              // venues.bride, venues.groom — tên, địa chỉ, link + embed Google Maps ← đang là placeholder
+  venues,              // venues.bride, venues.groom — tên, địa chỉ, link Google Maps ← đang là placeholder
   story,               // các mốc "Chuyện chúng mình": chữ + ảnh riêng từng mốc
   timeline,            // lịch trình "Our day"
   images, gallery,     // đường dẫn + tỉ lệ ảnh
@@ -55,7 +55,7 @@ Các nhãn nhỏ được CSS tự viết hoa nên trong config cứ ghi chữ t
 
 Cần sửa trước khi gửi thiệp:
 
-1. `venues.bride` và `venues.groom` (`name`, `address`, `mapsUrl`, `mapEmbedUrl`) — hiện là placeholder.
+1. `venues.bride` và `venues.groom` (`name`, `address`, `mapsUrl`) — hiện là placeholder.
 2. `site.url` — domain thật (dùng cho Open Graph / metadataBase).
 
 ---

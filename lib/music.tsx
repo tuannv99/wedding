@@ -17,19 +17,10 @@ type MusicState = {
   /** Có file nhạc dùng được không — false thì mọi control tự ẩn. */
   available: boolean;
   playing: boolean;
-  /** Thời lượng đã phát, dạng "mm:ss" (khớp chỉ báo 00:00 trên thanh nav). */
-  elapsed: string;
   toggle: () => void;
 };
 
 const MusicContext = createContext<MusicState | null>(null);
-
-const formatTime = (seconds: number) => {
-  const total = Math.max(0, Math.floor(seconds));
-  const mm = String(Math.floor(total / 60)).padStart(2, "0");
-  const ss = String(total % 60).padStart(2, "0");
-  return `${mm}:${ss}`;
-};
 
 /**
  * Nhạc nền dạng opt-in, tách khỏi giao diện.
@@ -46,7 +37,6 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [available, setAvailable] = useState(true);
-  const [elapsed, setElapsed] = useState("00:00");
 
   const play = useCallback(async () => {
     const audio = audioRef.current;
@@ -88,8 +78,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   }, [play]);
 
   const value = useMemo(
-    () => ({ available, playing, elapsed, toggle }),
-    [available, playing, elapsed, toggle],
+    () => ({ available, playing, toggle }),
+    [available, playing, toggle],
   );
 
   return (
@@ -99,9 +89,6 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         src={wedding.music.src}
         loop
         preload="none"
-        onTimeUpdate={(event) =>
-          setElapsed(formatTime(event.currentTarget.currentTime))
-        }
         onError={() => {
           setAvailable(false);
           setPlaying(false);

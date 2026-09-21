@@ -26,6 +26,16 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  webpack: (config, { dev }) => {
+    // Repo nằm trong thư mục đồng bộ OneDrive: OneDrive khoá file giữa chừng
+    // khi webpack ghi cache dạng filesystem (đổi tên .pack.gz_ -> .pack.gz),
+    // gây "ENOENT: no such file or directory, rename ..." và làm lần compile
+    // đầu (vd. mở /album) chậm hẳn hoặc trang đứng hình. Cache trong bộ nhớ
+    // khi dev để khỏi phải ghi file vào thư mục bị OneDrive theo dõi — không
+    // ảnh hưởng build production (Vercel build không chạy trong OneDrive).
+    if (dev) config.cache = { type: "memory" };
+    return config;
+  },
 };
 
 export default nextConfig;
