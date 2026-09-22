@@ -16,7 +16,7 @@ export function Couple() {
   return (
     <section
       id="couple"
-      className="relative isolate w-full overflow-hidden bg-ivory px-6 py-[132px] md:px-5"
+      className="relative isolate w-full overflow-hidden bg-ivory px-6 py-16 md:px-5 md:py-[132px]"
     >
       <BotanicalAccent
         variant="sprig"
@@ -32,7 +32,7 @@ export function Couple() {
           <hr className="wd-rule" />
         </Reveal>
 
-        <Reveal delay={0.1} y={20} className="mt-12 md:mt-14">
+        <Reveal delay={0.1} y={20} className="mt-8 md:mt-14">
           <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-[clamp(24px,5vw,72px)]">
             {/* Cột trái */}
             <PersonColumn {...people[0]} />
@@ -57,7 +57,7 @@ export function Couple() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.15} className="mt-12 flex justify-center md:mt-14">
+        <Reveal delay={0.15} className="mt-8 flex justify-center md:mt-14">
           <Botanical variant="mark" className="h-5 w-14 text-sage/65" />
         </Reveal>
       </div>

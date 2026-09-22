@@ -18,7 +18,7 @@ export function Timeline() {
   return (
     <section
       id="our-day"
-      className="relative isolate w-full overflow-hidden bg-ivory px-6 pt-10 pb-28 md:px-5 md:pt-14 md:pb-40"
+      className="relative isolate w-full overflow-hidden bg-ivory px-6 pt-8 pb-16 md:px-5 md:pt-14 md:pb-40"
     >
       {/* Branch mép trái — giữ cỡ 62vh, opacity tăng nhẹ so với chuẩn chung
           (0.32 → 0.37) cho khối Countdown → Timeline rõ hơn một chút. */}

@@ -9,7 +9,7 @@ export function OurStory() {
   return (
     <section
       id="our-story"
-      className="relative isolate w-full overflow-hidden bg-ivory px-6 py-28 md:px-5 md:py-40"
+      className="relative isolate w-full overflow-hidden bg-ivory px-6 py-16 md:px-5 md:py-40"
     >
       {/*
         Section được ưu tiên botanical: một nhánh dài chạy dọc mép phải, phần
@@ -118,13 +118,11 @@ export function OurStory() {
         {/* Chữ ký: — VĂN TUẤN · MAI HOA — + một nét lá nhỏ khép lại câu chuyện */}
         <Reveal delay={0.15} className="mt-16 flex flex-col items-center md:mt-20">
           <div className="flex items-center gap-5">
-            <span aria-hidden="true" className="h-px w-10 bg-champagne/60 sm:w-16" />
-            <p className="wd-eyebrow text-champagne">
-              {wedding.groom.name} · {wedding.bride.name}
-            </p>
-            <span aria-hidden="true" className="h-px w-10 bg-champagne/60 sm:w-16" />
+            <span aria-hidden="true" className="h-px w-10 bg-champagne/70 sm:w-16" />
+                <Botanical variant="mark" className="h-4 w-11 text-sage/65" />
+            <span aria-hidden="true" className="h-px w-10 bg-champagne/70 sm:w-16" />
           </div>
-          <Botanical variant="mark" className="mt-8 h-5 w-14 text-sage/65" />
+
         </Reveal>
       </div>
     </section>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Heart } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { wedding } from "@/lib/wedding";
 import { emitOpenInvitation } from "@/lib/events";
@@ -101,17 +102,33 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
       aria-label="Thiệp cưới Tuấn và Hoa"
       /*
         Bố cục chia đôi theo bản design: nửa trái là nền ivory + chữ, nửa phải
-        là ảnh cưới tràn viền. Dưới md không chia đôi (cột hẹp sẽ bóp cả chữ lẫn
-        ảnh) mà quay về ảnh nền tràn viền + chữ căn giữa đè lên.
+        là ảnh cưới tràn viền. Dưới md không chia đôi (cột hẹp sẽ bóp cả chữ
+        lẫn ảnh) mà để ảnh tràn cả màn hình, chữ đè lên ảnh — cảm giác một tấm
+        thiệp liền mạch.
+
+        Chìa khoá là KHÔNG phủ ivory đều lên cả ảnh (ảnh cưới này tông trắng
+        rất sáng, phủ đều là xoá luôn ảnh): nửa trên để nguyên cho thấy cô dâu
+        chú rể, chữ dồn xuống nửa dưới nơi chỉ còn tà váy trắng mờ, và lớp phủ
+        ivory chỉ đậm dần đúng ở vùng có chữ.
       */
       className="relative isolate grid h-[100svh] w-full grid-cols-1 overflow-hidden md:grid-cols-[1fr_1.05fr]"
     >
-      {/* Ảnh cưới: mobile = nền phía sau chữ; từ md = ô bên phải của lưới */}
+      {/* Ảnh cưới: mobile = nền tràn viền phía sau chữ; từ md = ô bên phải */}
       <motion.div
         initial={{ opacity: 0, scale: reduceMotion ? 1 : 1.04 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: reduceMotion ? 0.5 : 2.2, ease: EASE_OUT }}
-        className="absolute inset-0 -z-10 md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
+        /*
+          Mobile: khung ảnh cao hơn màn và ghim vào ĐÁY, tức là cắt bớt phần
+          trời trống phía trên. Cặp đôi nhờ vậy được đẩy cao lên, và vùng sáng
+          chỉ-còn-tà-váy — nơi đặt chữ — luôn bắt đầu quanh 45–48% chiều cao
+          màn ở MỌI chiều cao máy, vì khung ảnh giãn theo màn.
+
+          Máy thấp (≤700px) cắt sâu hơn (132%): màn càng thấp thì khối chữ
+          càng bắt đầu cao, nên phải kéo vùng sáng lên theo. Điều kiện bọc
+          thêm max-md để một cửa sổ desktop thấp không rơi vào nhánh mobile.
+        */
+        className="absolute inset-x-0 bottom-0 -z-10 h-[118%] max-md:[@media(max-height:700px)]:h-[132%] md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
       >
         <Image
           src={hero.src}
@@ -122,11 +139,21 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
           className="object-cover object-center"
         />
 
-        {/* Chỉ cần phủ ivory khi ảnh nằm DƯỚI chữ (mobile) */}
-        <div aria-hidden="true" className="absolute inset-0 bg-ivory/45 md:hidden" />
+        {/*
+          Mobile: lớp phủ ivory KHÔNG đậm dần về đáy mà đậm nhất ở DẢI GIỮA
+          rồi nhạt lại — nhờ vậy ảnh chạy thông tới cạnh dưới màn hình.
+
+          Lý do: đo độ sáng của chính tấm ảnh trong dải chữ cho thấy vùng
+          tay hai người + hàng cây (khoảng 48–56% chiều cao ảnh) có điểm rất
+          tối (min ~10/255) nên chữ đặt lên đó phải có nền; còn từ 56% xuống
+          đáy chỉ còn tà váy + voan sáng (min ~180) nên chữ ink đọc rõ mà chỉ
+          cần lớp phủ rất mỏng (~30%), tức là vẫn thấy nếp váy tới cạnh dưới.
+          Dải đậm ở giữa lại trùng đúng vệt tiền cảnh mờ có sẵn trong ảnh nên
+          không lộ ra như một tấm nền dán thêm.
+        */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-ivory/70 via-ivory/20 to-ivory/80 md:hidden"
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_34%,rgba(249,247,242,0.86)_52%,rgba(249,247,242,0.46)_68%,rgba(249,247,242,0.3)_100%)] md:hidden"
         />
 
         {/* Từ md: một dải chuyển ivory → ảnh cho mép nối giữa hai nửa mềm lại */}
@@ -146,10 +173,16 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
         className="-bottom-[6svh] -left-[8svh] h-[62vh] w-[24vh]"
       />
 
-      <div className="flex flex-col items-center justify-center gap-[clamp(10px,2.4svh,30px)] px-6 text-center md:col-start-1 md:row-start-1 md:items-start md:px-[clamp(32px,6vw,104px)] md:text-left">
+      {/*
+        Mobile: khối chữ dồn xuống đáy (justify-end) và nhịp giữa các dòng hẹp
+        hơn desktop, để cả khối nằm gọn dưới mốc 56% nói trên. Từ md quay lại
+        đúng nhịp của bản design: căn giữa theo trục dọc, canh trái.
+      */}
+      <div className="flex flex-col items-center justify-end gap-[clamp(7px,1.6svh,26px)] px-6 pb-[clamp(22px,5svh,64px)] text-center md:col-start-1 md:row-start-1 md:items-start md:justify-center md:gap-[clamp(10px,2.4svh,30px)] md:px-[clamp(32px,6vw,104px)] md:pb-0 md:text-left">
         <motion.p
           {...rise(0.4)}
-          className="wd-eyebrow wd-num text-ink/70 md:tracking-[0.5em]"
+          /* Mobile chữ đậm hơn desktop: dòng này nằm trực tiếp trên ảnh. */
+          className="wd-eyebrow wd-num text-ink md:text-ink/70 md:tracking-[0.5em]"
         >
           {wedding.date.display}
         </motion.p>
@@ -160,7 +193,7 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
         {guestName ? (
           <motion.p
             {...rise(0.62)}
-            className="wd-quote max-w-[22ch] text-[clamp(1rem,2.2vw,1.35rem)] text-ink/60 text-balance"
+            className="wd-quote max-w-[22ch] text-[clamp(1rem,2.2vw,1.35rem)] text-ink/85 text-balance md:text-ink/60"
           >
             {guestGreeting} <span className="text-ink">{guestName}</span>
           </motion.p>
@@ -202,15 +235,15 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
         {/* Bản design để câu này ở dạng serif nghiêng, không phải nhãn hoa */}
         <motion.p
           {...rise(2.1)}
-          className="wd-quote text-[clamp(1rem,2.2vw,1.35rem)] text-ink/60"
+          className="wd-quote text-[clamp(1rem,2.2vw,1.35rem)] text-ink/85 md:text-ink/60"
         >
           {wedding.copy.hero.tagline}!
         </motion.p>
 
         {/*
           Nút "Mở thiệp" dạng pill (đúng kiểu wd-btn-ghost dùng xuyên suốt
-          site) — chữ + mũi tên nằm cùng hàng, một nét kẻ mảnh phía trên tách
-          nó khỏi câu tagline. Đây là user gesture duy nhất hợp lệ để bật
+          site) — chữ + trái tim nhỏ nằm cùng hàng, một nét kẻ mảnh phía trên
+          tách nó khỏi câu tagline. Đây là user gesture duy nhất hợp lệ để bật
           nhạc và mở phần nội dung phía dưới.
         */}
         <motion.div
@@ -237,20 +270,12 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
                 {phase ? "Đang mở…" : wedding.copy.hero.openButton}
               </motion.span>
             </AnimatePresence>
-            <svg
-              viewBox="0 0 12 12"
-              fill="none"
+            <Heart
+              className="h-2.5 w-2.5 text-champagne"
+              fill="currentColor"
+              strokeWidth={0}
               aria-hidden="true"
-              className="h-3 w-3"
-            >
-              <path
-                d="M6 0v10M2 6.5 6 10.5l4-4"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            />
           </motion.button>
         </motion.div>
       </div>

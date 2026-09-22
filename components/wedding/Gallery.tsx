@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { Heart } from "lucide-react";
 import { wedding } from "@/lib/wedding";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
@@ -42,7 +44,7 @@ export function Gallery() {
   return (
     <section
       id="gallery"
-      className="relative isolate w-full overflow-hidden bg-ivory px-6 py-28 md:px-5 md:py-40"
+      className="relative isolate w-full overflow-hidden bg-ivory px-6 py-16 md:px-5 md:py-40"
     >
       {/* Sprig mép trái — cỡ chuẩn hoá dùng chung toàn site: 36vh/0.26. */}
       <BotanicalAccent
@@ -97,8 +99,29 @@ export function Gallery() {
           })}
         </div>
 
+        {/*
+          Mosaic ở trang chủ chỉ là 6 ảnh chọn lọc — nút này dẫn sang /album
+          (toàn bộ ảnh, chia theo buổi chụp). Nhãn dài hơn mọi nút
+          wd-btn-ghost khác nên ở mobile phải hạ cỡ chữ + tracking để vẫn gọn
+          một dòng trong 375px; từ sm trở lên mới về đúng cỡ chuẩn.
+        */}
+        <Reveal delay={0.08} className="mt-14 flex justify-center">
+          <Link
+            href="/album"
+            className="wd-btn-ghost gap-3 px-7 text-[11px] tracking-[0.12em] sm:px-10 sm:text-[13px] sm:tracking-[0.2em]"
+          >
+            {wedding.copy.gallery.moreLabel}
+            <Heart
+              className="h-2.5 w-2.5 shrink-0 text-champagne"
+              fill="currentColor"
+              strokeWidth={0}
+              aria-hidden="true"
+            />
+          </Link>
+        </Reveal>
+
         {/* Gallery thuộc về ảnh: botanical chỉ còn đúng một nét rất nhỏ khép lại. */}
-        <Reveal delay={0.1} className="mt-14 flex justify-center">
+        <Reveal delay={0.1} className="mt-10 flex justify-center">
           <Botanical variant="mark" className="h-4 w-11 text-sage/60" />
         </Reveal>
       </div>

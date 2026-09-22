@@ -7,17 +7,27 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { wedding } from "@/lib/wedding";
-import { AlbumChapters } from "@/app/album/AlbumChapters";
-import { ChapterRail } from "@/app/album/ChapterRail";
+import { AlbumStory } from "@/app/album/AlbumStory";
 
 export const metadata: Metadata = {
   title: `Album · ${wedding.groom.short} & ${wedding.bride.short}`,
   description:
-    "Toàn bộ album ảnh cưới của Văn Tuấn & Mai Hoa, chia theo từng buổi chụp.",
+    "Những ngày Văn Tuấn & Mai Hoa đi chụp ảnh cưới, kể lại bằng ảnh theo thứ tự từ đầu đến cuối.",
 };
 
-const { chapters, hero: heroPhotos, closing } = wedding.album;
-const TOTAL_PHOTOS = chapters.reduce((sum, c) => sum + c.photos.length, 0);
+const { chapters, hero: heroPhotos, closing, opening, ending } = wedding.album;
+
+/**
+ * Trang /album là một cuốn "photo diary": mở ra bằng một khoảng thở, rồi ba
+ * chương theo đúng thứ tự của ngày chụp (ngoại cảnh → studio → áo dài), rồi
+ * khép lại. Toàn bộ nằm trên một trang, cuộn một chiều — không mục lục, không
+ * tab, không filter, không nút nhảy chương.
+ *
+ * Bề rộng thân trang là 1100px (hẹp hơn mức 1300px cũ): cột ảnh gọn hơn thì
+ * khoảng trắng hai bên mới đủ rộng để trang đọc ra là một cuốn sách ảnh chứ
+ * không phải một trang gallery kín mép.
+ */
+const BODY = "mx-auto w-full max-w-[1100px]";
 
 export default function AlbumPage() {
   return (
@@ -27,9 +37,10 @@ export default function AlbumPage() {
 
       <main className="w-full bg-ivory">
         {/* ---------------------------------------------------------------
-            Hero album
+            01 · Mở đầu — chữ giữa trang, thật nhiều khoảng trắng, rồi hai
+            tấm ảnh đầu tiên lệch tầng như hai tấm rơi ra từ bìa album.
         --------------------------------------------------------------- */}
-        <section className="relative isolate w-full overflow-hidden px-6 pt-24 pb-14 md:px-10 md:pt-[112px] lg:h-[76svh] lg:pb-[clamp(32px,6svh,88px)]">
+        <section className="relative isolate w-full overflow-hidden px-6 pt-28 pb-[clamp(24px,5vh,56px)] md:px-10 md:pt-[136px]">
           <BotanicalAccent
             variant="branch"
             opacity={0.3}
@@ -37,103 +48,101 @@ export default function AlbumPage() {
             className="-top-[6vh] -left-[3vw] hidden h-[58vh] w-[22vh] lg:block"
           />
 
-          <div className="mx-auto grid h-full w-full max-w-[1300px] grid-cols-1 items-end gap-10 lg:grid-cols-[1fr_0.92fr] lg:gap-[clamp(32px,5vw,88px)]">
-            {/* --- Cột chữ --- */}
-            <Reveal y={20} className="min-w-0">
-              <p className="wd-eyebrow text-taupe">
-                {wedding.groom.short} &amp; {wedding.bride.short} ·{" "}
-                <span className="wd-num">{wedding.date.display}</span>
-              </p>
+          <div className={BODY}>
+            <Reveal className="mx-auto flex max-w-[620px] flex-col items-center text-center">
+              <p className="wd-eyebrow text-taupe">{opening.eyebrow}</p>
 
-              {/*
-                Bản gốc dùng font script Parisienne cho chữ "Our". Font đó đã
-                được gỡ khỏi dự án khi toàn site gộp về một font chữ, nên ở đây
-                dùng Cormorant italic — vẫn là một nét viết nghiêng chờm xuống
-                tiêu đề, nhưng không kéo thêm font thứ ba vào trang.
-              */}
-              <p
-                aria-hidden="true"
-                className="font-display mt-6 -mb-[0.34em] translate-x-[0.06em] text-[clamp(2rem,4.2vw,3.5rem)] leading-none text-taupe/85 italic"
-              >
-                Our
-              </p>
-
-              <h1 className="font-display text-[clamp(3.25rem,8.4vw,8.5rem)] leading-[0.95] font-light tracking-[0.09em] text-ink uppercase">
-                Album
+              <h1 className="font-display mt-8 text-[clamp(1.85rem,4.4vw,3.15rem)] leading-[1.3] font-light text-ink sm:whitespace-pre-line">
+                {opening.title}
               </h1>
 
+              {/* Dòng gợi cuộn: một nét kẻ dọc mảnh + chữ nhỏ. Cố ý không mũi
+                  tên, không animation nhấp nháy — chỉ đủ để nói "còn ở dưới". */}
               <span
                 aria-hidden="true"
-                className="mt-7 block h-px w-[64px] bg-champagne/70"
+                className="mt-10 block h-[52px] w-px bg-champagne/60"
               />
-
-              <p className="wd-quote mt-6 max-w-[28ch] text-[clamp(1.05rem,1.8vw,1.5rem)]">
-                Ba buổi chụp, <span className="wd-num">{TOTAL_PHOTOS}</span>{" "}
-                khoảnh khắc chúng mình giữ lại.
+              <p className="wd-eyebrow mt-5 text-[11px] tracking-[0.3em] text-taupe/85">
+                {opening.hint}
               </p>
-
-              <Link href="/" className="wd-btn-ghost mt-9">
-                Về thiệp cưới
-              </Link>
             </Reveal>
 
-            {/* --- Cột ảnh: hai tấm 4:5 lệch tầng --- */}
-            <Reveal
-              delay={0.12}
-              y={22}
-              className="grid min-w-0 grid-cols-2 gap-[clamp(10px,1.4vw,18px)]"
-            >
+            <div className="mt-[clamp(56px,10vh,120px)] grid grid-cols-1 gap-[clamp(18px,2.6vw,40px)] sm:grid-cols-[1.55fr_1fr] sm:items-start">
               {heroPhotos.map((photo, index) => (
                 <div
                   key={photo.src}
-                  className={index === 0 ? "translate-y-[-34px]" : undefined}
+                  /* Tấm thứ hai nhỏ hơn và tụt xuống — nhịp lệch của cả trang
+                     bắt đầu ngay từ đây. Mobile: đứng lẻ, thu về 74% bề ngang
+                     và dạt sang phải để không đọc thành một cặp đều nhau. */
+                  className={
+                    index === 1
+                      ? "ml-auto w-[74%] sm:mt-[clamp(32px,6vw,88px)] sm:ml-0 sm:w-[88%]"
+                      : undefined
+                  }
                 >
-                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3px] bg-warm">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-[3px] bg-warm">
                     <Image
                       src={photo.src}
                       alt={photo.alt}
                       fill
                       priority
-                      sizes="(max-width: 1023px) 46vw, 300px"
+                      sizes="(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 620px"
                       className="object-cover"
                     />
                   </div>
                 </div>
               ))}
-            </Reveal>
+            </div>
           </div>
         </section>
 
         {/* ---------------------------------------------------------------
-            Thân album: rail mục lục + các chapter
+            02–04 · Ba chương của ngày chụp
         --------------------------------------------------------------- */}
-        <div className="mx-auto w-full max-w-[1300px] px-6 pb-[clamp(72px,11vh,132px)] md:px-10">
-          <div className="grid grid-cols-1 gap-[clamp(24px,4vw,64px)] lg:grid-cols-[200px_minmax(0,1fr)]">
-            <ChapterRail
-              chapters={chapters.map((c) => ({ id: c.id, title: c.title }))}
-            />
-            <AlbumChapters chapters={chapters} />
+        {/* Lớp padding NGOÀI rồi mới tới khung 1100px — đúng thứ tự như hai
+            section trên/dưới. Gộp cả hai vào một thẻ thì phần chữ và ảnh của
+            các chương sẽ thụt vào thêm 40px so với ảnh mở đầu và ảnh kết. */}
+        <div className="w-full px-6 pt-[clamp(80px,13vh,150px)] pb-[clamp(24px,5vh,56px)] md:px-10">
+          <div className={BODY}>
+            <AlbumStory chapters={chapters} />
           </div>
+        </div>
 
-          {/* Ảnh ngang khép lại CẢ album. Cố ý nằm ngoài mọi <section> chapter:
-              nó thuộc về toàn album chứ không riêng buổi chụp cuối — và buổi
-              cuối (Áo dài) cũng không có khung ảnh ngang nào để dùng. */}
-          <Reveal delay={0.1} y={18} className="mt-[clamp(72px,11vh,132px)]">
-            <div className="relative aspect-[21/9] w-full overflow-hidden rounded-[3px] bg-warm">
+        {/* ---------------------------------------------------------------
+            05 · Khép album — khoảng trắng lớn, hai câu cảm ơn, rồi tấm ảnh
+            ngang cuối cùng.
+        --------------------------------------------------------------- */}
+        <section className="w-full px-6 pt-[clamp(96px,17vh,190px)] pb-[clamp(72px,11vh,130px)] md:px-10">
+          <Reveal className="mx-auto flex max-w-[560px] flex-col items-center text-center">
+            <p className="wd-quote text-[clamp(1.4rem,3.4vw,2.1rem)] text-ink">
+              {ending.lead}
+            </p>
+
+            <p className="font-display mt-7 text-[clamp(1.05rem,1.5vw,1.3rem)] leading-[1.9] font-light text-ink/70 sm:whitespace-pre-line">
+              {ending.body}
+            </p>
+          </Reveal>
+
+          <Reveal
+            delay={0.1}
+            y={18}
+            className={`${BODY} mt-[clamp(56px,10vh,120px)]`}
+          >
+            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-[3px] bg-warm">
               <Image
                 src={closing.src}
                 alt={closing.alt}
                 fill
                 loading="lazy"
-                sizes="(max-width: 1023px) 92vw, 1220px"
+                sizes="(max-width: 1023px) 92vw, 1100px"
                 className="object-cover"
               />
             </div>
           </Reveal>
-        </div>
+        </section>
 
         {/* ---------------------------------------------------------------
-            Footer album
+            Chữ ký khép lại + đường về thiệp cưới
         --------------------------------------------------------------- */}
         <footer className="relative isolate w-full overflow-hidden border-t border-taupe/20 px-6 py-[clamp(72px,12vh,140px)] md:px-10">
           <BotanicalAccent
@@ -144,14 +153,7 @@ export default function AlbumPage() {
           />
 
           <Reveal className="mx-auto flex max-w-[640px] flex-col items-center text-center">
-            {/* Cố ý KHÔNG dùng chữ viết tay ở đây — chỉ Cormorant 300 viết hoa,
-                giãn chữ rộng, để phần kết đọc như một dòng khắc chứ không phải
-                một chữ ký thứ hai cạnh tên cô dâu chú rể. */}
-            <p className="font-display text-[clamp(0.95rem,1.5vw,1.2rem)] font-light tracking-[0.14em] text-taupe uppercase">
-              Thank you for looking
-            </p>
-
-            <p className="wd-display mt-8 text-[clamp(2.25rem,8vw,4.5rem)] uppercase">
+            <p className="wd-display text-[clamp(2.25rem,8vw,4.5rem)] uppercase">
               {wedding.groom.short}
               <span className="mx-3 text-champagne italic lowercase">&amp;</span>
               {wedding.bride.short}

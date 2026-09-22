@@ -21,6 +21,12 @@ export type AlbumChapter = {
   id: string;
   title: string;
   /**
+   * Đoạn ghi chú mở đầu chương — giọng nhật ký, do cô dâu chú rể tự kể.
+   * Dùng \n để tự ngắt dòng: trang chỉ tôn trọng dấu ngắt đó từ sm trở
+   * lên, ở mobile chữ được cho tự xuống dòng (xem AlbumStory.tsx).
+   */
+  note: string;
+  /**
    * Ảnh NGANG tràn viền mở đầu chapter — trang trí, KHÔNG nằm trong lightbox
    * (nhờ vậy bộ đếm lightbox chỉ đếm đúng số ảnh thật của album).
    * Bỏ trống nếu buổi chụp đó không có khung ảnh ngang nào.
@@ -59,10 +65,10 @@ export const wedding = {
     // TODO: thay bằng SĐT thật của chú rể — hiện tạm dùng chung một số với cô dâu.
     phone: "0973002464",
     portrait: {
-      src: "/images/wedding/chu_re.jpg",
-      alt: "Chú rể Văn Tuấn trong bộ vest cưới",
-      width: 1365,
-      height: 2048,
+      src: "/images/wedding/chu_re_1.jpg",
+      alt: "Chú rể Văn Tuấn chỉnh lại cà vạt trong bộ vest cưới",
+      width: 933,
+      height: 1400,
     },
   },
   bride: {
@@ -107,6 +113,11 @@ export const wedding = {
       label: "Nhà gái",
       name: "Xuân Phương, Ninh Bình",
       address: "Nhà Văn Hóa Xóm 2, Xã Xuân Phương",
+      /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
+      photo: {
+        src: "/images/album/studio/06.jpg",
+        alt: "Tuấn và Hoa trong studio",
+      },
       mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}`,
       // "Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình" (query có dấu → base64url sau !1z)
     },
@@ -114,6 +125,11 @@ export const wedding = {
       label: "Nhà trai",
       name: "Quỳnh Phụ, Hưng Yên",
       address: "Xóm 3 Thôn Phụng Công, Xã Quỳnh Phụ",
+      /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
+      photo: {
+        src: "/images/album/santori/09.jpg",
+        alt: "Tuấn và Hoa bên mái vòm trong vườn",
+      },
       // Link thật do gia đình cung cấp, trỏ đúng "Miếu Hạ thôn Phụng Công".
       mapsUrl: "https://maps.app.goo.gl/WHHnQKhEMhDPR1kV7",
     },
@@ -245,7 +261,20 @@ export const wedding = {
    * dải ảnh tràn viền mở đầu.
    */
   album: {
-    /** Hai ảnh dọc lệch tầng ở nửa phải hero. */
+    /** Chữ mở đầu cuốn nhật ký ảnh. */
+    opening: {
+      eyebrow: "Our wedding story",
+      title: "Những ngày chúng mình\nđi chụp ảnh cưới.",
+      hint: "Cuộn xuống để xem",
+    },
+
+    /** Chữ khép lại cuốn nhật ký, đặt trước ảnh cuối. */
+    ending: {
+      lead: "Ảnh hết rồi.",
+      body: "Cảm ơn các bạn đã xem hết\nnhững khoảnh khắc của chúng mình.",
+    },
+
+    /** Hai ảnh dọc mở đầu, lệch tầng. */
     hero: [
       { src: "/images/album/hero-01.jpg", alt: "Tuấn và Hoa dưới mái vòm, tà voan bay trong gió" },
       { src: "/images/album/hero-02.jpg", alt: "Tuấn và Hoa trao nhau chiếc nhẫn trong studio" },
@@ -260,7 +289,9 @@ export const wedding = {
     chapters: [
       {
         id: "santori",
-        title: "Santori",
+        title: "Santori Yên Sở",
+        note:
+          "Đây là ảnh chụp ở Santori Yên Sở.\nTrộm vía hôm chụp trời khá đẹp và mát,\nnên hai đứa cũng có một ngày khá dễ chịu.",
         cover: "/images/album/santori/cover.jpg",
         photos: [
           { src: "/images/album/santori/01.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 01" },
@@ -286,6 +317,8 @@ export const wedding = {
       {
         id: "studio",
         title: "Studio",
+        note:
+          "Ảnh sau đấy chúng mình về studio chụp.\nLúc đấy cũng bắt đầu mệt rồi,\nnên sẽ hơi ít ảnh một chút.",
         photos: [
           { src: "/images/album/studio/01.jpg", alt: "Tuấn và Hoa chụp trong studio — 01" },
           { src: "/images/album/studio/02.jpg", alt: "Tuấn và Hoa chụp trong studio — 02" },
@@ -304,6 +337,8 @@ export const wedding = {
       {
         id: "ao-dai",
         title: "Áo dài",
+        note:
+          "Lúc chụp áo dài thì mệt lắm rồi,\nnên chỉ có vài tấm này thôi.",
         photos: [
           { src: "/images/album/ao-dai/01.jpg", alt: "Tuấn và Hoa trong tà áo dài — 01" },
           { src: "/images/album/ao-dai/02.jpg", alt: "Tuấn và Hoa trong tà áo dài — 02" },
@@ -355,7 +390,7 @@ export const wedding = {
       atLabel: "Tổ chức vào lúc",
       /** Tiền tố dòng địa chỉ: "{atHome} {venues.*.label}" → "Tại tư gia Nhà trai". */
       atHome: "Tại tư gia",
-      mapsLabel: "Xem bản đồ",
+      mapsLabel: "Bản đồ",
       contactLabel: "Liên hệ",
       calendarLabel: "Lưu ngày cưới",
     },
@@ -377,6 +412,7 @@ export const wedding = {
     gallery: {
       eyebrow: "Khoảnh khắc",
       title: "Ảnh cưới",
+      moreLabel: "Xem thêm ảnh chúng mình",
     },
     rsvp: {
       title: "RẤT MONG\nĐƯỢC GẶP BẠN",

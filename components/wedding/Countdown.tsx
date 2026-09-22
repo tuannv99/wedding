@@ -57,7 +57,7 @@ export function Countdown() {
   return (
     <section
       aria-label="Đếm ngược tới ngày cưới"
-      className="relative isolate w-full overflow-hidden bg-ivory px-6 pt-16 pb-14 md:px-5 md:pt-20 md:pb-16"
+      className="relative isolate w-full overflow-hidden bg-ivory px-6 pt-10 pb-8 md:px-5 md:pt-20 md:pb-16"
     >
       {/* Sprig mép phải — giữ cỡ 36vh, opacity tăng nhẹ so với chuẩn chung
           (0.26 → 0.30) để rõ hơn một chút trong khối Countdown → Timeline. */}

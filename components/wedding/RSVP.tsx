@@ -36,7 +36,7 @@ export function RSVP() {
   return (
     <section
       id="rsvp"
-      className="relative isolate w-full overflow-hidden border-y border-taupe/20 bg-ivory px-6 py-28 md:px-5 md:py-40"
+      className="relative isolate w-full overflow-hidden border-y border-taupe/20 bg-ivory px-6 py-16 md:px-5 md:py-40"
     >
       {/* Branch mép phải — cỡ chuẩn hoá dùng chung toàn site: 62vh/0.32. */}
       <BotanicalAccent

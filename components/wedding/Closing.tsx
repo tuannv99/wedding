@@ -9,7 +9,7 @@ export function Closing() {
   const { closing } = wedding.images;
 
   return (
-    <footer className="relative isolate flex min-h-[85svh] w-full items-center justify-center overflow-hidden px-6 py-28 md:px-5 md:py-40">
+    <footer className="relative isolate flex min-h-[85svh] w-full items-center justify-center overflow-hidden px-6 py-16 md:px-5 md:py-40">
       <div className="absolute inset-0 -z-10">
         <Image
           src={closing.src}
