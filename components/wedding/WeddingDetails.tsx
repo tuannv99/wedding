@@ -142,7 +142,7 @@ export function WeddingDetails() {
                     <p className="wd-fact-label mt-5 text-[10px] tracking-[0.18em] sm:text-[12px] sm:tracking-[0.24em] md:mt-7">
                       {copy.details.atHome} {place.label}
                     </p>
-                    <p className="wd-body-sm mt-2 max-w-[26ch] text-[12px] text-balance sm:mt-3 sm:text-[15px]">
+                    <p className="wd-body-sm mt-2 max-w-[34ch] text-[12px] whitespace-pre-line text-balance sm:mt-3 sm:text-[15px]">
                       {place.address}
                     </p>
 

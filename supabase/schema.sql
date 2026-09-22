@@ -140,3 +140,41 @@ create policy "authenticated can delete rsvp"
   for delete
   to authenticated
   using (true);
+
+-- Khách mời cho link thiệp cá nhân hoá (/<slug>, xem app/[guest]/page.tsx).
+-- Trước đây danh sách này nằm cứng trong data/guests.ts — muốn thêm một
+-- khách là phải sửa code rồi deploy lại. Giờ admin tự thêm qua /admin/guests,
+-- không cần deploy; data/guests.ts chỉ còn vài mục mẫu để fallback khi chưa
+-- cấu hình Supabase (dev local) hoặc slug không có trong bảng này.
+create table if not exists public.wedding_guests (
+  slug text primary key,
+  name text not null,
+  -- Lời chào đứng trước tên, vd "Gửi bạn yêu". NULL thì trang tự dùng mặc
+  -- định "Gửi bạn" (xem DEFAULT_GREETING trong data/guests.ts).
+  greeting text,
+  created_at timestamptz not null default now(),
+  constraint wedding_guests_slug_format check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+  constraint wedding_guests_name_length check (char_length(name) between 1 and 120),
+  constraint wedding_guests_greeting_length check (greeting is null or char_length(greeting) between 1 and 40)
+);
+
+alter table public.wedding_guests enable row level security;
+
+-- Mở link /<slug> là truy cập ẩn danh (role "anon") — phải đọc được đúng
+-- tên/lời chào của mình thì trang mới cá nhân hoá được, nên cho đọc công
+-- khai toàn bộ (dữ liệu chỉ là tên, không nhạy cảm).
+drop policy if exists "public can read guests" on public.wedding_guests;
+create policy "public can read guests"
+  on public.wedding_guests
+  for select
+  to anon, authenticated
+  using (true);
+
+-- Chỉ admin (đã đăng nhập) mới được tạo/sửa/xoá khách mời.
+drop policy if exists "authenticated can manage guests" on public.wedding_guests;
+create policy "authenticated can manage guests"
+  on public.wedding_guests
+  for all
+  to authenticated
+  using (true)
+  with check (true);

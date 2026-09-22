@@ -9,8 +9,18 @@ export function Closing() {
   const { closing } = wedding.images;
 
   return (
-    <footer className="relative isolate flex min-h-[85svh] w-full items-center justify-center overflow-hidden px-6 py-16 md:px-5 md:py-40">
-      <div className="absolute inset-0 -z-10">
+    <footer className="relative isolate flex w-full flex-col items-center overflow-hidden bg-ivory md:min-h-[85svh] md:justify-center md:px-5 md:py-40">
+      {/*
+        Desktop: ảnh tràn viền phủ toàn footer, chữ đè lên như bản design.
+
+        Mobile: ảnh gốc là khung NGANG (2200×1467, tỉ lệ ~3:2) — nhét vào một
+        footer cao gần hết màn hình trên điện thoại (khung DỌC) buộc object-cover
+        phải crop bỏ phần lớn bề ngang, kết quả chỉ còn thấy một mảnh nhỏ giữa
+        ảnh (thường mất luôn một trong hai người). Nên ở mobile tách ảnh ra
+        thành một khối riêng đúng tỉ lệ gốc (aspect-[3/2], không crop ngang),
+        đặt phía trên khối chữ, thay vì làm nền tràn viền cho cả footer.
+      */}
+      <div className="hidden md:absolute md:inset-0 md:-z-10 md:block">
         <Image
           src={closing.src}
           alt={closing.alt}
@@ -23,6 +33,22 @@ export function Closing() {
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-gradient-to-b from-ivory/40 via-ivory/25 to-ivory/70"
+        />
+      </div>
+
+      <div className="relative aspect-[3/2] w-full md:hidden">
+        <Image
+          src={closing.src}
+          alt={closing.alt}
+          fill
+          loading="lazy"
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        {/* Mờ dần vào nền ivory ở đáy để nối mượt sang khối chữ bên dưới. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ivory"
         />
       </div>
 
@@ -43,7 +69,7 @@ export function Closing() {
       />
 
       {/* Thứ tự theo bản design: lời cảm ơn → tên → ngày */}
-      <div className="flex w-full max-w-2xl flex-col items-center text-center">
+      <div className="flex w-full max-w-2xl flex-col items-center px-6 pt-12 pb-16 text-center md:px-0 md:py-0">
         <Reveal>
           <p className="wd-body-serif whitespace-pre-line">
             {wedding.copy.closing.thanks}

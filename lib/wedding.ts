@@ -112,7 +112,8 @@ export const wedding = {
     bride: {
       label: "Nhà gái",
       name: "Xuân Phương, Ninh Bình",
-      address: "Nhà Văn Hóa Xóm 2, Xã Xuân Phương",
+      /** \n để chủ động ngắt dòng đúng chỗ (WeddingDetails render whitespace-pre-line). */
+      address: "Nhà Văn Hóa Xóm 2,\nXã Xuân Phương, tỉnh Ninh Bình",
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
         src: "/images/album/studio/06.jpg",
@@ -124,7 +125,8 @@ export const wedding = {
     groom: {
       label: "Nhà trai",
       name: "Quỳnh Phụ, Hưng Yên",
-      address: "Xóm 3 Thôn Phụng Công, Xã Quỳnh Phụ",
+      /** \n để chủ động ngắt dòng đúng chỗ (WeddingDetails render whitespace-pre-line). */
+      address: "Xóm 3 Thôn Phụng Công,\nXã Quỳnh Phụ, tỉnh Hưng Yên",
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
         src: "/images/album/santori/09.jpg",

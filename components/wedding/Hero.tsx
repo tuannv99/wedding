@@ -18,16 +18,16 @@ const EASE_OPEN = [0.45, 0.05, 0.2, 1] as const;
 const toTitleCase = (value: string) => value.charAt(0) + value.slice(1).toLowerCase();
 
 /**
- * Nhịp "mở thiệp", tổng ~2.17s tính tới lúc cánh mở hết (nội dung bên trong
+ * Nhịp "mở thiệp", tổng ~2.85s tính tới lúc cánh mở hết (nội dung bên trong
  * còn tiếp tục nổi lên thêm một chút sau đó, xem .wd-rise trong wedding.css):
- *  0 – 0.72s     hai cánh trượt vào khép lại giữa màn hình (phase "closing")
- *  0.62 – 1.02s  con dấu hiện lên giữa mặt thiệp
- *  1.02 – 2.17s  hai cánh xoay mở ra hai bên, con dấu fade out (phase "unfolding")
+ *  0 – 0.95s     hai cánh trượt vào khép lại giữa màn hình (phase "closing")
+ *  0.8 – 1.35s   con dấu hiện lên giữa mặt thiệp
+ *  1.35 – 2.85s  hai cánh xoay mở ra hai bên, con dấu fade out (phase "unfolding")
  */
-const CLOSE_MS = 720;
-const SEAL_DELAY_MS = 620;
-const UNFOLD_START_MS = 1020;
-const UNFOLD_MS = 1150;
+const CLOSE_MS = 950;
+const SEAL_DELAY_MS = 800;
+const UNFOLD_START_MS = 1350;
+const UNFOLD_MS = 1500;
 
 /** Khớp scroll-margin-top của section[id] trong globals.css (mốc md). */
 const HEADER_H = 73;
@@ -338,8 +338,8 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
               }
               className="absolute inset-0 flex flex-col items-center justify-center gap-3"
             >
-              <Botanical variant="mark" className="h-6 w-[66px] text-sage/85" />
-              <span className="text-[13px] font-light tracking-[0.5em] text-taupe">
+              <Botanical variant="mark" className="h-8 w-[88px] text-sage/85" />
+              <span className="text-[22px] font-light tracking-[0.35em] text-taupe md:text-[26px]">
                 {toTitleCase(wedding.groom.short)} &amp; {toTitleCase(wedding.bride.short)}
               </span>
             </motion.div>

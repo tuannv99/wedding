@@ -74,7 +74,7 @@ function MusicToggle({ className }: { className?: string }) {
  * cuộn tới, nên liệt kê đúng nhóm đó thay vì so sánh "/" tuyệt đối — nhờ vậy
  * Navigation không cần biết từng slug khách mời.
  */
-const NON_HOME_ROUTES = ["/album", "/wishes", "/admin", "/create-link"];
+const NON_HOME_ROUTES = ["/album", "/wishes", "/admin"];
 
 export function Navigation() {
   const [open, setOpen] = useState(false);

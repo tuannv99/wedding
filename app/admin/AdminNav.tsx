@@ -4,10 +4,11 @@ import { cn } from "@/lib/utils";
 const TABS = [
   { href: "/admin/wishes", label: "Lời chúc" },
   { href: "/admin/rsvp", label: "Xác nhận tham dự" },
+  { href: "/admin/guests", label: "Khách mời" },
 ] as const;
 
-/** Chuyển nhanh giữa 2 trang quản lý — dùng chung cho /admin/wishes và /admin/rsvp. */
-export function AdminNav({ active }: { active: "wishes" | "rsvp" }) {
+/** Chuyển nhanh giữa các trang quản lý. */
+export function AdminNav({ active }: { active: "wishes" | "rsvp" | "guests" }) {
   return (
     <nav aria-label="Điều hướng quản trị" className="mt-8 flex gap-6">
       {TABS.map((tab) => {
