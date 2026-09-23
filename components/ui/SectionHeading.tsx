@@ -12,6 +12,18 @@ type SectionHeadingProps = {
   className?: string;
   /** Ghi đè cỡ chữ tiêu đề cho riêng một section — không đổi font/weight/tracking. */
   titleClassName?: string;
+  /**
+   * Bậc heading. Mặc định h2 (tiêu đề của một section). Dùng h3 cho tiêu đề
+   * của một khối NẰM TRONG section — ví dụ "Địa điểm / Tổ chức" nằm dưới
+   * "Lời hẹn / Ngày cưới" — để cây heading của trang không bị nhảy bậc.
+   */
+  as?: "h2" | "h3";
+  /**
+   * Đặt false khi tiêu đề đã nằm sẵn trong một <Reveal> khác. Lồng hai lớp
+   * Reveal là nhân hai lần fade vào nhau: chữ bắt đầu hiện lúc lớp ngoài còn
+   * chưa rõ hẳn, thành ra nhấp nháy đúng kiểu mà Reveal vốn sinh ra để tránh.
+   */
+  reveal?: boolean;
 };
 
 export function SectionHeading({
@@ -21,22 +33,26 @@ export function SectionHeading({
   align = "center",
   className,
   titleClassName,
+  as: Title = "h2",
+  reveal = true,
 }: SectionHeadingProps) {
-  return (
-    <Reveal
-      className={cn(
-        "flex flex-col gap-5",
-        align === "center"
-          ? "items-center text-center"
-          : "items-start text-left",
-        className,
-      )}
-    >
+  const content = (
+    <>
       {label ? <span className="wd-eyebrow">{label}</span> : null}
-      <h2 className={cn("wd-h1 tracking-[0.16em] uppercase", titleClassName)}>
+      <Title className={cn("wd-h1 tracking-[0.16em] uppercase", titleClassName)}>
         {title}
-      </h2>
+      </Title>
       {rule ? <BotanicalRule lineClassName="w-10 sm:w-14" /> : null}
-    </Reveal>
+    </>
   );
+
+  const classes = cn(
+    "flex flex-col gap-5",
+    align === "center" ? "items-center text-center" : "items-start text-left",
+    className,
+  );
+
+  if (!reveal) return <div className={classes}>{content}</div>;
+
+  return <Reveal className={classes}>{content}</Reveal>;
 }

@@ -9,6 +9,7 @@ import { wedding } from "@/lib/wedding";
 import { scrollToSection } from "@/lib/utils";
 import { useInvitation } from "@/lib/invitation";
 import { useMusic } from "@/lib/music";
+import { useScrollLock } from "@/lib/scroll-lock";
 import { cn } from "@/lib/utils";
 
 /**
@@ -85,6 +86,8 @@ export function Navigation() {
   const isHome = !NON_HOME_ROUTES.some((route) => pathname.startsWith(route));
 
   // Khoá scroll + đóng bằng Escape khi menu mobile mở
+  useScrollLock(open);
+
   useEffect(() => {
     if (!open) return;
 
@@ -92,14 +95,8 @@ export function Navigation() {
       if (event.key === "Escape") setOpen(false);
     };
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   /**

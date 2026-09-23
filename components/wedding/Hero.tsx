@@ -141,19 +141,24 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
 
         {/*
           Mobile: lớp phủ ivory KHÔNG đậm dần về đáy mà đậm nhất ở DẢI GIỮA
-          rồi nhạt lại — nhờ vậy ảnh chạy thông tới cạnh dưới màn hình.
+          rồi nhạt hẳn đi — nhờ vậy ảnh chạy thông tới cạnh dưới màn hình và
+          khối chữ đứng trên chính tấm ảnh, không phải trên một mảng ivory.
 
-          Lý do: đo độ sáng của chính tấm ảnh trong dải chữ cho thấy vùng
-          tay hai người + hàng cây (khoảng 48–56% chiều cao ảnh) có điểm rất
-          tối (min ~10/255) nên chữ đặt lên đó phải có nền; còn từ 56% xuống
-          đáy chỉ còn tà váy + voan sáng (min ~180) nên chữ ink đọc rõ mà chỉ
-          cần lớp phủ rất mỏng (~30%), tức là vẫn thấy nếp váy tới cạnh dưới.
-          Dải đậm ở giữa lại trùng đúng vệt tiền cảnh mờ có sẵn trong ảnh nên
-          không lộ ra như một tấm nền dán thêm.
+          Lý do các mốc: đo độ sáng của chính tấm ảnh cho thấy vùng tay hai
+          người + hàng cây (khoảng 48–56% chiều cao ảnh, rơi vào 39–48% chiều
+          cao màn với cách cắt ở trên) có điểm rất tối (min ~10/255) — đó là
+          chỗ duy nhất cần một lớp nền thật sự, nên đỉnh 0.55 đặt đúng ở 44%.
+          Từ 56% ảnh xuống đáy chỉ còn tà váy + voan sáng (min ~180) mà khối
+          chữ thì bắt đầu quanh 52% màn, tức nằm TRỌN trong vùng sáng đó: chữ
+          ink đọc rõ mà lớp phủ chỉ cần 0.38 → 0.08.
+
+          Bản trước phủ tới 0.86 ở giữa và 0.46 ở 68% — cộng với việc nửa dưới
+          tấm ảnh vốn đã là vệt tiền cảnh trắng mờ, cả phần dưới màn hình đọc
+          ra là một nền ivory phẳng chứ không còn ra ảnh cưới.
         */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_34%,rgba(249,247,242,0.86)_52%,rgba(249,247,242,0.46)_68%,rgba(249,247,242,0.3)_100%)] md:hidden"
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_30%,rgba(249,247,242,0.55)_44%,rgba(249,247,242,0.38)_56%,rgba(249,247,242,0.16)_72%,rgba(249,247,242,0.08)_100%)] md:hidden"
         />
 
         {/* Từ md: một dải chuyển ivory → ảnh cho mép nối giữa hai nửa mềm lại */}

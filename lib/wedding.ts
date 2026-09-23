@@ -177,7 +177,7 @@ export const wedding = {
     {
       id: "vu-quy",
       label: "Lễ Vu Quy",
-      venue: "Nhà gái",
+      venue: "Tại Tư Gia Nhà Gái",
       items: [
         { time: "10:30", title: "Đón khách" },
         { time: "11:00", title: "Lễ Vu Quy" },
@@ -187,7 +187,7 @@ export const wedding = {
     {
       id: "thanh-hon",
       label: "Lễ Thành Hôn",
-      venue: "Nhà trai",
+      venue: "Tại Tư Gia Nhà Trai",
       items: [
         { time: "10:45", title: "Đón khách" },
         { time: "11:00", title: "Lễ Thành Hôn" },
@@ -381,12 +381,21 @@ export const wedding = {
       tagline: "Chúng mình sắp cưới",
       openButton: "Mở thiệp",
     },
+    /*
+      Tiêu đề mỗi section đi theo một khuôn duy nhất: một dòng nhỏ (eyebrow)
+      đặt trên, một dòng chữ to đặt dưới — đúng kiểu "Chương trình / Ngày vui"
+      của mục timeline. Chữ to giữ nguyên từ khoá cũ của từng mục nên không
+      mục nào trùng chữ to với mục nào; eyebrow là dòng thêm mới.
+    */
     story: {
-      title: "Chuyện chúng mình",
+      eyebrow: "Chuyện",
+      title: "Chúng mình",
     },
     details: {
+      eyebrow: "Lời hẹn",
       title: "Ngày cưới",
-      venueLabel: "Địa điểm tổ chức",
+      venueEyebrow: "Địa điểm",
+      venueLabel: "Tổ chức",
       /** Tiền tố cho tiêu đề mỗi khối tiệc: "{partyLabel} {venues.*.label}" → "Tiệc Nhà Trai". */
       partyLabel: "Tiệc",
       atLabel: "Tổ chức vào lúc",
@@ -417,7 +426,8 @@ export const wedding = {
       moreLabel: "Xem thêm ảnh chúng mình",
     },
     rsvp: {
-      title: "RẤT MONG\nĐƯỢC GẶP BẠN",
+      eyebrow: "Rất mong",
+      title: "Được gặp bạn",
       submitLabel: "Gửi lời chúc",
       successTitle: "Cảm ơn bạn ♡",
       successBody:

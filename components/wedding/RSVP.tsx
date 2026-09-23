@@ -50,6 +50,7 @@ export function RSVP() {
       <div className="mx-auto w-full max-w-[720px]">
         <Reveal>
           <RsvpForm
+            eyebrow={wedding.copy.rsvp.eyebrow}
             title={wedding.copy.rsvp.title}
             submitLabel={wedding.copy.rsvp.submitLabel}
             successTitle={wedding.copy.rsvp.successTitle}

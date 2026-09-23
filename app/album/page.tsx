@@ -156,18 +156,19 @@ export default function AlbumPage() {
 
         {/* ---------------------------------------------------------------
             Chữ ký khép lại + đường về thiệp cưới — tấm ảnh cuối cùng của
-            album làm nền, đúng pattern của Closing.tsx ở trang chủ:
-
-              Desktop: ảnh tràn viền phủ toàn footer, chữ đè lên, một lớp phủ
-              ivory mờ dần để chữ vẫn đọc rõ trên nền ảnh.
-
-              Mobile: ảnh gốc là khung NGANG (3:2) — nhét vào một footer cao
-              gần hết màn hình trên điện thoại buộc object-cover phải crop bỏ
-              phần lớn bề ngang. Nên ở mobile tách ảnh ra thành một khối riêng
-              đúng tỉ lệ gốc, đặt phía trên khối chữ, mờ dần vào nền ivory.
+            album làm nền tràn viền ở MỌI bề rộng màn, chữ đè lên trên, một
+            lớp phủ ivory mờ dần để chữ vẫn đọc rõ. Đúng pattern của
+            Closing.tsx ở trang chủ, kể cả phần đánh đổi: ảnh gốc là khung
+            NGANG (3:2) nên ở khung dọc của điện thoại object-cover cắt mất
+            phần lớn bề ngang, chỉ còn lại khoảng giữa ảnh.
         --------------------------------------------------------------- */}
-        <footer className="relative isolate flex w-full flex-col items-center overflow-hidden md:min-h-[74svh] md:justify-center md:px-5 md:py-32">
-          <div className="hidden md:absolute md:inset-0 md:-z-10 md:block">
+        <footer className="relative isolate flex w-full flex-col items-center justify-center overflow-hidden px-5 py-16 md:min-h-[74svh] md:py-32">
+          {/* Ảnh cuối album làm nền — cắt hai kiểu theo bề rộng màn, giống hệt
+              footer trang chủ (components/wedding/Closing.tsx), xem ghi chú
+              đầy đủ ở đó.
+
+              Desktop: tràn viền, object-cover chỉ xén trên/dưới. */}
+          <div className="absolute inset-0 -z-10 hidden md:block">
             <Image
               src={closing.src}
               alt={closing.alt}
@@ -183,20 +184,25 @@ export default function AlbumPage() {
             />
           </div>
 
-          <div className="relative aspect-[3/2] w-full md:hidden">
-            <Image
-              src={closing.src}
-              alt={closing.alt}
-              fill
-              loading="lazy"
-              sizes="100vw"
-              className="object-cover object-center"
-            />
-            {/* Mờ dần vào nền ivory ở đáy để nối mượt sang khối chữ bên dưới. */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ivory"
-            />
+          {/* Mobile: khung nền giữ đúng tỉ lệ gốc 3:2 và rộng hết bề ngang
+              màn — ảnh không bị xén — canh giữa footer, hai mép tan vào ivory
+              để vẫn đọc ra là nền nằm sau chữ. */}
+          <div className="absolute inset-x-0 top-1/2 -z-10 w-full -translate-y-1/2 md:hidden">
+            <div className="relative aspect-[3/2] w-full">
+              <Image
+                src={closing.src}
+                alt={closing.alt}
+                fill
+                loading="lazy"
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              <div aria-hidden="true" className="absolute inset-0 bg-ivory/45" />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(249,247,242,1)_0%,rgba(249,247,242,0.18)_18%,rgba(249,247,242,0.18)_82%,rgba(249,247,242,1)_100%)]"
+              />
+            </div>
           </div>
 
           <BotanicalAccent
@@ -206,7 +212,7 @@ export default function AlbumPage() {
             className="-right-[2vw] -bottom-[6vh] hidden h-[34vh] w-[19vh] md:block"
           />
 
-          <Reveal className="flex w-full max-w-[640px] flex-col items-center px-6 pt-12 pb-16 text-center md:px-0 md:py-0">
+          <Reveal className="flex w-full max-w-[640px] flex-col items-center px-1 text-center md:px-0">
             <p className="wd-display text-[clamp(2.25rem,8vw,4.5rem)] uppercase">
               {wedding.groom.short}
               <span className="mx-3 text-champagne italic lowercase">&amp;</span>

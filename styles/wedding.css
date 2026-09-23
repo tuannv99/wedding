@@ -56,6 +56,30 @@
   color: var(--wd-brown);
 }
 
+/*
+  Chốt chặn để tiêu đề section luôn nằm gọn MỘT DÒNG trên mobile.
+
+  .wd-h1 để sàn cỡ chữ ở 36px, nhưng màn 320px trừ lề px-6 chỉ còn 272px. Đo
+  trong Cormorant Garamond viết hoa, kể cả letter-spacing 0.16em: "ĐƯỢC GẶP
+  BẠN" rộng 9.15em (cần 329px ở cỡ 36px) và "CHÚNG MÌNH" rộng 8.05em — cả hai
+  đều tràn ở máy hẹp và tự ngắt thành hai dòng.
+
+  Cỡ chữ vì thế tính NGƯỢC TỪ BỀ NGANG CÒN LẠI thay vì chọn một con số:
+  (100vw − 48px lề) chia cho bề ngang chuỗi dài nhất (9.15em, cộng ~5% dự
+  phòng → 9.6). Nhờ vậy tiêu đề vừa đúng một dòng ở mọi bề ngang màn, và chạm
+  trần 36px của .wd-h1 ngay từ ~394px — tức phần lớn điện thoại vẫn đọc đúng
+  cỡ chữ gốc, chỉ máy hẹp mới thu lại.
+
+  Letter-spacing giữ nguyên 0.16em như mọi tiêu đề khác, không thu theo: cỡ
+  chữ co lại là đủ, mà tracking thì phải đồng bộ với hai mục Chương trình /
+  Khoảnh khắc nếu không nhìn ra hai kiểu chữ khác nhau trên cùng một trang.
+*/
+@media (max-width: 767px) {
+  .wd-h1-fit {
+    font-size: min(36px, calc((100vw - 48px) / 9.6));
+  }
+}
+
 /* Số ngày/tháng/năm, giờ lễ, đếm ngược */
 .wd-numeral {
   font-family: var(--wd-font-numeral);

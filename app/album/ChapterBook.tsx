@@ -215,7 +215,19 @@ const BookLeaf = memo(function BookLeaf({
 
   /* Lật xong thì tắt hẳn: trang lúc này đã nằm hẳn bên trái gáy, gần như ra
      khỏi tầm mắt, nên mờ đi ở đoạn cuối là không ai thấy — mà compositor thì
-     đỡ được một lớp cho mỗi trang đã lật qua. */
+     đỡ được một lớp cho mỗi trang đã lật qua.
+
+     Độ mờ này nằm trên MẶT SAU chứ không phải trên cả tờ giấy. Lý do là một
+     quy tắc của CSS: `transform-style: preserve-3d` bị ép về `flat` ngay khi
+     phần tử có opacity < 1. Đặt nó lên tờ giấy (thứ đang mang preserve-3d)
+     nghĩa là đúng lúc độ mờ rời khỏi 1, không gian 3D của tờ giấy sập xuống
+     phẳng, hai mặt giấy bị gộp lại và backface-visibility đổi cách xử lý —
+     trình duyệt vẽ lại tờ giấy theo một kiểu khác chỉ trong một khung hình.
+     Đó chính là cái nháy ở nửa trái màn hình mỗi lần một trang lật xong.
+
+     Đặt lên mặt sau thì không còn phần tử nào vừa preserve-3d vừa mờ: quãng
+     mờ này rơi vào lúc trang đã quay quá 90° nên chỉ mặt sau còn nhìn thấy,
+     mặt trước đã bị backface-visibility giấu đi rồi. */
   const opacity = useTransform(progress, [to - 0.06, to], [1, 0]);
 
   return (
@@ -223,7 +235,6 @@ const BookLeaf = memo(function BookLeaf({
       className="absolute inset-0"
       style={{
         rotateY: isLast ? 0 : rotateY,
-        opacity: isLast ? 1 : opacity,
         pointerEvents: isActive ? "auto" : "none",
         transformOrigin: "left center",
         transformStyle: "preserve-3d",
@@ -239,10 +250,18 @@ const BookLeaf = memo(function BookLeaf({
         style={{ opacity: lift, boxShadow: LIFT_SHADOW }}
       />
 
-      {/* --- Mặt trước: composition ảnh --- */}
+      {/* --- Mặt trước: composition ảnh ---
+          translateZ(0.6px): hai mặt giấy nếu nằm ĐÚNG cùng một mặt phẳng thì
+          trình duyệt phải tự quyết mặt nào vẽ trước ở từng khung hình, và nó
+          đổi ý qua lại quanh mốc 90° — nhìn ra là giấy chớp qua chớp lại. Tách
+          mỗi mặt ra trước 0.6px theo hướng nó đang quay về phía người xem là
+          hết hẳn; ở perspective 1700px+ thì 0.6px không đổi gì về mặt hình. */}
       <div
         className="absolute inset-0 bg-ivory"
-        style={{ backfaceVisibility: "hidden" }}
+        style={{
+          backfaceVisibility: "hidden",
+          transform: "translateZ(0.6px)",
+        }}
       >
         <PageComposition page={page} onOpen={onOpen} />
 
@@ -262,26 +281,34 @@ const BookLeaf = memo(function BookLeaf({
           nền trang, vừa đủ để mắt thấy CÓ một tờ giấy đang quét qua nửa trái
           màn hình, chưa tới mức thành một khối trắng lạc chỗ. */}
       <div
-        className="absolute inset-0 bg-warm"
+        className="absolute inset-0"
         style={{
           backfaceVisibility: "hidden",
-          transform: "rotateY(180deg)",
+          transform: "rotateY(180deg) translateZ(0.6px)",
         }}
       >
-        <span
-          aria-hidden="true"
-          className="absolute inset-y-[5%] right-0 w-px bg-champagne/25"
-        />
+        {/* Lớp trong mới là thứ mang màu giấy và độ mờ — lớp ngoài chỉ lo chỗ
+            đứng trong không gian 3D, nên opacity không bao giờ chạm vào một
+            phần tử đang mang preserve-3d (xem ghi chú ở `opacity` bên trên). */}
+        <motion.div
+          className="absolute inset-0 bg-warm"
+          style={{ opacity: isLast ? 1 : opacity }}
+        >
+          <span
+            aria-hidden="true"
+            className="absolute inset-y-[5%] right-0 w-px bg-champagne/25"
+          />
 
-        <motion.span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            opacity: shadeBack,
-            background:
-              "linear-gradient(to left, rgba(61,57,53,0.45), rgba(61,57,53,0) 52%)",
-          }}
-        />
+          <motion.span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              opacity: shadeBack,
+              background:
+                "linear-gradient(to left, rgba(61,57,53,0.45), rgba(61,57,53,0) 52%)",
+            }}
+          />
+        </motion.div>
       </div>
     </motion.div>
   );

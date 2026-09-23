@@ -4,10 +4,10 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
   type ReactNode,
 } from "react";
+import { useScrollLock } from "@/lib/scroll-lock";
 
 /**
  * Trạng thái "đã mở thiệp": ban đầu trang chỉ hiện Hero và khoá scroll,
@@ -23,16 +23,9 @@ const InvitationContext = createContext<InvitationContextValue | null>(null);
 export function InvitationProvider({ children }: { children: ReactNode }) {
   const [opened, setOpened] = useState(false);
 
-  useEffect(() => {
-    const { documentElement: root, body } = document;
-    root.style.overflow = opened ? "" : "hidden";
-    body.style.overflow = opened ? "" : "hidden";
-
-    return () => {
-      root.style.overflow = "";
-      body.style.overflow = "";
-    };
-  }, [opened]);
+  // Cùng một khoá cuộn với lightbox/menu/khung mừng cưới — xem lib/scroll-lock.ts
+  // về lý do khoá trên <html> và tại sao phải đếm số lớp đang khoá.
+  useScrollLock(!opened);
 
   const open = useCallback(() => setOpened(true), []);
 

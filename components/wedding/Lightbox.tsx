@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useScrollLock } from "@/lib/scroll-lock";
 /**
  * Chỉ cần src + alt. Cố ý KHÔNG dùng GalleryImage: trang chủ truyền
  * GalleryImage (có thêm width/height) còn /album truyền AlbumPhoto — kiểu hẹp
@@ -48,6 +49,23 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
     onChange((index + 1) % images.length);
   }, [images.length, index, onChange]);
 
+  /**
+   * Khoá cuộn giữ NGUYÊN cho tới khi lớp phủ tan hẳn, không nhả ngay lúc nó
+   * bắt đầu mờ đi: nhả sớm thì suốt 0.45s cuối người xem vẫn lăn được chuột,
+   * và trang phía sau chạy ngay sau tấm nền đang trong suốt dần.
+   */
+  const [holdLock, setHoldLock] = useState(false);
+  useEffect(() => {
+    if (isOpen) setHoldLock(true);
+  }, [isOpen]);
+  useScrollLock(holdLock);
+
+  // Mở ra thì đưa focus về nút đóng — và CHỈ lúc mở, không phải mỗi lần đổi
+  // ảnh, nếu không bấm "ảnh tiếp theo" là focus lại bị giật về nút đóng.
+  useEffect(() => {
+    if (isOpen) closeRef.current?.focus();
+  }, [isOpen]);
+
   // Bàn phím: Esc để đóng, mũi tên để chuyển ảnh, Tab giữ focus trong lightbox
   useEffect(() => {
     if (!isOpen) return;
@@ -85,15 +103,8 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
       }
     };
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
-    closeRef.current?.focus();
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [isOpen, goNext, goPrev, onClose]);
 
   const current = index === null ? null : images[index];
@@ -101,7 +112,7 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
   if (!mounted) return null;
 
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={() => setHoldLock(false)}>
       {isOpen && current ? (
         <motion.div
           ref={containerRef}
@@ -112,7 +123,15 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.45, ease: EASE_OUT }}
-          className="fixed inset-0 z-60 flex flex-col bg-ink/95 backdrop-blur-sm"
+          /* Không có backdrop-blur ở đây, dù tấm nền trông rất hợp với nó.
+             `backdrop-filter` phải đọc lại toàn bộ nội dung nằm dưới để làm
+             nhoè, mà nội dung dưới /album là một xấp giấy 3D (perspective +
+             preserve-3d + will-change: transform). Mỗi lần lớp nhoè được tạo
+             ra rồi bị gỡ bỏ, trình duyệt phải vẽ lại cả vùng 3D đó — và cú
+             vẽ lại rơi đúng vào khung hình cuối của hiệu ứng mờ đi, thành một
+             cái "nháy" ngay lúc ảnh biến mất. Nền đã đục 95% nên phần nhoè
+             chỉ tác động lên 5% còn lại: bỏ đi gần như không thấy khác. */
+          className="fixed inset-0 z-60 flex flex-col bg-ink/95"
           onTouchStart={(event) => {
             touchStartX.current = event.touches[0]?.clientX ?? null;
           }}
@@ -150,24 +169,45 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
               if (event.target === event.currentTarget) onClose();
             }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={current.src}
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                transition={{ duration: 0.5, ease: EASE_OUT }}
-                className="relative h-full w-full"
-              >
-                <Image
-                  src={current.src}
-                  alt={current.alt}
-                  fill
-                  sizes="100vw"
-                  className="object-contain"
-                />
-              </motion.div>
-            </AnimatePresence>
+            {/* Khung trong cùng cỡ với khung ảnh cũ — có nó thì hai tấm ảnh
+                mới chồng được lên nhau lúc chuyển. */}
+            <div className="relative h-full w-full">
+              {/*
+                Đổi ảnh là MỜ CHỒNG, không phải mode="wait".
+
+                mode="wait" bắt tấm cũ mờ hết (0.5s) rồi mới dựng tấm mới và
+                cho nó hiện lên (0.5s nữa): ở khoảng giữa, màn hình trống
+                trơn — và vì tấm mới chỉ được tải lúc nó mount, nó hay nhảy
+                phịch vào giữa chừng hiệu ứng thay vì hiện dần. Nhìn ra đúng
+                một cái nháy mỗi lần ảnh biến mất.
+
+                Để hai tấm cùng nằm đó và chồng mờ lên nhau thì lúc nào trên
+                màn cũng có ảnh, và tấm mới có thêm nguyên quãng mờ của tấm cũ
+                để kịp tải xong.
+
+                `initial={false}`: tấm đầu tiên không tự mờ vào nữa — cả lớp
+                phủ vốn đã đang mờ vào rồi, chồng hai hiệu ứng chỉ làm ảnh lên
+                chậm gấp đôi.
+              */}
+              <AnimatePresence initial={false}>
+                <motion.div
+                  key={current.src}
+                  initial={{ opacity: 0, scale: 0.99 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.99 }}
+                  transition={{ duration: 0.5, ease: EASE_OUT }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={current.src}
+                    alt={current.alt}
+                    fill
+                    sizes="100vw"
+                    className="object-contain"
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* Thanh dưới: mũi tên tròn 44px — bộ đếm — mũi tên tròn 44px.

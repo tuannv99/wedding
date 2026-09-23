@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { BotanicalRule } from "@/components/ui/Botanical";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/utils";
 
 export type RsvpData = {
@@ -17,6 +18,8 @@ export type RsvpData = {
 };
 
 type Props = {
+  /** Dòng nhỏ phía trên tiêu đề — cùng khuôn với mọi section khác của trang. */
+  eyebrow?: string;
   title?: string;
   submitLabel?: string;
   successTitle?: string;
@@ -28,7 +31,8 @@ type Props = {
 };
 
 export default function RsvpForm({
-  title = "RẤT MONG\nĐƯỢC GẶP BẠN",
+  eyebrow,
+  title = "Được gặp bạn",
   submitLabel = "Gửi lời chúc",
   successTitle = "Cảm ơn bạn ♡",
   successBody = "Sự hiện diện của bạn là món quà tuyệt vời đối với chúng mình.",
@@ -156,12 +160,16 @@ export default function RsvpForm({
 
   return (
     <div>
-      <div style={{ textAlign: "center" }}>
-        <h2 className="wd-h1" style={{ whiteSpace: "pre-line" }}>
-          {title}
-        </h2>
-        <BotanicalRule className="mt-[28px] mb-[clamp(40px,5vh,56px)]" />
-      </div>
+      {/* Dòng nhỏ trên — chữ to dưới — nét lá: đúng khuôn tiêu đề của mọi
+          section khác. reveal={false} vì cả form đã nằm trong một Reveal ở
+          RSVP.tsx rồi. */}
+      <SectionHeading
+        label={eyebrow}
+        title={title}
+        titleClassName="wd-h1-fit"
+        reveal={false}
+        className="mb-[clamp(40px,5vh,56px)]"
+      />
 
       <form className="wd-form" onSubmit={handleSubmit} noValidate>
         {/* Honeypot chống bot — người dùng thật không bao giờ thấy field này,

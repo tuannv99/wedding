@@ -8,6 +8,7 @@ import { X } from "lucide-react";
 import { Botanical } from "@/components/ui/Botanical";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { weddingBankAccounts, type BankAccount } from "@/lib/wedding-bank";
+import { useScrollLock } from "@/lib/scroll-lock";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
@@ -68,6 +69,8 @@ export function GiftCTA() {
   // Cùng cơ chế với Lightbox.tsx: portal thẳng vào body (tránh bị nhốt trong
   // stacking context `isolate` của section), khoá scroll nền, Esc để đóng,
   // Tab không thoát khỏi modal.
+  useScrollLock(open);
+
   useEffect(() => {
     if (!open) return;
 
@@ -94,15 +97,10 @@ export function GiftCTA() {
       }
     };
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
     closeRef.current?.focus();
 
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   return (

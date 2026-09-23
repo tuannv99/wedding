@@ -23,6 +23,17 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* Chừa sẵn máng thanh cuộn.
+
+       Mọi lớp phủ toàn màn hình (lightbox, menu mobile, thiệp chưa mở) đều
+       khoá cuộn bằng overflow: hidden — và lúc đó thanh cuộn biến mất, khung
+       nhìn rộng thêm đúng bề ngang thanh cuộn (~15px trên Windows). Cả trang
+       phải bố cục lại một nhịp khi lớp phủ hiện ra, rồi một nhịp nữa khi nó
+       tan đi. Ở /album nhịp thứ hai rơi đúng vào lúc nền lightbox đang mờ
+       dần, nên trang album phía sau khựng một cái ngay khi ảnh biến mất.
+
+       Giữ máng luôn hiện thì khoá hay mở khoá cuộn đều không đổi layout. */
+    scrollbar-gutter: stable;
   }
 
   body {

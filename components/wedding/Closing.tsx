@@ -9,18 +9,16 @@ export function Closing() {
   const { closing } = wedding.images;
 
   return (
-    <footer className="relative isolate flex w-full flex-col items-center overflow-hidden bg-ivory md:min-h-[85svh] md:justify-center md:px-5 md:py-40">
+    <footer className="relative isolate flex w-full flex-col items-center justify-center overflow-hidden bg-ivory px-5 py-16 md:min-h-[85svh] md:py-40">
       {/*
-        Desktop: ảnh tràn viền phủ toàn footer, chữ đè lên như bản design.
+        Ảnh khép thiệp làm nền, chữ đè lên trên — nhưng cắt ảnh theo hai cách
+        khác nhau, vì ảnh gốc là khung NGANG (2200×1467) còn màn điện thoại
+        thì dọc.
 
-        Mobile: ảnh gốc là khung NGANG (2200×1467, tỉ lệ ~3:2) — nhét vào một
-        footer cao gần hết màn hình trên điện thoại (khung DỌC) buộc object-cover
-        phải crop bỏ phần lớn bề ngang, kết quả chỉ còn thấy một mảnh nhỏ giữa
-        ảnh (thường mất luôn một trong hai người). Nên ở mobile tách ảnh ra
-        thành một khối riêng đúng tỉ lệ gốc (aspect-[3/2], không crop ngang),
-        đặt phía trên khối chữ, thay vì làm nền tràn viền cho cả footer.
+        Desktop: khung nhìn cũng nằm ngang nên ảnh tràn viền được, object-cover
+        chỉ xén bớt trên/dưới mà vẫn giữ nguyên bề ngang — cả hai người còn đủ.
       */}
-      <div className="hidden md:absolute md:inset-0 md:-z-10 md:block">
+      <div className="absolute inset-0 -z-10 hidden md:block">
         <Image
           src={closing.src}
           alt={closing.alt}
@@ -36,20 +34,38 @@ export function Closing() {
         />
       </div>
 
-      <div className="relative aspect-[3/2] w-full md:hidden">
-        <Image
-          src={closing.src}
-          alt={closing.alt}
-          fill
-          loading="lazy"
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        {/* Mờ dần vào nền ivory ở đáy để nối mượt sang khối chữ bên dưới. */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ivory"
-        />
+      {/*
+        Mobile: nếu để ảnh tràn viền cả footer thì object-cover phải xén theo
+        BỀ NGANG — một footer 390×660 chỉ giữ lại đúng 37% giữa ảnh, tức mất
+        hẳn chú rể ở mép phải. Nên ở đây khung nền giữ đúng tỉ lệ gốc 3:2 và
+        rộng hết bề ngang màn: ảnh không bị xén một milimet nào.
+
+        Khung đó canh giữa theo trục dọc của footer và mép trên/mép dưới tan
+        dần vào ivory, nên nó vẫn là NỀN nằm sau khối chữ (đúng ý "ảnh làm
+        background"), không quay lại thành một khối ảnh riêng đặt phía trên
+        khối chữ như bản cũ. Chữ chạy qua ảnh ở khoảng giữa — chỗ có cô dâu,
+        tà voan và vòm đá — rồi ra ngoài nền ivory ở hai đầu.
+      */}
+      <div className="absolute inset-x-0 top-1/2 -z-10 w-full -translate-y-1/2 md:hidden">
+        <div className="relative aspect-[3/2] w-full">
+          <Image
+            src={closing.src}
+            alt={closing.alt}
+            fill
+            loading="lazy"
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-ivory/45" />
+          {/* Ivory đặc ở đúng hai mép rồi nhạt nhanh: mép ảnh tan vào nền thay
+              vì cắt ngang thành một đường thẳng. Ở khoảng giữa (18–82%) lớp
+              phủ chỉ còn 0.18 — cộng với 0.45 bên trên là ~0.55, đúng bằng độ
+              phủ của bản desktop. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(249,247,242,1)_0%,rgba(249,247,242,0.18)_18%,rgba(249,247,242,0.18)_82%,rgba(249,247,242,1)_100%)]"
+          />
+        </div>
       </div>
 
       {/* Branch mép trái + sprig mép phải, đúng cỡ chuẩn hoá dùng chung toàn
@@ -69,7 +85,7 @@ export function Closing() {
       />
 
       {/* Thứ tự theo bản design: lời cảm ơn → tên → ngày */}
-      <div className="flex w-full max-w-2xl flex-col items-center px-6 pt-12 pb-16 text-center md:px-0 md:py-0">
+      <div className="flex w-full max-w-2xl flex-col items-center px-1 text-center md:px-0">
         <Reveal>
           <p className="wd-body-serif whitespace-pre-line">
             {wedding.copy.closing.thanks}

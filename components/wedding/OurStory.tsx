@@ -2,6 +2,7 @@ import Image from "next/image";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { Botanical, BotanicalRule } from "@/components/ui/Botanical";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { cn } from "@/lib/utils";
 
@@ -29,12 +30,14 @@ export function OurStory() {
       />
 
       <div className="mx-auto w-full max-w-4xl">
-        <Reveal className="flex flex-col items-center md:items-start">
-          <h2 className="wd-h1 text-center tracking-[0.16em] uppercase md:text-left">
-            {wedding.copy.story.title}
-          </h2>
-          <BotanicalRule className="mt-6" lineClassName="w-10 sm:w-14" />
-        </Reveal>
+        {/* Căn giữa ở mobile, dồn về trái từ md — nên không dùng align="left"
+            mà ghi đè bằng biến thể md: trên chính wrapper của SectionHeading. */}
+        <SectionHeading
+          label={wedding.copy.story.eyebrow}
+          title={wedding.copy.story.title}
+          titleClassName="wd-h1-fit"
+          className="md:items-start md:text-left"
+        />
 
         <div className="mt-14 flex flex-col md:mt-16">
           {wedding.story.map((step, index) => {

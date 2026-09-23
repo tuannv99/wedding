@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { BotanicalRule } from "@/components/ui/Botanical";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { WeddingCalendar } from "@/components/wedding/WeddingCalendar";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
 
@@ -51,9 +52,12 @@ export function WeddingDetails() {
       />
 
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
-        <Reveal className="flex flex-col items-center gap-4">
-          <h2 className="wd-h1 tracking-[0.16em] uppercase">{copy.details.title}</h2>
-        </Reveal>
+        <SectionHeading
+          label={copy.details.eyebrow}
+          title={copy.details.title}
+          titleClassName="wd-h1-fit"
+          rule={false}
+        />
 
         {/* Lịch tháng cưới — thay cho khối ngày dạng hàng dọc cũ, ngày cưới
             được khoanh tròn bằng đúng màu champagne đang dùng chung site. */}
@@ -79,7 +83,16 @@ export function WeddingDetails() {
             một dashboard card. */}
         <Reveal delay={0.2} className="mt-14 flex w-full flex-col items-center md:mt-28">
           <BotanicalRule className="mb-9 w-full max-w-xs md:mb-14" lineClassName="flex-1" />
-          <h3 className="wd-h1 tracking-[0.16em] uppercase">{copy.details.venueLabel}</h3>
+          {/* h3 chứ không phải h2: khối này nằm TRONG section "Ngày cưới".
+              reveal={false} vì cả khối đã nằm trong <Reveal delay={0.2}> ở trên. */}
+          <SectionHeading
+            as="h3"
+            label={copy.details.venueEyebrow}
+            title={copy.details.venueLabel}
+            titleClassName="wd-h1-fit"
+            rule={false}
+            reveal={false}
+          />
 
           {/*
             Mỗi bên tiệc là một khối hai cột CHỮ | ẢNH, đổi bên giữa nhà trai
