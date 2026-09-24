@@ -125,12 +125,11 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
           transition={{ duration: 0.45, ease: EASE_OUT }}
           /* Không có backdrop-blur ở đây, dù tấm nền trông rất hợp với nó.
              `backdrop-filter` phải đọc lại toàn bộ nội dung nằm dưới để làm
-             nhoè, mà nội dung dưới /album là một xấp giấy 3D (perspective +
-             preserve-3d + will-change: transform). Mỗi lần lớp nhoè được tạo
-             ra rồi bị gỡ bỏ, trình duyệt phải vẽ lại cả vùng 3D đó — và cú
-             vẽ lại rơi đúng vào khung hình cuối của hiệu ứng mờ đi, thành một
-             cái "nháy" ngay lúc ảnh biến mất. Nền đã đục 95% nên phần nhoè
-             chỉ tác động lên 5% còn lại: bỏ đi gần như không thấy khác. */
+             nhoè — mà dưới lightbox của /album là mấy chục khung ảnh 2:3 —
+             rồi vẽ lại cả vùng đó mỗi lần lớp nhoè được tạo ra hoặc bị gỡ bỏ.
+             Cú vẽ lại rơi đúng vào khung hình cuối của hiệu ứng mờ đi, thành
+             một cái "nháy" ngay lúc ảnh biến mất. Nền đã đục 95% nên phần
+             nhoè chỉ tác động lên 5% còn lại: bỏ đi gần như không thấy khác. */
           className="fixed inset-0 z-60 flex flex-col bg-ink/95"
           onTouchStart={(event) => {
             touchStartX.current = event.touches[0]?.clientX ?? null;

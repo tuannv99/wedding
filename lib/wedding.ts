@@ -16,23 +16,19 @@ export type AlbumPhoto = {
   alt: string;
 };
 
-export type AlbumChapter = {
-  /** Dùng làm anchor (#chapter-<id>) và làm thư mục ảnh. */
-  id: string;
-  title: string;
-  /**
-   * Đoạn ghi chú mở đầu chương — giọng nhật ký, do cô dâu chú rể tự kể.
-   * Dùng \n để tự ngắt dòng: trang chỉ tôn trọng dấu ngắt đó từ sm trở
-   * lên, ở mobile chữ được cho tự xuống dòng (xem AlbumStory.tsx).
-   */
-  note: string;
-  /**
-   * Ảnh NGANG tràn viền mở đầu chapter — trang trí, KHÔNG nằm trong lightbox
-   * (nhờ vậy bộ đếm lightbox chỉ đếm đúng số ảnh thật của album).
-   * Bỏ trống nếu buổi chụp đó không có khung ảnh ngang nào.
-   */
-  cover?: string;
-  photos: AlbumPhoto[];
+/**
+ * Một câu chen giữa dòng ảnh của /album.
+ *
+ * Không phải tiêu đề chương: nó không đặt tên cho đoạn ảnh đứng sau nó, chỉ
+ * là một câu người nhà nói chen vào giữa lúc lật ảnh.
+ */
+export type AlbumInterlude = {
+  /** Số thứ tự (1–35) của ảnh dọc mà câu này đứng ngay sau. */
+  after: number;
+  /** "quote" = in nghiêng, cỡ lớn; "note" = giọng kể bình thường. */
+  tone: "quote" | "note";
+  /** Dùng \n để tự ngắt dòng — chỉ được tôn trọng từ sm trở lên. */
+  text: string;
 };
 
 export type TimelineItem = {
@@ -252,102 +248,123 @@ export const wedding = {
   ] satisfies GalleryImage[],
 
   /**
-   * Album ảnh cưới đầy đủ (trang /album), chia theo buổi chụp.
+   * Album ảnh cưới đầy đủ (trang /album) — MỘT dòng ảnh liên tục, không chia
+   * chương.
    *
-   * Ảnh nằm ở public/images/album/<chapter-id>/NN.jpg, được nén sẵn từ bộ ảnh
-   * gốc trong public/images/anh_cuoi/ (xem scripts/build-album-images.mjs).
-   * Bản gốc ~332MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra.
+   * Trước đây bộ ảnh được gom thành ba "chương" (Santori / Studio / Áo dài) vì
+   * trang cũ là một cuốn photobook lật được. Trang mới kể thẳng một mạch từ
+   * đầu đến cuối, nên dữ liệu cũng phẳng theo: `photos` là đúng thứ tự người
+   * xem sẽ gặp, không có cấp trung gian nào nữa. Vẫn là đúng bộ ảnh đó, chỉ
+   * khác cách xếp.
    *
-   * `cover` chỉ có ở chapter nào thật sự có khung ảnh NGANG: cả bộ chỉ có 6
-   * khung ngang và đều thuộc buổi ngoại cảnh, nên Studio và Áo dài không có
-   * dải ảnh tràn viền mở đầu.
+   * Ảnh nằm ở public/images/album/..., được nén sẵn từ bộ ảnh gốc trong
+   * public/images/anh_cuoi/ (xem scripts/build-album-images.mjs). Bản gốc
+   * ~332MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra.
+   *
+   * Cả bộ có 37 file: 35 ảnh DỌC (2:3, 1200×1800) và đúng 2 ảnh NGANG (3:2,
+   * 2200×1467) là `cover` và `closing`. Hai tấm ngang đó là của hiếm nên được
+   * dành riêng cho hai đầu câu chuyện — mở ra và khép lại — chứ không trộn
+   * vào dòng ảnh dọc ở giữa.
    */
   album: {
-    /** Chữ mở đầu cuốn nhật ký ảnh. */
+    /** Chữ mở đầu. */
     opening: {
-      eyebrow: "Our wedding story",
+      eyebrow: "Our story",
       title: "Những ngày chúng mình\nđi chụp ảnh cưới.",
-      hint: "Cuộn xuống để xem",
+      intro:
+        "Cả bộ có 37 tấm, xếp đúng theo thứ tự lúc chụp. Bấm vào một tấm bất kỳ ở phần tổng thể bên dưới để nhảy thẳng tới tấm đó.",
     },
 
-    /** Chữ khép lại cuốn nhật ký, đặt trước ảnh cuối. */
-    ending: {
-      lead: "Ảnh hết rồi.",
-      body: "Cảm ơn các bạn đã xem hết\nnhững khoảnh khắc của chúng mình.",
+    /** Ảnh NGANG mở đầu — dùng làm hero, không cắt. */
+    cover: {
+      src: "/images/album/santori/cover.jpg",
+      alt: "Tuấn và Hoa nắm tay nhau giữa sân vườn Santori Yên Sở",
+    } satisfies AlbumPhoto,
+
+    /** Phần xem tổng thể đặt ngay sau hero. */
+    overview: {
+      eyebrow: "Our story",
+      title: "37 khoảnh khắc",
+      hint: "Bấm vào một tấm để tới đúng chỗ của nó",
     },
 
-    /** Hai ảnh dọc mở đầu, lệch tầng. */
-    hero: [
+    /**
+     * 35 ảnh DỌC, đúng thứ tự kể chuyện: một tấm mở màn ngoài trời, cả buổi
+     * ngoại cảnh ở Santori, một tấm mở màn trong studio, cả buổi studio, rồi
+     * ba tấm áo dài cuối ngày.
+     *
+     * Thứ tự này là thứ tự thật của ngày chụp, nên ai cuộn hết một lượt sẽ đi
+     * đúng hành trình của hai đứa — nhưng trang không hề nói ra điều đó thành
+     * tên chương, vì người xem không cần biết tên buổi chụp để xem ảnh.
+     */
+    photos: [
       { src: "/images/album/hero-01.jpg", alt: "Tuấn và Hoa dưới mái vòm, tà voan bay trong gió" },
+      { src: "/images/album/santori/01.jpg", alt: "Tuấn và Hoa giữa sân vườn — 01" },
+      { src: "/images/album/santori/02.jpg", alt: "Tuấn và Hoa giữa sân vườn — 02" },
+      { src: "/images/album/santori/03.jpg", alt: "Tuấn và Hoa giữa sân vườn — 03" },
+      { src: "/images/album/santori/04.jpg", alt: "Tuấn và Hoa giữa sân vườn — 04" },
+      { src: "/images/album/santori/05.jpg", alt: "Tuấn và Hoa giữa sân vườn — 05" },
+      { src: "/images/album/santori/06.jpg", alt: "Tuấn và Hoa giữa sân vườn — 06" },
+      { src: "/images/album/santori/07.jpg", alt: "Tuấn và Hoa giữa sân vườn — 07" },
+      { src: "/images/album/santori/08.jpg", alt: "Tuấn và Hoa giữa sân vườn — 08" },
+      { src: "/images/album/santori/09.jpg", alt: "Tuấn và Hoa giữa sân vườn — 09" },
+      { src: "/images/album/santori/10.jpg", alt: "Tuấn và Hoa giữa sân vườn — 10" },
+      { src: "/images/album/santori/11.jpg", alt: "Tuấn và Hoa giữa sân vườn — 11" },
+      { src: "/images/album/santori/12.jpg", alt: "Tuấn và Hoa giữa sân vườn — 12" },
+      { src: "/images/album/santori/13.jpg", alt: "Tuấn và Hoa giữa sân vườn — 13" },
+      { src: "/images/album/santori/14.jpg", alt: "Tuấn và Hoa giữa sân vườn — 14" },
+      { src: "/images/album/santori/15.jpg", alt: "Tuấn và Hoa giữa sân vườn — 15" },
+      { src: "/images/album/santori/16.jpg", alt: "Tuấn và Hoa giữa sân vườn — 16" },
+      { src: "/images/album/santori/17.jpg", alt: "Tuấn và Hoa giữa sân vườn — 17" },
+      { src: "/images/album/santori/18.jpg", alt: "Tuấn và Hoa giữa sân vườn — 18" },
       { src: "/images/album/hero-02.jpg", alt: "Tuấn và Hoa trao nhau chiếc nhẫn trong studio" },
+      { src: "/images/album/studio/01.jpg", alt: "Tuấn và Hoa trong studio — 01" },
+      { src: "/images/album/studio/02.jpg", alt: "Tuấn và Hoa trong studio — 02" },
+      { src: "/images/album/studio/03.jpg", alt: "Tuấn và Hoa trong studio — 03" },
+      { src: "/images/album/studio/04.jpg", alt: "Tuấn và Hoa trong studio — 04" },
+      { src: "/images/album/studio/05.jpg", alt: "Tuấn và Hoa trong studio — 05" },
+      { src: "/images/album/studio/06.jpg", alt: "Tuấn và Hoa trong studio — 06" },
+      { src: "/images/album/studio/07.jpg", alt: "Tuấn và Hoa trong studio — 07" },
+      { src: "/images/album/studio/08.jpg", alt: "Tuấn và Hoa trong studio — 08" },
+      { src: "/images/album/studio/09.jpg", alt: "Tuấn và Hoa trong studio — 09" },
+      { src: "/images/album/studio/10.jpg", alt: "Tuấn và Hoa trong studio — 10" },
+      { src: "/images/album/studio/11.jpg", alt: "Tuấn và Hoa trong studio — 11" },
+      { src: "/images/album/studio/12.jpg", alt: "Tuấn và Hoa trong studio — 12" },
+      { src: "/images/album/ao-dai/01.jpg", alt: "Tuấn và Hoa trong tà áo dài — 01" },
+      { src: "/images/album/ao-dai/02.jpg", alt: "Tuấn và Hoa trong tà áo dài — 02" },
+      { src: "/images/album/ao-dai/03.jpg", alt: "Tuấn và Hoa trong tà áo dài — 03" },
     ] satisfies AlbumPhoto[],
 
-    /** Ảnh ngang khép lại cả album, đặt ngay trước footer. */
+    /**
+     * Mấy câu chen giữa dòng ảnh — giọng nói thật của hai đứa, không phải
+     * tiêu đề chương.
+     *
+     * `after` là số thứ tự (1–35) của ảnh DỌC mà câu này đứng ngay sau. Bốn
+     * mốc dưới đây đều rơi đúng vào ranh giới giữa hai khối ảnh trong
+     * story-plan.ts — nếu đổi số ở đây thì phải đổi nhịp bên đó cho khớp,
+     * buildStory() sẽ ném lỗi ngay lúc build nếu hai bên lệch nhau.
+     *
+     * `tone: "quote"` in nghiêng, cỡ lớn hơn, dùng cho câu mang tính cảm thán;
+     * `"note"` là giọng kể bình thường.
+     */
+    interludes: [
+      { after: 4, tone: "note", text: "Trộm vía hôm chụp trời khá đẹp và mát,\nnên hai đứa cũng có một ngày khá dễ chịu." },
+      { after: 13, tone: "quote", text: "Chúng mình cứ thế đi cùng nhau." },
+      { after: 19, tone: "note", text: "Chụp ngoài trời xong thì cả hai về studio.\nLúc đấy cũng bắt đầu mệt rồi, nên hơi ít ảnh một chút." },
+      { after: 32, tone: "note", text: "Lúc chụp áo dài thì mệt lắm rồi,\nnên chỉ có vài tấm này thôi." },
+    ] satisfies AlbumInterlude[],
+
+    /** Ảnh NGANG khép lại — tấm cuối cùng người xem nhìn thấy. */
     closing: {
       src: "/images/album/closing.jpg",
       alt: "Tuấn và Hoa trên bậc thềm đá giữa vườn cây",
     } satisfies AlbumPhoto,
 
-    chapters: [
-      {
-        id: "santori",
-        title: "Santori Yên Sở",
-        note:
-          "Đây là ảnh chụp ở Santori Yên Sở.\nTrộm vía hôm chụp trời khá đẹp và mát,\nnên hai đứa cũng có một ngày khá dễ chịu.",
-        cover: "/images/album/santori/cover.jpg",
-        photos: [
-          { src: "/images/album/santori/01.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 01" },
-          { src: "/images/album/santori/02.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 02" },
-          { src: "/images/album/santori/03.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 03" },
-          { src: "/images/album/santori/04.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 04" },
-          { src: "/images/album/santori/05.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 05" },
-          { src: "/images/album/santori/06.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 06" },
-          { src: "/images/album/santori/07.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 07" },
-          { src: "/images/album/santori/08.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 08" },
-          { src: "/images/album/santori/09.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 09" },
-          { src: "/images/album/santori/10.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 10" },
-          { src: "/images/album/santori/11.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 11" },
-          { src: "/images/album/santori/12.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 12" },
-          { src: "/images/album/santori/13.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 13" },
-          { src: "/images/album/santori/14.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 14" },
-          { src: "/images/album/santori/15.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 15" },
-          { src: "/images/album/santori/16.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 16" },
-          { src: "/images/album/santori/17.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 17" },
-          { src: "/images/album/santori/18.jpg", alt: "Tuấn và Hoa chụp ngoại cảnh sân vườn — 18" },
-        ],
-      },
-      {
-        id: "studio",
-        title: "Studio",
-        note:
-          "Ảnh sau đấy chúng mình về studio chụp.\nLúc đấy cũng bắt đầu mệt rồi,\nnên sẽ hơi ít ảnh một chút.",
-        photos: [
-          { src: "/images/album/studio/01.jpg", alt: "Tuấn và Hoa chụp trong studio — 01" },
-          { src: "/images/album/studio/02.jpg", alt: "Tuấn và Hoa chụp trong studio — 02" },
-          { src: "/images/album/studio/03.jpg", alt: "Tuấn và Hoa chụp trong studio — 03" },
-          { src: "/images/album/studio/04.jpg", alt: "Tuấn và Hoa chụp trong studio — 04" },
-          { src: "/images/album/studio/05.jpg", alt: "Tuấn và Hoa chụp trong studio — 05" },
-          { src: "/images/album/studio/06.jpg", alt: "Tuấn và Hoa chụp trong studio — 06" },
-          { src: "/images/album/studio/07.jpg", alt: "Tuấn và Hoa chụp trong studio — 07" },
-          { src: "/images/album/studio/08.jpg", alt: "Tuấn và Hoa chụp trong studio — 08" },
-          { src: "/images/album/studio/09.jpg", alt: "Tuấn và Hoa chụp trong studio — 09" },
-          { src: "/images/album/studio/10.jpg", alt: "Tuấn và Hoa chụp trong studio — 10" },
-          { src: "/images/album/studio/11.jpg", alt: "Tuấn và Hoa chụp trong studio — 11" },
-          { src: "/images/album/studio/12.jpg", alt: "Tuấn và Hoa chụp trong studio — 12" },
-        ],
-      },
-      {
-        id: "ao-dai",
-        title: "Áo dài",
-        note:
-          "Lúc chụp áo dài thì mệt lắm rồi,\nnên chỉ có vài tấm này thôi.",
-        photos: [
-          { src: "/images/album/ao-dai/01.jpg", alt: "Tuấn và Hoa trong tà áo dài — 01" },
-          { src: "/images/album/ao-dai/02.jpg", alt: "Tuấn và Hoa trong tà áo dài — 02" },
-          { src: "/images/album/ao-dai/03.jpg", alt: "Tuấn và Hoa trong tà áo dài — 03" },
-        ],
-      },
-    ] satisfies AlbumChapter[],
+    /** Chữ khép lại. */
+    ending: {
+      lead: "Ảnh hết rồi.",
+      body: "Cảm ơn các bạn đã xem hết\nnhững khoảnh khắc của chúng mình.",
+    },
   },
 
   music: {

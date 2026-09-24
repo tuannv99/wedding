@@ -420,62 +420,19 @@
 }
 
 /*
-  /album — cuốn photobook lật được (xem app/album/ChapterBook.tsx).
+  /album — neo cuộn của từng khung ảnh.
 
-  Không dùng scroll-snap: người xem phải cuộn tự nhiên, góc lật của trang được
-  TÍNH RA từ vị trí cuộn chứ không bị hút vào điểm dừng nào.
+  Bấm một ô trong bản đồ tổng thể là gọi scrollIntoView() lên đúng phần tử
+  này, nên phải tự chừa chỗ cho thanh nav cố định. Quy tắc `section[id]` ở
+  globals.css không với tới đây được: các neo này là <button>, không phải
+  section, và chúng cần nhiều khoảng thở hơn một section đầu trang — dừng sát
+  ngay dưới mép nav thì tấm ảnh trông như bị thanh nav đè lên.
 
-  --wd-page-h là chiều cao thật của một trang album, chừa sẵn chỗ cho thanh nav
-  cố định phía trên và một khoảng thở phía dưới.
+  Chỉ đúng một thuộc tính. Mọi thứ còn lại của trang ảnh (bề ngang, tỉ lệ,
+  khoảng cách, nhịp bố cục) đều là utility Tailwind đặt tại chỗ ở
+  StoryBlock.tsx — không có lớp CSS nào ở đây điều khiển bố cục cả, nên sửa
+  một bố cục không bao giờ phải mở hai file.
 */
-.wd-book-stage {
-  --wd-page-h: calc(100svh - clamp(176px, 24vh, 244px));
-  --wd-page-gap: clamp(14px, 2vw, 30px);
-}
-
-/* Bản xếp dọc cho prefers-reduced-motion: trang không bị ghim vào màn hình nữa
-   nên chiều cao tự chọn, không phụ thuộc khung nhìn. */
-.wd-book-flat {
-  --wd-page-h: clamp(420px, 72svh, 720px);
-  --wd-page-gap: clamp(14px, 2vw, 30px);
-}
-
-/* Chiều sâu phối cảnh tính theo bề ngang màn: trang hẹp mà để perspective lớn
-   thì lật ra gần như phẳng, trang rộng mà để nhỏ thì méo như một hiệu ứng 3D.
-   Con số ở đây được chọn sao cho mép trang nhấc lên vẫn nằm gần trong khung
-   nhìn lúc nghiêng nhiều nhất — đủ để thấy là giấy, chưa tới mức trùm màn. */
-.wd-book-plate {
-  perspective: clamp(1700px, 210vw, 3400px);
-  perspective-origin: 50% 50%;
-}
-
-/*
-  Khung ảnh trong một trang album.
-
-  Chiều rộng tính NGƯỢC TỪ CHIỀU CAO TRANG (page-h × hệ số cỡ × tỉ lệ ảnh) chứ
-  không theo % bề ngang: một trang sắp bị lật thì bắt buộc phải nằm trọn trong
-  một màn hình, không được tràn xuống dưới. min(100%, …) là chốt chặn cho màn
-  hẹp — khi bề ngang mới là thứ giới hạn, ảnh co theo bề ngang và aspect-ratio
-  tự tính lại chiều cao, nên tỉ lệ 2:3 / 3:2 không bao giờ bị méo.
-
-  Trong layout hai ảnh, flex-shrink mặc định lo nốt phần còn lại: nếu tổng bề
-  ngang hai khung vượt quá trang (màn thấp và rộng), cả hai co lại theo đúng
-  tương quan cũ.
-*/
-.wd-frame {
-  position: relative;
-  min-width: 0;
-  overflow: hidden;
-  border-radius: 3px;
-  background-color: var(--color-warm);
-}
-
-.wd-frame-p {
-  aspect-ratio: 2 / 3;
-  width: min(100%, calc(var(--wd-page-h) * var(--wd-frame-s, 1) * 2 / 3));
-}
-
-.wd-frame-l {
-  aspect-ratio: 3 / 2;
-  width: min(100%, calc(var(--wd-page-h) * var(--wd-frame-s, 1) * 3 / 2));
+.wd-anchor {
+  scroll-margin-top: clamp(88px, 13vh, 132px);
 }

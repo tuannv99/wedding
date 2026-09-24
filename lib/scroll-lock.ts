@@ -10,7 +10,7 @@ import { useEffect } from "react";
  *
  * 1. Khoá trên <html> chứ KHÔNG phải <body>. body đang mang `overflow-x: clip`
  *    (app/globals.css) — thứ chặn tràn ngang mà không biến body thành khung
- *    cuộn, nhờ đó `position: sticky` của ChapterBook còn sống. Ghi
+ *    cuộn, nhờ đó `position: sticky` ở các trang con còn sống. Ghi
  *    `body.style.overflow = "hidden"` là ghi đè luôn cả overflow-x đó rồi trả
  *    lại bằng chuỗi rỗng, tức mỗi lần mở/đóng một lớp phủ là một lần thuộc
  *    tính overflow của body đổi qua đổi lại.

@@ -14,12 +14,6 @@ type RevealProps = {
   /** Khoảng dịch lên (px). Đặt 0 nếu chỉ muốn fade. */
   y?: number;
   duration?: number;
-  /**
-   * Scale ban đầu trước khi vào viewport (vd 0.97) — hiệu ứng "trang sách
-   * khép nhẹ rồi mở ra" dùng ở /album. Mặc định 1 = không đổi hành vi hiện
-   * có ở mọi nơi khác đang dùng Reveal.
-   */
-  scale?: number;
 };
 
 /**
@@ -32,7 +26,6 @@ export function Reveal({
   delay = 0,
   y = 24,
   duration = 0.4,
-  scale = 1,
 }: RevealProps) {
   /*
     useReducedMotion() đọc matchMedia ngay ở lần render đầu của client, còn
@@ -51,8 +44,8 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: reduceMotion ? 0 : y, scale: reduceMotion ? 1 : scale }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: reduceMotion ? 0 : y }}
+      whileInView={{ opacity: 1, y: 0 }}
       // margin dương ở đáy (320px): bắt đầu fade-in TRƯỚC khi phần tử thật sự
       // lọt vào khung nhìn, cộng với duration ngắn (0.4s, trước là 1s) để
       // animation kịp xong trước khi mắt người dùng nhìn thấy — nếu không,
