@@ -269,10 +269,10 @@ export const wedding = {
   album: {
     /** Chữ mở đầu. */
     opening: {
-      eyebrow: "Our story",
-      title: "Những ngày chúng mình\nđi chụp ảnh cưới.",
+      eyebrow: "Chuyện chúng mình",
+      title: "Một chút thanh xuân của chúng mình",
       intro:
-        "Cả bộ có 37 tấm, xếp đúng theo thứ tự lúc chụp. Bấm vào một tấm bất kỳ ở phần tổng thể bên dưới để nhảy thẳng tới tấm đó.",
+        "Có những khoảnh khắc chỉ đến một lần,\nvà có những khoảnh khắc ta muốn nhớ mãi.\n\nĐây là những ngày chúng mình đã cùng nhau đi qua,\ncùng cười, cùng nhìn nhau,\nvà cùng lưu lại một chút thanh xuân của hai đứa.",
     },
 
     /** Ảnh NGANG mở đầu — dùng làm hero, không cắt. */
@@ -283,9 +283,9 @@ export const wedding = {
 
     /** Phần xem tổng thể đặt ngay sau hero. */
     overview: {
-      eyebrow: "Our story",
-      title: "37 khoảnh khắc",
-      hint: "Bấm vào một tấm để tới đúng chỗ của nó",
+      eyebrow: "Chuyện chúng mình",
+      hint: "Một hành trình nhỏ,\ncủa hai người và những ngày thật đẹp.",
+      cta: "Chạm vào từng bức ảnh để khám phá.",
     },
 
     /**
@@ -350,8 +350,8 @@ export const wedding = {
     interludes: [
       { after: 4, tone: "note", text: "Trộm vía hôm chụp trời khá đẹp và mát,\nnên hai đứa cũng có một ngày khá dễ chịu." },
       { after: 13, tone: "quote", text: "Chúng mình cứ thế đi cùng nhau." },
-      { after: 19, tone: "note", text: "Chụp ngoài trời xong thì cả hai về studio.\nLúc đấy cũng bắt đầu mệt rồi, nên hơi ít ảnh một chút." },
-      { after: 32, tone: "note", text: "Lúc chụp áo dài thì mệt lắm rồi,\nnên chỉ có vài tấm này thôi." },
+      { after: 19, tone: "note", text: "Sau những khung hình ngoài trời,\nchúng mình trở về studio,\nmang theo một chút mệt và thật nhiều niềm vui." },
+      { after: 32, tone: "note", text: "Ngày dài đã gần khép lại,\nnhưng chúng mình vẫn muốn giữ thêm vài khoảnh khắc\ntrong tà áo dài." },
     ] satisfies AlbumInterlude[],
 
     /** Ảnh NGANG khép lại — tấm cuối cùng người xem nhìn thấy. */
@@ -362,7 +362,7 @@ export const wedding = {
 
     /** Chữ khép lại. */
     ending: {
-      lead: "Ảnh hết rồi.",
+      lead: "Hết rồi !!",
       body: "Cảm ơn các bạn đã xem hết\nnhững khoảnh khắc của chúng mình.",
     },
   },

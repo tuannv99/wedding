@@ -1,35 +1,55 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useScrollLock } from "@/lib/scroll-lock";
 import { cn } from "@/lib/utils";
+import { gapFor, justifyRows } from "@/app/album/justified-layout";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Đo bề rộng khung ngay trong layout effect (trước khi trình duyệt vẽ khung
+ * hình kế tiếp) thay vì trong effect thường — để lần render đã có chiều rộng
+ * đúng ngay từ đầu ở các lượt điều hướng phía client, thay vì vẽ một khung
+ * rỗng rồi mới nhảy vào. Trên server thì rơi về useEffect thường, vì
+ * useLayoutEffect không chạy được ở đó (và sẽ in cảnh báo nếu cứ gọi thẳng).
+ */
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export type OverviewTile = {
   n: number;
   src: string;
   alt: string;
-  /** Hai tấm ngang (mở đầu và khép lại) chiếm hai ô thay vì một. */
+  /** Hai tấm ngang (mở đầu và khép lại) — tỉ lệ 3:2 thay vì 2:3 như phần còn lại. */
   wide?: boolean;
 };
 
+/** Tỉ lệ rộng/cao THẬT của hai loại ảnh trong bộ — dùng để xếp hàng, không dùng để crop. */
+const RATIO_PORTRAIT = 2 / 3;
+const RATIO_LANDSCAPE = 3 / 2;
+
 /**
- * Bản đồ thị giác của cả bộ ảnh.
+ * Bản đồ thị giác của cả bộ ảnh — một "justified grid" kiểu editorial.
  *
  * Đây là câu trả lời cho đúng hai phàn nàn về trang cũ: không nhìn được tổng
- * thể, và muốn quay lại một tấm cụ thể thì phải lướt ngược rất xa. Cả 37 ô
- * nằm trong một lưới duy nhất, bấm một ô là cuộn thẳng tới tấm đó.
+ * thể, và muốn quay lại một tấm cụ thể thì phải lướt ngược rất xa. Mọi ô nằm
+ * trong cùng một dòng ảnh liên tục, bấm một ô là cuộn thẳng tới tấm đó — vẫn
+ * đúng `onPick`/anchor sẵn có, không có hệ thống điều hướng nào mới.
+ *
+ * Khác bản cũ (lưới cột cố định, mọi ô ép về chung một khung 2:3 rồi
+ * object-cover cắt cho vừa): ở đây thuật toán `justifyRows` xếp ảnh theo
+ * ĐÚNG tỉ lệ thật của nó, hàng nào cũng vừa khít bề ngang khung chứa — không
+ * ảnh nào bị cắt, chỉ có chiều cao hàng thay đổi. Bề rộng khung được đo bằng
+ * ResizeObserver nên bố cục tự vẽ lại theo màn hình lẫn theo số lượng ảnh,
+ * không có gì hard-code cho riêng con số 37.
  *
  * Cố ý KHÔNG có filter, tab hay nhóm nào cả — có nhóm là quay lại chuyện
  * chương mục, mà chuyện đó vừa bỏ xong. Lưới này chỉ để nhìn và để bấm.
- *
- * Ảnh không bị cắt theo tỉ lệ khác: ô dọc giữ 2:3, hai ô ngang giữ 3:2 và
- * chiếm hai cột.
  */
 function OverviewGrid({
   tiles,
@@ -43,63 +63,86 @@ function OverviewGrid({
   current?: number;
   className?: string;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+
+  useIsomorphicLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) setWidth(entry.contentRect.width);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const rows = useMemo(() => {
+    const withRatio = tiles.map((tile) => ({
+      ...tile,
+      ratio: tile.wide ? RATIO_LANDSCAPE : RATIO_PORTRAIT,
+    }));
+    return justifyRows(withRatio, width);
+  }, [tiles, width]);
+
+  const gap = gapFor(width || 1);
+
   return (
-    <ul
-      className={cn(
-        "grid grid-cols-5 gap-[6px] sm:grid-cols-7 sm:gap-2 md:grid-cols-8 md:gap-3 lg:grid-cols-10",
-        className,
-      )}
-    >
-      {tiles.map((tile) => {
-        const active = current === tile.n;
-
-        return (
-          <li
-            key={tile.n}
-            className={cn("self-center", tile.wide && "col-span-2")}
+    <div ref={containerRef} className={className}>
+      <div className="flex flex-col" style={{ rowGap: gap }}>
+        {rows.map((row) => (
+          <div
+            key={row.key}
+            className="flex justify-start"
+            style={{ height: row.height, columnGap: gap }}
           >
-            <button
-              type="button"
-              onClick={() => onPick(tile.n)}
-              aria-label={`Tới ảnh ${tile.n}: ${tile.alt}`}
-              aria-current={active ? "true" : undefined}
-              className={cn(
-                "group relative block w-full overflow-hidden rounded-[2px] bg-warm",
-                tile.wide ? "aspect-[3/2]" : "aspect-[2/3]",
-              )}
-            >
-              <Image
-                src={tile.src}
-                alt=""
-                fill
-                loading="lazy"
-                decoding="async"
-                sizes="(max-width: 640px) 20vw, (max-width: 768px) 15vw, (max-width: 1024px) 13vw, 112px"
-                className={cn(
-                  "object-cover transition-opacity duration-500",
-                  // Ô thường lùi lại một bước để cả lưới đọc ra là một bản đồ
-                  // chứ không phải 37 tấm ảnh đang tranh nhau; rê chuột vào,
-                  // hoặc đang đứng ở tấm nào, thì tấm đó rõ hẳn.
-                  active
-                    ? "opacity-100"
-                    : "opacity-[0.82] group-hover:opacity-100",
-                )}
-              />
+            {row.items.map(({ tile, width: itemWidth }) => {
+              const active = current === tile.n;
 
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "pointer-events-none absolute inset-0 rounded-[2px] transition-colors duration-500",
-                  active
-                    ? "ring-1 ring-champagne ring-inset"
-                    : "group-hover:ring-1 group-hover:ring-taupe/45 group-hover:ring-inset",
-                )}
-              />
-            </button>
-          </li>
-        );
-      })}
-    </ul>
+              return (
+                <button
+                  key={tile.n}
+                  type="button"
+                  onClick={() => onPick(tile.n)}
+                  aria-label={`Tới ảnh ${tile.n}: ${tile.alt}`}
+                  aria-current={active ? "true" : undefined}
+                  className="group relative block shrink-0 overflow-hidden rounded-[2px] bg-warm"
+                  style={{ width: itemWidth, height: row.height }}
+                >
+                  <Image
+                    src={tile.src}
+                    alt=""
+                    fill
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(max-width: 640px) 42vw, (max-width: 1024px) 28vw, 380px"
+                    className={cn(
+                      "object-cover transition-opacity duration-500",
+                      // Ô thường lùi lại một bước để cả lưới đọc ra là một bản
+                      // đồ chứ không phải từng ấy tấm ảnh đang tranh nhau; rê
+                      // chuột vào, hoặc đang đứng ở tấm nào, thì tấm đó rõ hẳn.
+                      active
+                        ? "opacity-100"
+                        : "opacity-[0.86] group-hover:opacity-100",
+                    )}
+                  />
+
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "pointer-events-none absolute inset-0 rounded-[2px] transition-colors duration-500",
+                      active
+                        ? "ring-1 ring-champagne ring-inset"
+                        : "group-hover:ring-1 group-hover:ring-taupe/45 group-hover:ring-inset",
+                    )}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -108,13 +151,15 @@ export function OverviewSection({
   eyebrow,
   title,
   hint,
+  cta,
   tiles,
   onPick,
   current,
 }: {
   eyebrow: string;
-  title: string;
+  title?: string;
   hint: string;
+  cta?: string;
   tiles: readonly OverviewTile[];
   onPick: (n: number) => void;
   current?: number;
@@ -123,10 +168,15 @@ export function OverviewSection({
     <>
       <div className="flex flex-col items-start border-l border-champagne/50 pl-5 md:pl-7">
         <p className="wd-eyebrow text-taupe">{eyebrow}</p>
-        <h2 className="font-display mt-4 text-[clamp(1.5rem,3.2vw,2.25rem)] leading-[1.25] font-light text-ink">
-          {title}
-        </h2>
-        <p className="wd-body-sm mt-3 text-[15px] text-taupe">{hint}</p>
+        {title ? (
+          <h2 className="font-display mt-4 text-[clamp(1.5rem,3.2vw,2.25rem)] leading-[1.25] font-light text-ink">
+            {title}
+          </h2>
+        ) : null}
+        <p className="wd-body-sm mt-3 text-[15px] whitespace-pre-line text-taupe">{hint}</p>
+        {cta ? (
+          <p className="wd-body-sm mt-2 text-[15px] text-taupe/80 italic">{cta}</p>
+        ) : null}
       </div>
 
       <OverviewGrid
@@ -204,9 +254,9 @@ export function OverviewControl({
         >
           <div className="flex items-start justify-between px-5 pt-5 md:px-10 md:pt-7">
             <div>
-              <p className="wd-eyebrow text-taupe">Our story</p>
+              <p className="wd-eyebrow text-taupe">Chuyện chúng mình</p>
               <p className="font-display mt-2 text-[clamp(1.15rem,2.4vw,1.6rem)] leading-tight font-light text-ink">
-                {tiles.length} khoảnh khắc
+                Những khoảnh khắc được giữ lại từ một ngày thật đẹp.
               </p>
             </div>
 

@@ -188,7 +188,7 @@ export function AlbumStory() {
               {opening.title}
             </h1>
 
-            <p className="wd-body-sm mt-6 max-w-[480px] text-[15px] leading-[1.9]">
+            <p className="wd-body-sm mt-6 max-w-[480px] text-[15px] leading-[1.9] sm:whitespace-pre-line">
               {opening.intro}
             </p>
           </Reveal>
@@ -222,8 +222,8 @@ export function AlbumStory() {
           <Reveal>
             <OverviewSection
               eyebrow={overview.eyebrow}
-              title={overview.title}
               hint={overview.hint}
+              cta={overview.cta}
               tiles={tiles}
               onPick={jumpTo}
               current={current}
