@@ -198,9 +198,14 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
         {guestName ? (
           <motion.p
             {...rise(0.62)}
-            className="wd-quote max-w-[22ch] text-[clamp(1rem,2.2vw,1.35rem)] text-ink/85 text-balance md:text-ink/60"
+            className="wd-quote max-w-[34ch] text-[clamp(1rem,2.2vw,1.35rem)] text-ink/85 md:text-ink/60"
           >
-            {guestGreeting} <span className="text-ink">{guestName}</span>
+            <span className="block">
+              {guestGreeting} <span className="text-ink">{guestName}</span>,
+            </span>
+            <span className="mt-1 block">
+              Trân trọng mời bạn đến dự lễ cưới của chúng mình..
+            </span>
           </motion.p>
         ) : null}
 
