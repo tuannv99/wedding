@@ -33,7 +33,8 @@ export function GuestRow({ guest }: { guest: GuestRecord }) {
     setActionError(null);
     startTransition(async () => {
       try {
-        await deleteGuest(guest.slug);
+        const result = await deleteGuest(guest.slug);
+        if (!result.ok) setActionError(result.message);
       } catch (err) {
         setActionError(err instanceof Error ? err.message : "Có lỗi xảy ra.");
       }

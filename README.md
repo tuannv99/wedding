@@ -188,6 +188,23 @@ Có `prefers-reduced-motion` cho mọi animation và cho smooth scroll.
 
 ---
 
+## Thiết lập Supabase
+
+Lời chúc (`/wishes`), RSVP và link thiệp cá nhân hoá (`/admin/guests`) đều đọc/ghi Supabase.
+Hai bước, làm một lần cho mỗi project:
+
+1. **Biến môi trường** — copy `.env.example` thành `.env.local` (và thêm đúng hai biến đó vào
+   Vercel → Settings → Environment Variables cho production).
+2. **Tạo bảng** — mở Supabase Dashboard → **SQL Editor → New query**, dán toàn bộ
+   [`supabase/schema.sql`](supabase/schema.sql) rồi **Run**.
+
+Bỏ qua bước 2 thì trang vẫn chạy nhưng mọi thao tác chạm tới bảng sẽ báo
+*"Could not find the table ... in the schema cache"* — ví dụ nút **Tạo link** ở `/admin/guests`.
+File `schema.sql` an toàn để chạy lại nhiều lần (không xoá dữ liệu cũ), nên cứ chạy lại mỗi khi
+file này có thêm bảng mới.
+
+---
+
 ## Deploy lên Vercel
 
 1. Push code lên GitHub.

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SimpleHeader } from "@/components/ui/SimpleHeader";
 import { EnsureOpened } from "@/components/ui/EnsureOpened";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { describeGuestTableError } from "@/lib/supabase/errors";
 import { signOutAdmin } from "@/app/admin/actions";
 import { AdminNav } from "@/app/admin/AdminNav";
 import { CreateGuestForm } from "@/app/admin/guests/CreateGuestForm";
@@ -10,9 +11,13 @@ import { GuestRow, type GuestRecord } from "@/app/admin/guests/GuestRow";
 export const metadata: Metadata = { title: "Quản lý khách mời" };
 export const dynamic = "force-dynamic";
 
-async function getAllGuests(): Promise<{ guests: GuestRecord[]; configured: boolean }> {
+async function getAllGuests(): Promise<{
+  guests: GuestRecord[];
+  configured: boolean;
+  error: string | null;
+}> {
   const supabase = await createSupabaseServerClient();
-  if (!supabase) return { guests: [], configured: false };
+  if (!supabase) return { guests: [], configured: false, error: null };
 
   const { data, error } = await supabase
     .from("wedding_guests")
@@ -20,12 +25,13 @@ async function getAllGuests(): Promise<{ guests: GuestRecord[]; configured: bool
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("[admin/guests] fetch failed:", error.message);
-    return { guests: [], configured: true };
+    console.error("[admin/guests] fetch failed:", error.code, error.message);
+    return { guests: [], configured: true, error: describeGuestTableError(error) };
   }
 
   return {
     configured: true,
+    error: null,
     guests: (data ?? []).map((row) => ({
       slug: row.slug,
       name: row.name,
@@ -36,7 +42,7 @@ async function getAllGuests(): Promise<{ guests: GuestRecord[]; configured: bool
 }
 
 export default async function AdminGuestsPage() {
-  const { guests, configured } = await getAllGuests();
+  const { guests, configured, error } = await getAllGuests();
 
   return (
     <>
@@ -53,6 +59,12 @@ export default async function AdminGuestsPage() {
         </div>
 
         <AdminNav active="guests" />
+
+        {error ? (
+          <p role="alert" className="wd-body-sm mt-10 text-red-700">
+            {error}
+          </p>
+        ) : null}
 
         {!configured ? (
           <p className="wd-body-sm mt-10">

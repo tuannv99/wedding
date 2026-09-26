@@ -29,12 +29,18 @@ export function CreateGuestForm() {
           slug: effectiveSlug,
           greeting: greeting.trim() || undefined,
         });
+        if (!result.ok) {
+          setError(result.message);
+          return;
+        }
         setCreatedUrl(createGuestInvitationUrl(result.slug));
         setName("");
         setSlug("");
         setSlugTouched(false);
         setGreeting("");
       } catch (err) {
+        // Chỉ còn lỗi mạng / action không gọi tới được — lỗi nghiệp vụ đã
+        // nằm trong result.message ở trên.
         setError(err instanceof Error ? err.message : "Có lỗi xảy ra.");
       }
     });
