@@ -6,6 +6,19 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { cn } from "@/lib/utils";
 
+/** Bọc các cụm chữ số (ví dụ "2023") trong .wd-num — số dùng DM Sans như cả site. */
+function withNumerals(text: string) {
+  return text.split(/(\d+)/).map((part, i) =>
+    i % 2 === 1 ? (
+      <span key={i} className="wd-num">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
+
 export function OurStory() {
   return (
     <section
@@ -77,17 +90,21 @@ export function OurStory() {
                           <span className="absolute top-2 -left-[2.5px] h-1.5 w-1.5 rounded-full bg-champagne" />
                         </span>
 
-                        <p className="wd-body-serif text-[clamp(1.25rem,4.6vw,1.8rem)] leading-[1.5] whitespace-pre-line sm:leading-[1.6]">
-                          {step.text}
+                        {/* Mỗi mốc giờ là 2–3 đoạn ngắn nên cỡ chữ nhỏ hơn
+                            bản một câu cũ. Mobile bỏ qua \n (cột chữ chỉ ~½
+                            màn hình, ngắt cứng + tự xuống dòng sẽ rất vụn). */}
+                        <div className="wd-body-serif flex flex-col gap-3 text-[clamp(0.875rem,3.6vw,1.3rem)] leading-[1.55] sm:gap-4 sm:leading-[1.65]">
+                          {step.text.split("\n\n").map((paragraph) => (
+                            <p key={paragraph} className="sm:whitespace-pre-line">
+                              {withNumerals(paragraph)}
+                            </p>
+                          ))}
                           {step.emphasis ? (
-                            <>
-                              {"\n"}
-                              <span className="wd-quote text-[0.92em]">
-                                {step.emphasis}
-                              </span>
-                            </>
+                            <p className="wd-quote text-[0.95em] sm:whitespace-pre-line">
+                              {step.emphasis}
+                            </p>
                           ) : null}
-                        </p>
+                        </div>
                       </div>
                     </div>
 

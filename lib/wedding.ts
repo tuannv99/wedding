@@ -39,7 +39,7 @@ export type TimelineItem = {
 export type TimelineSchedule = {
   /** Dùng làm React key + để tab nhớ đang chọn nghi lễ nào. */
   id: string;
-  /** Nhãn trên tab, ví dụ "Lễ Vu Quy". */
+  /** Nhãn trên tab, ví dụ "Lễ Thành Hôn". */
   label: string;
   /** Nhà tổ chức nghi lễ này, ví dụ "Nhà gái". */
   venue: string;
@@ -47,9 +47,12 @@ export type TimelineSchedule = {
 };
 
 export type StoryStep = {
-  /** Phần chữ chính. Dùng \n để tự ngắt dòng theo ý muốn. */
+  /**
+   * Phần chữ chính. \n\n để tách đoạn; \n để tự ngắt dòng theo ý muốn (chỉ
+   * được tôn trọng từ sm trở lên — ở mobile cột chữ quá hẹp, để chữ tự xuống dòng).
+   */
   text: string;
-  /** Phần chữ nhấn ở cuối (in nghiêng, màu taupe). Có thể bỏ trống. */
+  /** Đoạn chữ nhấn ở cuối (in nghiêng, màu taupe). Có thể bỏ trống. */
   emphasis?: string;
   image: GalleryImage;
 };
@@ -58,7 +61,6 @@ export const wedding = {
   groom: {
     name: "Văn Tuấn",
     short: "TUẤN",
-    // TODO: thay bằng SĐT thật của chú rể — hiện tạm dùng chung một số với cô dâu.
     phone: "0973002464",
     portrait: {
       src: "/images/wedding/chu_re_1.jpg",
@@ -70,8 +72,7 @@ export const wedding = {
   bride: {
     name: "Mai Hoa",
     short: "HOA",
-    // TODO: thay bằng SĐT thật của cô dâu — hiện tạm dùng chung một số với chú rể.
-    phone: "0973002464",
+    phone: "0914812001",
     portrait: {
       src: "/images/wedding/co_dau.jpg",
       alt: "Cô dâu Mai Hoa trong váy cưới",
@@ -100,29 +101,33 @@ export const wedding = {
   },
   reception: {
     label: "Tiệc cưới",
-    time: "12:00",
+    time: "11:00",
   },
 
   /** Cách lấy mapsUrl cho địa điểm mới: mở Google Maps → Chia sẻ → Sao chép liên kết. */
   venues: {
     bride: {
       label: "Nhà gái",
-      name: "Xuân Phương, Ninh Bình",
+      name: "Xuân Hưng, Ninh Bình",
+      /** Tiệc nhà gái diễn ra chiều hôm trước — ghi đè giờ/thứ/ngày mặc định. */
+      time: "17:00",
+      weekday: "Thứ Bảy",
+      day: "24",
+      month: "10",
       /** \n để chủ động ngắt dòng đúng chỗ (WeddingDetails render whitespace-pre-line). */
-      address: "Nhà Văn Hóa Xóm 2,\nXã Xuân Phương, tỉnh Ninh Bình",
+      address: "Thôn Trà Đông,\nXã Xuân Hưng, Tỉnh Ninh Bình",
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
         src: "/images/album/studio/06.jpg",
         alt: "Tuấn và Hoa trong studio",
       },
-      mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình")}`,
-      // "Nhà văn hóa xóm 2, xã Xuân Phương, Ninh Bình" (query có dấu → base64url sau !1z)
+      mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Thôn Trà Đông, xã Xuân Hưng, Ninh Bình")}`,
     },
     groom: {
       label: "Nhà trai",
       name: "Quỳnh Phụ, Hưng Yên",
       /** \n để chủ động ngắt dòng đúng chỗ (WeddingDetails render whitespace-pre-line). */
-      address: "Xóm 3 Thôn Phụng Công,\nXã Quỳnh Phụ, tỉnh Hưng Yên",
+      address: "Thôn Phụng Công,\nXã Quỳnh Phụ, Tỉnh Hưng Yên",
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
         src: "/images/album/santori/09.jpg",
@@ -136,7 +141,9 @@ export const wedding = {
   /** Mỗi mốc trong câu chuyện đi kèm một ảnh riêng, bố trí so le trái/phải. */
   story: [
     {
-      text: "Một ngày bình thường,\nchúng mình gặp nhau.",
+      text:
+        "Năm 2023,\nchúng mình gặp nhau\ngiữa những ngày đi làm rất đỗi bình thường.\n\n" +
+        "Khi ấy,\nchẳng ai nghĩ rằng\nđó lại mở đầu cho câu chuyện của hai đứa.",
       image: {
         src: "/images/wedding/home-story-01.jpg",
         alt: "Tuấn và Hoa nắm tay bước trên lối vườn",
@@ -145,7 +152,9 @@ export const wedding = {
       },
     },
     {
-      text: "Rồi từ những điều rất nhỏ,\nchúng mình quyết định\nđi cùng nhau thật lâu.",
+      text:
+        "Được sự yêu quý và “đẩy thuyền”\ncủa các anh chị em đồng nghiệp,\nchúng mình dần có thêm những cuộc trò chuyện.\n\n" +
+        "Rồi chúng mình trở thành người yêu,\ncùng nhau đi qua những ngày tháng\nvà những kỷ niệm thật đẹp.",
       image: {
         src: "/images/wedding/home-story-02.jpg",
         alt: "Tuấn quỳ gối trao hoa cho Hoa giữa vườn",
@@ -154,8 +163,9 @@ export const wedding = {
       },
     },
     {
-      text: "Và rồi,\nchúng mình",
-      emphasis: "ở đây...",
+      text:
+        "Để rồi hôm nay,\nchúng mình đã chính thức trở thành vợ chồng.",
+      emphasis: "Và câu chuyện của chúng mình\nvẫn đang được viết tiếp...",
       image: {
         src: "/images/wedding/home-story-03.jpg",
         alt: "Tuấn và Hoa cùng cầm tấm thiệp cưới trong studio",
@@ -166,20 +176,10 @@ export const wedding = {
   ] satisfies StoryStep[],
 
   /**
-   * Chương trình gồm 2 nghi lễ riêng — Timeline.tsx hiển thị dạng tab, mặc
-   * định chọn mục đầu tiên (Lễ Vu Quy).
+   * Chương trình nghi lễ — Timeline.tsx hiển thị dạng tab, mặc định chọn mục
+   * đầu tiên. Hiện chỉ còn Lễ Thành Hôn.
    */
   timeline: [
-    {
-      id: "vu-quy",
-      label: "Lễ Vu Quy",
-      venue: "Tại Tư Gia Nhà Gái",
-      items: [
-        { time: "10:30", title: "Đón khách" },
-        { time: "11:00", title: "Lễ Vu Quy" },
-        { time: "11:30", title: "Tiệc thân mật" },
-      ],
-    },
     {
       id: "thanh-hon",
       label: "Lễ Thành Hôn",

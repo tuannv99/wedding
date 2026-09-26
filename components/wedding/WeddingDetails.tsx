@@ -136,18 +136,28 @@ export function WeddingDetails() {
 
                     <p className="wd-body-sm mt-5 text-[13px] sm:text-[15px] md:mt-6">
                       {copy.details.atLabel}{" "}
-                      <span className="wd-num">{reception.time}</span>
+                      <span className="wd-num">
+                        {"time" in place ? place.time : reception.time}
+                      </span>
                     </p>
 
-                    {/* Hàng ngày tháng: thứ trong khung nhỏ · ngày/tháng cỡ lớn · năm mờ */}
-                    <div className="mt-3 flex items-center justify-center gap-2 sm:mt-4 sm:gap-3">
-                      <span className="rounded-[2px] border border-taupe/35 px-1.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe uppercase sm:px-2.5 sm:text-[11px] sm:tracking-[0.1em]">
-                        {date.weekday}
+                    {/* Hàng ngày tháng: thứ (xếp 2 dòng giữa hai nét ngang) ·
+                        ngày/tháng cỡ lớn · năm mờ. Grid 1fr|auto|1fr để
+                        ngày/tháng luôn nằm đúng trục giữa, thẳng với tiêu đề
+                        "Tiệc nhà …" dù khối thứ và khối năm rộng khác nhau. */}
+                    <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 sm:mt-4 sm:gap-3">
+                      <span className="flex flex-col items-center gap-[3px] justify-self-end border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe uppercase sm:gap-1 sm:px-1 sm:py-1.5 sm:text-[11px] sm:tracking-[0.1em]">
+                        {("weekday" in place ? place.weekday : date.weekday)
+                          .split(" ")
+                          .map((word) => (
+                            <span key={word}>{word}</span>
+                          ))}
                       </span>
                       <span className="wd-num text-[clamp(1.35rem,5.5vw,2.5rem)] leading-none tracking-[0.02em] text-ink">
-                        {date.day}/{date.month}
+                        {"day" in place ? place.day : date.day}/
+                        {"month" in place ? place.month : date.month}
                       </span>
-                      <span className="wd-num rounded-[2px] border border-taupe/35 px-1.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe sm:px-2 sm:text-[11px]">
+                      <span className="wd-num justify-self-start border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe sm:px-1 sm:py-1.5 sm:text-[11px] sm:tracking-[0.1em]">
                         {date.year}
                       </span>
                     </div>

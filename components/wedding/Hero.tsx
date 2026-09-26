@@ -58,15 +58,15 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
     },
   });
 
-  const scrollToStory = () => {
-    // open() chỉ setState — DOM của Our Story chưa kịp mount ngay trong cùng
+  const scrollToCeremony = () => {
+    // open() chỉ setState — DOM của khối Lễ Thành Hôn (#couple) chưa kịp mount ngay trong cùng
     // tick, nên đợi hai animation frame để React commit xong rồi mới đo & cuộn.
     // Đo bằng viewport (getBoundingClientRect), KHÔNG dùng offsetTop: wrapper
     // nội dung có transform (wd-rise) nên trở thành offsetParent, khiến
     // offsetTop luôn bằng 0.
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        const el = document.getElementById("our-story");
+        const el = document.getElementById("couple");
         if (!el) return;
         const y = el.getBoundingClientRect().top + window.scrollY - HEADER_H;
         window.scrollTo({ top: Math.max(0, y), behavior: "instant" });
@@ -80,7 +80,7 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
     if (reduceMotion) {
       if (wedding.music.startOnOpen) emitOpenInvitation();
       open();
-      scrollToStory();
+      scrollToCeremony();
       return;
     }
 
@@ -90,7 +90,7 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
       if (wedding.music.startOnOpen) emitOpenInvitation();
       open();
       setPhase("unfolding");
-      scrollToStory();
+      scrollToCeremony();
     }, UNFOLD_START_MS);
 
     window.setTimeout(() => setPhase(null), UNFOLD_START_MS + UNFOLD_MS);

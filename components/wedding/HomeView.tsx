@@ -25,8 +25,8 @@ export function HomeView({ guestName, guestGreeting }: HomeViewProps) {
       <main id="main">
         <Hero guestName={guestName} guestGreeting={guestGreeting} />
         <AfterOpen>
-          <OurStory />
           <Couple />
+          <OurStory />
           <WeddingDetails />
           <Countdown />
           <Timeline />
