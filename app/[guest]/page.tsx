@@ -29,17 +29,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const found = await getGuest(guest);
   if (!found) return {};
 
+  // Tiêu đề + mô tả khi gửi link qua Zalo/Messenger: đúng lời mời theo cách
+  // xưng hô, vd "Gửi anh Hiếu" / "Trân trọng mời anh đến dự lễ cưới của chúng em..".
   const title = `${found.greeting} ${found.name}`;
+  const description = found.message;
 
   return {
     title,
+    description,
     openGraph: {
       type: "website",
       locale: "vi_VN",
       url: `${wedding.site.url}/${guest}`,
       siteName: wedding.site.title,
       title,
-      description: wedding.site.description,
+      description,
       images: [
         {
           url: "/images/wedding/og.jpg",
@@ -52,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title,
-      description: wedding.site.description,
+      description,
       images: ["/images/wedding/og.jpg"],
     },
   };
@@ -62,5 +66,5 @@ export default async function GuestInvitationPage({ params }: Props) {
   const { guest } = await params;
   const found = await getGuest(guest);
 
-  return <HomeView guestName={found?.name} guestGreeting={found?.greeting} />;
+  return <HomeView invitation={found ?? undefined} />;
 }

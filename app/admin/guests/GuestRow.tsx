@@ -4,19 +4,32 @@ import { useState, useTransition } from "react";
 import { deleteGuest } from "@/app/admin/guests/actions";
 import { createGuestInvitationUrl } from "@/lib/guest-link";
 import { formatShortDate } from "@/lib/utils";
+import { buildGuestInvitation, isGuestPronoun } from "@/lib/guest-invitation";
 
 export type GuestRecord = {
   slug: string;
+  /** Họ tên đầy đủ. */
   name: string;
+  /** Lời chào tự do — chỉ còn ở link tạo trước khi có cách xưng hô. */
   greeting: string | null;
+  displayName: string | null;
+  /** NULL ở link cũ; xem lib/guest-invitation.ts. */
+  pronoun: string | null;
   createdAt: string;
 };
 
-export function GuestRow({ guest }: { guest: GuestRecord }) {
+type GuestRowProps = {
+  guest: GuestRecord;
+  onEdit: (guest: GuestRecord) => void;
+};
+
+export function GuestRow({ guest, onEdit }: GuestRowProps) {
   const [isPending, startTransition] = useTransition();
   const [actionError, setActionError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const url = createGuestInvitationUrl(guest.slug);
+  const invitation = buildGuestInvitation(guest);
+  const isLegacy = !isGuestPronoun(guest.pronoun);
 
   const handleCopy = async () => {
     try {
@@ -49,14 +62,22 @@ export function GuestRow({ guest }: { guest: GuestRecord }) {
           {formatShortDate(guest.createdAt)}
         </p>
         <p className="wd-body-sm mt-3 break-all">{url}</p>
-        {guest.greeting ? (
-          <p className="wd-body-sm mt-1 text-taupe">Lời chào: {guest.greeting}</p>
+        <p className="wd-body-sm mt-1 text-taupe">
+          {invitation.greeting} {invitation.name}, {invitation.message}
+        </p>
+        {isLegacy ? (
+          <p className="wd-body-sm mt-1 text-ink/50">
+            Link cũ, chưa chọn cách xưng hô. Bấm Sửa để chọn.
+          </p>
         ) : null}
       </div>
 
       <div className="mt-4 flex flex-wrap gap-3">
         <button type="button" className="wd-btn-ghost" onClick={handleCopy}>
           {copied ? "Đã sao chép" : "Sao chép link"}
+        </button>
+        <button type="button" className="wd-btn-ghost" onClick={() => onEdit(guest)}>
+          Sửa
         </button>
         <button
           type="button"

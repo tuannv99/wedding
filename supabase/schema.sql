@@ -150,13 +150,32 @@ create table if not exists public.wedding_guests (
   slug text primary key,
   name text not null,
   -- Lời chào đứng trước tên, vd "Gửi bạn yêu". NULL thì trang tự dùng mặc
-  -- định "Gửi bạn" (xem DEFAULT_GREETING trong data/guests.ts).
+  -- định "Gửi bạn" (xem LEGACY_DEFAULT_GREETING trong lib/guest-invitation.ts).
+  -- Chỉ áp dụng cho link chưa có cột pronoun bên dưới.
   greeting text,
   created_at timestamptz not null default now(),
   constraint wedding_guests_slug_format check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
   constraint wedding_guests_name_length check (char_length(name) between 1 and 120),
   constraint wedding_guests_greeting_length check (greeting is null or char_length(greeting) between 1 and 40)
 );
+
+-- Cách xưng hô (thêm sau — "add column if not exists" để chạy lại an toàn
+-- trên bảng đã có dữ liệu). Cột `name` giữ vai trò họ tên đầy đủ.
+--   display_name: tên gọi trên thiệp, vd "Hiếu" cho "Đỗ Ngọc Hiếu".
+--   pronoun:      anh | chị | em | bạn — quyết định "Gửi anh Hiếu, Trân
+--                 trọng mời anh… của chúng em.." (lib/guest-invitation.ts).
+-- Link tạo trước đó có pronoun NULL → thiệp giữ nguyên cách hiển thị cũ
+-- (lời chào ở cột greeting + tên đầy đủ).
+alter table public.wedding_guests add column if not exists display_name text;
+alter table public.wedding_guests add column if not exists pronoun text;
+
+alter table public.wedding_guests drop constraint if exists wedding_guests_display_name_length;
+alter table public.wedding_guests add constraint wedding_guests_display_name_length
+  check (display_name is null or char_length(display_name) between 1 and 60);
+
+alter table public.wedding_guests drop constraint if exists wedding_guests_pronoun_valid;
+alter table public.wedding_guests add constraint wedding_guests_pronoun_valid
+  check (pronoun is null or pronoun in ('anh', 'chị', 'em', 'bạn'));
 
 alter table public.wedding_guests enable row level security;
 

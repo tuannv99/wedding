@@ -9,21 +9,20 @@ import { Gallery } from "@/components/wedding/Gallery";
 import { RSVP } from "@/components/wedding/RSVP";
 import { Closing } from "@/components/wedding/Closing";
 import { AfterOpen } from "@/components/wedding/AfterOpen";
+import type { GuestInvitation } from "@/lib/guest-invitation";
 
 type HomeViewProps = {
-  /** Tên khách mời lấy từ URL cá nhân hoá /[guest] — bỏ trống ở URL mặc định "/". */
-  guestName?: string;
-  /** Lời chào trước tên, ví dụ "Gửi bạn yêu" — xem data/guests.ts. */
-  guestGreeting?: string;
+  /** Lời mời cá nhân hoá từ URL /[guest] — bỏ trống ở URL mặc định "/". Xem data/guests.ts. */
+  invitation?: GuestInvitation;
 };
 
 /** Toàn bộ nội dung thiệp — dùng chung cho URL mặc định "/" và URL cá nhân hoá "/[guest]". */
-export function HomeView({ guestName, guestGreeting }: HomeViewProps) {
+export function HomeView({ invitation }: HomeViewProps) {
   return (
     <>
       <Navigation />
       <main id="main">
-        <Hero guestName={guestName} guestGreeting={guestGreeting} />
+        <Hero invitation={invitation} />
         <AfterOpen>
           <Couple />
           <OurStory />

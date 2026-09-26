@@ -1,10 +1,11 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { buildGuestInvitation, type GuestInvitation } from "@/lib/guest-invitation";
 
 export type Guest = {
   name: string;
   /**
    * Lời chào đứng trước tên trên thiệp, ví dụ "Gửi bạn yêu" cho bạn thân
-   * thay vì "Gửi bạn" mặc định. Bỏ trống thì dùng DEFAULT_GREETING.
+   * thay vì "Gửi bạn" mặc định. Chỉ dùng cho khách chưa có cách xưng hô.
    */
   greeting?: string;
 };
@@ -24,38 +25,61 @@ export const guests: Record<string, Guest> = {
   "minh-giang": { name: "Minh Giang", greeting: "Gửi bạn yêu" },
 };
 
-export const DEFAULT_GREETING = "Gửi bạn";
+type GuestRow = {
+  name: string;
+  greeting: string | null;
+  display_name?: string | null;
+  pronoun?: string | null;
+};
 
-export type ResolvedGuest = { name: string; greeting: string };
+/**
+ * Đọc một khách từ wedding_guests. Nếu database chưa chạy bản schema.sql có
+ * cột display_name/pronoun thì câu select đầy đủ báo lỗi cột không tồn tại —
+ * khi đó đọc lại chỉ với các cột cũ, để link đã gửi vẫn chạy trong lúc chưa
+ * migrate.
+ */
+async function fetchGuestRow(slug: string): Promise<GuestRow | null> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return null;
 
-function fromStaticList(slug: string): ResolvedGuest | null {
-  const guest = guests[slug];
-  if (!guest) return null;
-  return { name: guest.name, greeting: guest.greeting ?? DEFAULT_GREETING };
+  const full = await supabase
+    .from("wedding_guests")
+    .select("name, greeting, display_name, pronoun")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!full.error) return full.data;
+
+  console.error("[guests] fetch failed, retrying legacy columns:", full.error.message);
+  const legacy = await supabase
+    .from("wedding_guests")
+    .select("name, greeting")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (legacy.error) console.error("[guests] legacy fetch failed:", legacy.error.message);
+  return legacy.data ?? null;
 }
 
 /**
- * Tên hiển thị + lời chào (đã áp mặc định) cho một slug.
+ * Lời mời cá nhân hoá (đã áp cách xưng hô / mặc định) cho một slug.
  *
  * Ưu tiên đọc từ bảng wedding_guests (admin tự thêm qua /admin/guests, có
  * hiệu lực ngay không cần deploy) — rơi về danh sách mẫu ở trên nếu chưa cấu
  * hình Supabase hoặc slug không có trong bảng. Trả null nếu không tìm thấy ở
  * đâu cả; nơi gọi (app/[guest]/page.tsx) tự fallback về thiệp mặc định.
  */
-export async function getGuest(slug: string): Promise<ResolvedGuest | null> {
+export async function getGuest(slug: string): Promise<GuestInvitation | null> {
   const normalized = slug.toLowerCase();
-  const supabase = await createSupabaseServerClient();
 
-  if (supabase) {
-    const { data, error } = await supabase
-      .from("wedding_guests")
-      .select("name, greeting")
-      .eq("slug", normalized)
-      .maybeSingle();
-
-    if (error) console.error("[guests] fetch failed:", error.message);
-    if (data) return { name: data.name, greeting: data.greeting ?? DEFAULT_GREETING };
+  const row = await fetchGuestRow(normalized);
+  if (row) {
+    return buildGuestInvitation({
+      name: row.name,
+      greeting: row.greeting,
+      displayName: row.display_name,
+      pronoun: row.pronoun,
+    });
   }
 
-  return fromStaticList(normalized);
+  const guest = guests[normalized];
+  return guest ? buildGuestInvitation(guest) : null;
 }

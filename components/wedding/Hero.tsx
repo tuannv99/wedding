@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { wedding } from "@/lib/wedding";
 import { emitOpenInvitation } from "@/lib/events";
 import { useInvitation } from "@/lib/invitation";
+import type { GuestInvitation } from "@/lib/guest-invitation";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 
@@ -35,13 +36,14 @@ const HEADER_H = 73;
 type Phase = null | "closing" | "unfolding";
 
 type HeroProps = {
-  /** Tên khách mời từ URL /[guest] (xem app/[guest]/page.tsx) — bỏ trống ở URL mặc định. */
-  guestName?: string;
-  /** Lời chào trước tên, ví dụ "Gửi bạn yêu" — xem data/guests.ts. */
-  guestGreeting?: string;
+  /**
+   * Lời mời cá nhân hoá từ URL /[guest] (xem app/[guest]/page.tsx và
+   * lib/guest-invitation.ts) — bỏ trống ở URL mặc định.
+   */
+  invitation?: GuestInvitation;
 };
 
-export function Hero({ guestName, guestGreeting }: HeroProps) {
+export function Hero({ invitation }: HeroProps) {
   const reduceMotion = useReducedMotion();
   const { hero } = wedding.images;
   const { open } = useInvitation();
@@ -192,20 +194,18 @@ export function Hero({ guestName, guestGreeting }: HeroProps) {
           {wedding.date.display}
         </motion.p>
 
-        {/* Gửi khách mời cá nhân hoá (URL /[guest]) — chỉ hiện khi có guestName,
+        {/* Gửi khách mời cá nhân hoá (URL /[guest]) — chỉ hiện khi có invitation,
             không đổi gì ở URL mặc định "/". Dùng lại đúng style wd-quote của
             câu tagline bên dưới, không tạo badge/card mới. */}
-        {guestName ? (
+        {invitation ? (
           <motion.p
             {...rise(0.62)}
             className="wd-quote max-w-[34ch] text-[clamp(1rem,2.2vw,1.35rem)] text-ink/85 md:text-ink/60"
           >
             <span className="block">
-              {guestGreeting} <span className="text-ink">{guestName}</span>,
+              {invitation.greeting} <span className="text-ink">{invitation.name}</span>,
             </span>
-            <span className="mt-1 block">
-              Trân trọng mời bạn đến dự lễ cưới của chúng mình..
-            </span>
+            <span className="mt-1 block">{invitation.message}</span>
           </motion.p>
         ) : null}
 

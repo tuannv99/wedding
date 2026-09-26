@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireAdminClient } from "@/app/admin/actions";
 import { describeGuestTableError } from "@/lib/supabase/errors";
 import { slugify } from "@/lib/guest-link";
+import { deriveDisplayName, isGuestPronoun, type GuestPronoun } from "@/lib/guest-invitation";
 
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -13,11 +14,13 @@ function revalidateGuestPaths(slug: string) {
 }
 
 export type CreateGuestInput = {
+  /** Họ tên đầy đủ. */
   name: string;
   /** Tự sinh từ tên bằng slugify() nếu bỏ trống. */
   slug?: string;
-  /** Bỏ trống thì trang tự dùng "Gửi bạn" mặc định. */
-  greeting?: string;
+  /** Tên gọi trên thiệp — bỏ trống thì lấy từ cuối của họ tên. */
+  displayName?: string;
+  pronoun: GuestPronoun;
 };
 
 /**
@@ -36,15 +39,21 @@ function failed(message: string): { ok: false; message: string } {
 
 /**
  * Tạo hoặc cập nhật (upsert theo slug) một khách mời — cho phép admin "tạo
- * lại" cùng một slug để sửa tên/lời chào mà không cần xoá trước.
+ * lại" cùng một slug để sửa tên/xưng hô mà không cần xoá trước (form admin
+ * dùng đúng cách này cho nút "Sửa").
  */
 export async function createGuest({
   name,
   slug,
-  greeting,
+  displayName,
+  pronoun,
 }: CreateGuestInput): Promise<GuestActionResult<{ slug: string }>> {
   const trimmedName = name.trim();
   if (!trimmedName) return failed("Vui lòng nhập tên người nhận.");
+  if (!isGuestPronoun(pronoun)) return failed("Vui lòng chọn cách xưng hô.");
+
+  const finalDisplayName = displayName?.trim() || deriveDisplayName(trimmedName);
+  if (finalDisplayName.length > 60) return failed("Tên hiển thị tối đa 60 ký tự.");
 
   const finalSlug = (slug?.trim() || slugify(trimmedName)).toLowerCase();
   if (!finalSlug) return failed("Không tạo được đường dẫn từ tên này.");
@@ -61,7 +70,14 @@ export async function createGuest({
 
   const { error } = await supabase
     .from("wedding_guests")
-    .upsert({ slug: finalSlug, name: trimmedName, greeting: greeting?.trim() || null });
+    .upsert({
+      slug: finalSlug,
+      name: trimmedName,
+      display_name: finalDisplayName,
+      pronoun,
+      // Lời chào tự do chỉ còn cho link cũ — có pronoun thì lời chào sinh từ đó.
+      greeting: null,
+    });
 
   if (error) {
     console.error("[admin/guests] create failed:", error.code, error.message);
