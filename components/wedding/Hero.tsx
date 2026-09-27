@@ -206,7 +206,7 @@ export function Hero({ invitation }: HeroProps) {
         {invitation ? (
           <motion.p
             {...rise(0.62)}
-            className="wd-quote max-w-[34ch] text-[clamp(1rem,2.2vw,1.35rem)] text-ink/85 md:text-ink/60"
+            className="wd-quote max-w-[34ch] text-[clamp(1rem,2.2vw,1.35rem)] md:text-[clamp(calc(1rem_+_8px),calc(2.2vw_+_8px),calc(1.35rem_+_8px))] text-ink/85 md:text-ink/60"
           >
             <span className="block">
               {invitation.greeting} <span className="text-ink">{invitation.name}</span>,
@@ -251,7 +251,7 @@ export function Hero({ invitation }: HeroProps) {
         {/* Bản design để câu này ở dạng serif nghiêng, không phải nhãn hoa */}
         <motion.p
           {...rise(2.1)}
-          className="wd-quote text-[clamp(1rem,2.2vw,1.35rem)] text-ink/85 md:text-ink/60"
+          className="wd-quote text-[clamp(1rem,2.2vw,1.35rem)] md:text-[clamp(calc(1rem_+_8px),calc(2.2vw_+_8px),calc(1.35rem_+_8px))] text-ink/85 md:text-ink/60"
         >
           {wedding.copy.hero.tagline}!
         </motion.p>
@@ -321,7 +321,7 @@ export function Hero({ invitation }: HeroProps) {
 
           <div className="wd-seal absolute inset-0 flex flex-col items-center justify-center gap-3">
             <Botanical variant="mark" className="h-8 w-[88px] text-sage/85" />
-            <span className="text-[22px] font-light tracking-[0.35em] text-taupe md:text-[26px]">
+            <span className="text-[22px] font-light tracking-[0.35em] text-taupe md:text-[34px]">
               {toTitleCase(wedding.groom.short)} &amp; {toTitleCase(wedding.bride.short)}
             </span>
           </div>

@@ -47,7 +47,7 @@ export function WeddingCalendar() {
         {WEEKDAY_LABELS.map((label) => (
           <span
             key={label}
-            className="wd-fact-label wd-num pb-2 text-center text-[11px] tracking-[0.18em]"
+            className="wd-fact-label wd-num pb-2 text-center text-[11px] md:text-[19px] tracking-[0.18em]"
           >
             {label}
           </span>
@@ -70,7 +70,7 @@ export function WeddingCalendar() {
                   ) : null}
                   <span
                     className={cn(
-                      "wd-num relative z-10 text-[15px] sm:text-base",
+                      "wd-num relative z-10 text-[15px] sm:text-base md:text-[24px]",
                       isHighlighted ? "font-medium text-ink" : "text-ink/70",
                     )}
                   >

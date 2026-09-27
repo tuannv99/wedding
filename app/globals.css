@@ -3,6 +3,40 @@
    Đưa vào layer(components) để utility Tailwind (text-*, mt-*, ...) vẫn ghi đè được. */
 @import "../styles/wedding.css" layer(components);
 
+/* Mọi chữ số 0–9 trên toàn site vẽ bằng Times New Roman, không bao giờ đậm.
+
+   unicode-range chỉ phủ đúng 10 chữ số, nên đặt "WD Digits" đứng đầu mỗi
+   font stack thì chữ vẫn là Cormorant còn số chuyển sang Times — không cần
+   bọc từng con số vào một class riêng.
+
+   font-weight khai báo cả dải 100–900 trỏ về đúng một bản Regular: trình
+   duyệt coi mặt chữ này đã có sẵn mọi độ đậm nên không tự "tô đậm giả"
+   (synthetic bold), kể cả khi số nằm trong <strong> hay class font-semibold.
+   Mặt italic cũng trỏ về bản thường để số trong câu trích nghiêng vẫn đứng.
+
+   Font hệ thống, không tải qua mạng: Windows/macOS/iOS có Times New Roman;
+   Linux thường có Liberation Serif/Tinos (cùng metric); Android không có nên
+   rơi về Noto Serif, không có nữa thì về font kế tiếp trong stack. */
+@font-face {
+  font-family: "WD Digits";
+  src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Times"),
+    local("Liberation Serif"), local("LiberationSerif"), local("Tinos"),
+    local("Noto Serif"), local("NotoSerif");
+  font-weight: 100 900;
+  font-style: normal;
+  unicode-range: U+0030-0039;
+}
+
+@font-face {
+  font-family: "WD Digits";
+  src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Times"),
+    local("Liberation Serif"), local("LiberationSerif"), local("Tinos"),
+    local("Noto Serif"), local("NotoSerif");
+  font-weight: 100 900;
+  font-style: italic;
+  unicode-range: U+0030-0039;
+}
+
 @theme {
   /* ---- Palette (khớp 1:1 với biến --wd-* trong styles/wedding.css) ---- */
   --color-ivory: #f9f7f2;
@@ -14,7 +48,7 @@
   --color-champagne: #d8c5a5;
 
   /* ---- Typography ---- */
-  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-display: "WD Digits", var(--font-cormorant), "Cormorant Garamond", Georgia, "Times New Roman", serif;
   /* Một font cho cả trang — xem ghi chú ở styles/wedding.css. */
   --font-body: var(--font-display);
 }
@@ -47,6 +81,14 @@
     -moz-osx-font-smoothing: grayscale;
     /* clip (không dùng hidden) để chặn overflow ngang mà không phá position: sticky */
     overflow-x: clip;
+  }
+
+  /* PC: chữ không đặt cỡ riêng cũng lớn hơn mobile 8px (16 → 24px), đồng bộ
+     với khối @media cuối styles/wedding.css. */
+  @media (min-width: 768px) {
+    body {
+      font-size: 24px;
+    }
   }
 
   /* Chừa chỗ cho navigation sticky khi cuộn tới anchor.

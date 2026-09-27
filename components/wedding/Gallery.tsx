@@ -85,7 +85,9 @@ export function Gallery() {
                     src={image.src}
                     alt={image.alt}
                     fill
-                    loading="lazy"
+                    /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+
+                    loading="eager"
                     sizes={GALLERY_SIZES}
                     className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.035]"
                   />
@@ -108,7 +110,7 @@ export function Gallery() {
         <Reveal delay={0.08} className="mt-14 flex justify-center">
           <Link
             href="/album"
-            className="wd-btn-ghost gap-3 px-7 text-[11px] tracking-[0.12em] sm:px-10 sm:text-[13px] sm:tracking-[0.2em]"
+            className="wd-btn-ghost gap-3 px-7 text-[11px] tracking-[0.12em] sm:px-10 sm:text-[13px] md:text-[21px] sm:tracking-[0.2em]"
           >
             {wedding.copy.gallery.moreLabel}
             <Heart

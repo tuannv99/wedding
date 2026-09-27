@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Cormorant_Garamond } from "next/font/google";
 import { wedding } from "@/lib/wedding";
 import { InvitationProvider } from "@/lib/invitation";
 import { MusicProvider } from "@/lib/music";
@@ -11,14 +11,6 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
-  display: "swap",
-});
-
-/** Chỉ dùng cho các con số (.wd-numeral): ngày cưới, giờ lễ, đếm ngược. */
-const dmSans = DM_Sans({
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500"],
-  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -65,7 +57,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${cormorant.variable} ${dmSans.variable}`}
+      className={cormorant.variable}
     >
       <body>
         <InvitationProvider>

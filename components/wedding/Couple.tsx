@@ -43,7 +43,7 @@ export function Couple() {
                 aria-hidden="true"
                 className="h-px flex-1 bg-champagne/45 md:h-[clamp(40px,7vh,72px)] md:w-px md:flex-none"
               />
-              <span className="font-display text-[clamp(1.75rem,3vw,2.75rem)] leading-none text-champagne italic">
+              <span className="font-display text-[clamp(1.75rem,3vw,2.75rem)] md:text-[clamp(calc(1.75rem_+_8px),calc(3vw_+_8px),calc(2.75rem_+_8px))] leading-none text-champagne italic">
                 &amp;
               </span>
               <span
@@ -86,7 +86,7 @@ function PersonColumn({ label, name, portrait }: PersonColumnProps) {
         />
         <figcaption className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 bg-gradient-to-t from-ivory/94 via-ivory/72 to-ivory/0 px-4 pt-14 pb-[22px]">
           <span aria-hidden="true" className="h-px w-[34px] bg-champagne/90" />
-          <span className="font-display text-[clamp(1.75rem,3.6vw,2.5rem)] font-light tracking-[0.06em] text-ink">
+          <span className="font-display text-[clamp(1.75rem,3.6vw,2.5rem)] md:text-[clamp(calc(1.75rem_+_8px),calc(3.6vw_+_8px),calc(2.5rem_+_8px))] font-light tracking-[0.06em] text-ink">
             {name}
           </span>
         </figcaption>

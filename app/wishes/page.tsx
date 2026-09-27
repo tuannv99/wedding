@@ -97,7 +97,7 @@ export default async function WishesPage({
             ~180-240px mobile trước khi vào grid. */}
         <div className="mx-auto flex max-w-[700px] flex-col items-center text-center">
           <BotanicalRule lineClassName="w-8 sm:w-12" />
-          <h1 className="wd-h1 mt-4 text-[clamp(26px,4.5vw,44px)] tracking-[0.16em] uppercase md:mt-5">
+          <h1 className="wd-h1 mt-4 text-[clamp(26px,4.5vw,44px)] md:text-[clamp(34px,calc(4.5vw_+_8px),52px)] tracking-[0.16em] uppercase md:mt-5">
             Những lời yêu thương
           </h1>
           <p className="wd-body-sm mx-auto mt-3 max-w-[420px]">

@@ -21,16 +21,16 @@
   --wd-line: rgba(169, 159, 149, 0.22);
   --wd-line-strong: rgba(169, 159, 149, 0.5);
 
-  --wd-font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --wd-font-display: "WD Digits", var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   /* Toàn site dùng MỘT font chữ. --wd-font-body được giữ lại như một "khe"
      riêng cho chữ nhỏ/giao diện nhưng hiện trỏ thẳng về font display — muốn
      tách lại thành hai font thì chỉ sửa đúng dòng này, không phải đi sửa
-     từng class. Chữ số vẫn dùng --wd-font-numeral (DM Sans) như cũ. */
+     từng class. Chữ số thì luôn là Times New Roman qua "WD Digits" (globals.css). */
   --wd-font-body: var(--wd-font-display);
-  --wd-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  /* Chỉ dùng cho số (.wd-numeral) — toàn chữ số/dấu ":" nên không cần subset
-     vietnamese như phần chữ có dấu. */
-  --wd-font-numeral: var(--font-dm-sans), "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --wd-font-mono: "WD Digits", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Cho các đoạn text thuần số (.wd-numeral, .wd-num): cả dấu ":" / "." đi
+     kèm cũng là Times, không chỉ riêng chữ số. */
+  --wd-font-numeral: "WD Digits", "Times New Roman", Times, "Liberation Serif", serif;
 }
 
 /* ---------- Text styles ---------- */
@@ -176,7 +176,7 @@
   color: var(--wd-brown-soft);
 }
 
-/* Chỉ đổi MẶT CHỮ sang DM Sans cho những đoạn text thuần số (ngày, giờ, số
+/* Chỉ đổi MẶT CHỮ sang Times New Roman cho những đoạn text thuần số (ngày, giờ, số
    thứ tự…). Cố ý không đặt cỡ chữ / màu / giãn chữ: mọi thứ đó vẫn kế thừa
    từ class gốc (wd-eyebrow, wd-label, wd-fact-value…), nên chỉ cần thêm
    class này vào cạnh class gốc là đủ.
@@ -184,6 +184,28 @@
    sau mới thắng. */
 .wd-num {
   font-family: var(--wd-font-numeral);
+}
+
+/* Chữ số nằm lẫn trong đoạn kể chuyện (Chuyện chúng mình, ví dụ "2023"):
+   Times New Roman — font hệ thống (Windows/macOS/iOS có sẵn), không tải qua
+   next/font. Android không có Times New Roman nên rơi về serif mặc định của
+   máy.
+
+   Chữ xung quanh là Cormorant Light (300) còn Times chỉ có nét Regular, và
+   chữ số Times cao gần bằng chữ hoa — để nguyên cỡ thì "2023" trông như in
+   đậm và to hơn chữ. Thu về 0.8em cho đầu số ngang tầm chữ thường cao của
+   Cormorant. Màu giữ nguyên như chữ xung quanh (không làm nhạt).
+
+   Times không có bản Light, nên nét được làm mảnh bằng một đường viền cùng
+   màu nền ivory: viền nằm giữa mép nét chữ, nửa trong của nó "gọt" bớt mỗi
+   bên nét một chút. Để mỏng rất nhẹ (0.01em): dày hơn là số bị nhạt. Chỉ
+   dùng được vì khối Chuyện chúng mình luôn nằm trên nền ivory phẳng. */
+.wd-num-story {
+  font-family: var(--wd-font-numeral);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.8em;
+  -webkit-text-stroke: 0.01em var(--wd-ivory);
 }
 
 /* Gạch ngăn champagne */
@@ -513,4 +535,50 @@
 */
 .wd-anchor {
   scroll-margin-top: clamp(88px, 13vh, 132px);
+}
+
+/* ---------- PC: toàn bộ chữ lớn hơn bản mobile đúng 8px ----------
+   Mobile giữ nguyên cỡ gốc; từ md (≥768px) mỗi cỡ chữ được cộng thêm 8px
+   (với clamp thì cộng vào cả sàn, giá trị giữa và trần). Những chỗ đặt cỡ
+   bằng utility Tailwind trong component thì có md:text-[…] tương ứng ngay
+   cạnh — nhớ cộng cả hai nơi nếu sau này đổi thang chữ. */
+@media (min-width: 768px) {
+  .wd-display { font-size: clamp(64px, calc(min(14vw, 15svh) + 8px), 148px); }
+  .wd-h1 { font-size: clamp(44px, calc(5vw + 8px), 68px); }
+  .wd-numeral { font-size: clamp(70px, calc(13vw + 8px), 140px); }
+  .wd-quote { font-size: clamp(28px, calc(2.4vw + 8px), 36px); }
+  .wd-body-serif { font-size: clamp(30px, calc(2.5vw + 8px), 40px); }
+  .wd-eyebrow { font-size: 21px; }
+  .wd-label { font-size: 24px; }
+  .wd-body-sm { font-size: 24px; }
+  .wd-mono { font-size: 18px; }
+  .wd-fact-label { font-size: 21px; }
+  .wd-fact-value { font-size: 24px; }
+  .wd-field-label { font-size: 20px; }
+  .wd-input,
+  .wd-textarea { font-size: 26px; }
+  .wd-rsvp-option { font-size: 24px; }
+  .wd-stepper-btn,
+  .wd-stepper-value { font-size: 28px; }
+  .wd-cta { font-size: 22px; }
+  .wd-btn-ghost { font-size: 21px; }
+}
+
+/* ---------- Our Story: giữ nguyên chỗ xuống dòng khi chữ lớn lên trên PC ----------
+   Từ md chữ đoạn kể chuyện là 1.3rem + 8px (28.8px) thay cho 1.3rem (20.8px),
+   gấp 28.8 / 20.8 ≈ 1.3846 lần. Cột chữ cũ rộng
+     min(380px, (bề ngang khung − 56px gap) / 2.15)   (khung max 896px)
+   trừ 21px cho đường kẻ + gap. Nhân phần chữ với đúng tỉ lệ đó thì mỗi dòng
+   ôm đúng những chữ như trước, nên xuống hàng y hệt bản chưa phóng chữ.
+   Khung được nới lên 1000px để có chỗ cho cột chữ rộng hơn; 100cqw đo theo
+   .wd-story (container). Đổi cỡ chữ ở OurStory.tsx thì phải đổi 1.3846. */
+@media (min-width: 768px) {
+  .wd-story {
+    container-type: inline-size;
+  }
+  .wd-story-row {
+    --wd-story-col: calc(
+      (min(380px, (min(100cqw, 896px) - 56px) / 2.15) - 21px) * 1.3846 + 21px
+    );
+  }
 }

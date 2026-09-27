@@ -23,7 +23,9 @@ export function Closing() {
           src={closing.src}
           alt={closing.alt}
           fill
-          loading="lazy"
+          /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+
+          loading="eager"
           sizes="100vw"
           className="object-cover object-center"
         />
@@ -52,7 +54,9 @@ export function Closing() {
             src={closing.src}
             alt={closing.alt}
             fill
-            loading="lazy"
+            /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+
+            loading="eager"
             sizes="100vw"
             className="object-cover object-center"
           />
@@ -93,7 +97,7 @@ export function Closing() {
         </Reveal>
 
         <Reveal delay={0.16}>
-          <p className="wd-display mt-12 text-[clamp(2.5rem,11vw,5.5rem)] uppercase md:mt-16">
+          <p className="wd-display mt-12 text-[clamp(2.5rem,11vw,5.5rem)] md:text-[clamp(calc(2.5rem_+_8px),calc(11vw_+_8px),calc(5.5rem_+_8px))] uppercase md:mt-16">
             {wedding.groom.short}
             <span className="mx-3 text-champagne italic lowercase">&amp;</span>
             {wedding.bride.short}

@@ -11,14 +11,14 @@ export function WishCard({ wish, index }: { wish: Wish; index: number }) {
       className="wd-wish-card flex flex-col rounded-[3px] border border-taupe/20 bg-warm p-6 md:p-7"
       style={{ animationDelay: `${Math.min(index, 8) * 30}ms` }}
     >
-      <span aria-hidden="true" className="text-sm text-champagne">
+      <span aria-hidden="true" className="text-sm text-champagne md:text-[22px]">
         ♡
       </span>
-      <p className="wd-body-serif mt-3 flex-1 text-[15px] leading-[1.7] whitespace-pre-line sm:text-base">
+      <p className="wd-body-serif mt-3 flex-1 text-[15px] leading-[1.7] whitespace-pre-line sm:text-base md:text-[24px]">
         {wish.message}
       </p>
       <span aria-hidden="true" className="mt-5 h-px w-full bg-taupe/20" />
-      <span className="wd-label mt-4 truncate text-center text-[12px] text-ink/70">
+      <span className="wd-label mt-4 truncate text-center text-[12px] text-ink/70 md:text-[20px]">
         {wish.name}
       </span>
     </li>

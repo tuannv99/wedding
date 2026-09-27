@@ -97,7 +97,7 @@ export function Countdown() {
             >
               {UNITS.map(({ key, label }) => (
                 <div key={key} className="flex min-w-0 flex-col items-center gap-3">
-                  <span className="wd-numeral whitespace-nowrap text-[clamp(2.25rem,10vw,6.25rem)] tracking-[0.04em] tabular-nums sm:text-[clamp(3.25rem,12vw,6.25rem)]">
+                  <span className="wd-numeral whitespace-nowrap text-[clamp(2.25rem,10vw,6.25rem)] tracking-[0.04em] tabular-nums sm:text-[clamp(3.25rem,12vw,6.25rem)] md:text-[clamp(calc(3.25rem_+_8px),calc(12vw_+_8px),calc(6.25rem_+_8px))]">
                     {remaining
                       ? String(remaining[key]).padStart(2, "0")
                       : "--"}

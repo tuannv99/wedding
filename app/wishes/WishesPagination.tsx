@@ -22,7 +22,7 @@ export function WishesPagination({ currentPage, totalPages }: Props) {
 
   const tokens = buildPageTokens(currentPage, totalPages);
   const arrowClass =
-    "flex h-11 w-6 items-center justify-center text-[13px] transition-colors duration-300";
+    "flex h-11 w-6 items-center justify-center text-[13px] md:text-[21px] transition-colors duration-300";
 
   return (
     <nav

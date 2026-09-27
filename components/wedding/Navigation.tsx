@@ -316,7 +316,7 @@ export function Navigation() {
             </ul>
 
             <hr className="wd-rule" />
-            <p className="wd-eyebrow wd-num">{wedding.date.display}</p>
+            <p className="wd-eyebrow wd-num md:text-[13px]">{wedding.date.display}</p>
           </motion.div>
         ) : null}
       </AnimatePresence>

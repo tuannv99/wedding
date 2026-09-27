@@ -92,7 +92,7 @@ export function Frame({
 
       {/* Dấu thứ tự rất nhỏ dưới mép trái — đủ để đối chiếu với ô thumbnail
           vừa bấm, không đủ to để thành một lưới đánh số kiểu trang quản lý. */}
-      <span className="wd-eyebrow wd-num mt-3 block text-[10px] tracking-[0.28em] text-taupe/70">
+      <span className="wd-eyebrow wd-num mt-3 block text-[10px] md:text-[18px] tracking-[0.28em] text-taupe/70">
         {String(n).padStart(2, "0")}
       </span>
     </div>

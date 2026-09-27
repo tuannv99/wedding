@@ -18,15 +18,15 @@ import { buildGoogleCalendarUrl } from "@/lib/calendar";
  */
 const PARTY_BTN =
   "wd-btn-ghost min-h-11 shrink gap-1.5 px-2.5 text-[10px] tracking-[0.06em] whitespace-nowrap " +
-  "sm:gap-2 sm:px-5 sm:text-[12px] sm:tracking-[0.16em] md:px-7 md:text-[13px] md:tracking-[0.2em]";
+  "sm:gap-2 sm:px-5 sm:text-[12px] sm:tracking-[0.16em] md:px-7 md:text-[21px] md:tracking-[0.2em]";
 
 export function WeddingDetails() {
   const { date, reception, venues, groom, bride, copy } = wedding;
 
   /** Ghép mỗi địa điểm với đúng SĐT liên hệ của bên đó (nhà trai ↔ chú rể, nhà gái ↔ cô dâu). */
   const parties = [
-    { place: venues.groom, phone: groom.phone },
     { place: venues.bride, phone: bride.phone },
+    { place: venues.groom, phone: groom.phone },
   ];
 
   return (
@@ -101,7 +101,7 @@ export function WeddingDetails() {
           */}
           <div className="mt-12 flex w-full flex-col gap-14 md:mt-16 md:gap-24">
             {parties.map(({ place, phone }, index) => {
-              // Nhà gái (khối thứ hai) đảo ảnh sang trái cho bố cục so le.
+              // Khối thứ hai (nhà trai) đảo ảnh sang trái cho bố cục so le.
               const photoFirst = index === 1;
 
               return (
@@ -126,7 +126,7 @@ export function WeddingDetails() {
                       photoFirst ? "order-2" : "order-1",
                     )}
                   >
-                    <h4 className="wd-label text-[13px] tracking-[0.18em] text-ink uppercase sm:text-[15px] sm:tracking-[0.26em] md:text-[17px]">
+                    <h4 className="wd-label text-[13px] tracking-[0.18em] text-ink uppercase sm:text-[15px] sm:tracking-[0.26em] md:text-[25px]">
                       {copy.details.partyLabel} {place.label}
                     </h4>
                     <span
@@ -134,7 +134,7 @@ export function WeddingDetails() {
                       className="mt-3 block h-px w-[34px] bg-champagne/70"
                     />
 
-                    <p className="wd-body-sm mt-5 text-[13px] sm:text-[15px] md:mt-6">
+                    <p className="wd-body-sm mt-5 text-[13px] sm:text-[15px] md:mt-6 md:text-[23px]">
                       {copy.details.atLabel}{" "}
                       <span className="wd-num">
                         {"time" in place ? place.time : reception.time}
@@ -146,26 +146,26 @@ export function WeddingDetails() {
                         ngày/tháng luôn nằm đúng trục giữa, thẳng với tiêu đề
                         "Tiệc nhà …" dù khối thứ và khối năm rộng khác nhau. */}
                     <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 sm:mt-4 sm:gap-3">
-                      <span className="flex flex-col items-center gap-[3px] justify-self-end border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe uppercase sm:gap-1 sm:px-1 sm:py-1.5 sm:text-[11px] sm:tracking-[0.1em]">
+                      <span className="flex flex-col items-center gap-[3px] justify-self-end border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe uppercase sm:gap-1 sm:px-1 sm:py-1.5 sm:text-[11px] md:text-[19px] sm:tracking-[0.1em]">
                         {("weekday" in place ? place.weekday : date.weekday)
                           .split(" ")
                           .map((word) => (
                             <span key={word}>{word}</span>
                           ))}
                       </span>
-                      <span className="wd-num text-[clamp(1.35rem,5.5vw,2.5rem)] leading-none tracking-[0.02em] text-ink">
+                      <span className="wd-num text-[clamp(1.35rem,5.5vw,2.5rem)] md:text-[clamp(calc(1.35rem_+_8px),calc(5.5vw_+_8px),calc(2.5rem_+_8px))] leading-none tracking-[0.02em] text-ink">
                         {"day" in place ? place.day : date.day}/
                         {"month" in place ? place.month : date.month}
                       </span>
-                      <span className="wd-num justify-self-start border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe sm:px-1 sm:py-1.5 sm:text-[11px] sm:tracking-[0.1em]">
+                      <span className="wd-num justify-self-start border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe sm:px-1 sm:py-1.5 sm:text-[11px] md:text-[19px] sm:tracking-[0.1em]">
                         {date.year}
                       </span>
                     </div>
 
-                    <p className="wd-fact-label mt-5 text-[10px] tracking-[0.18em] sm:text-[12px] sm:tracking-[0.24em] md:mt-7">
+                    <p className="wd-fact-label mt-5 text-[10px] tracking-[0.18em] sm:text-[12px] sm:tracking-[0.24em] md:text-[20px] md:mt-7">
                       {copy.details.atHome} {place.label}
                     </p>
-                    <p className="wd-body-sm mt-2 max-w-[34ch] text-[12px] whitespace-pre-line text-balance sm:mt-3 sm:text-[15px]">
+                    <p className="wd-body-sm mt-2 max-w-[34ch] text-[12px] whitespace-pre-line text-balance sm:mt-3 sm:text-[15px] md:text-[23px]">
                       {place.address}
                     </p>
 
@@ -205,7 +205,9 @@ export function WeddingDetails() {
                         src={place.photo.src}
                         alt={place.photo.alt}
                         fill
-                        loading="lazy"
+                        /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+
+                        loading="eager"
                         sizes="(max-width: 767px) 40vw, 46vw"
                         className="object-cover"
                       />

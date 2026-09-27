@@ -34,7 +34,7 @@ export function Timeline() {
         <SectionHeading
           label={wedding.copy.timeline.eyebrow}
           title={wedding.copy.timeline.title}
-          titleClassName="text-[clamp(40px,5.6vw,68px)]"
+          titleClassName="text-[clamp(40px,5.6vw,68px)] md:text-[clamp(48px,calc(5.6vw_+_8px),76px)]"
         />
 
         <Reveal delay={0.1} className="mt-14 flex flex-col items-center md:mt-16">
@@ -58,7 +58,7 @@ export function Timeline() {
                   aria-controls={`timeline-panel-${item.id}`}
                   onClick={() => setActiveId(item.id)}
                   className={cn(
-                    "wd-nav-link relative pb-2.5 text-[13px] tracking-[0.24em] transition-colors duration-300 sm:text-[14px]",
+                    "wd-nav-link relative pb-2.5 text-[13px] tracking-[0.24em] transition-colors duration-300 sm:text-[14px] md:text-[22px]",
                     isActive ? "text-ink" : "text-ink/50",
                   )}
                 >
@@ -106,7 +106,7 @@ export function Timeline() {
                     >
                       <span
                         className={cn(
-                          "wd-label wd-num pt-1 text-right text-[13px] text-ink/70 sm:text-sm",
+                          "wd-label wd-num pt-1 text-right text-[13px] text-ink/70 sm:text-sm md:text-[22px]",
                           isLast ? "pb-0" : "pb-5 sm:pb-6",
                         )}
                       >
@@ -124,7 +124,7 @@ export function Timeline() {
 
                       <span
                         className={cn(
-                          "wd-body-serif -mt-0.5 text-[clamp(1.05rem,3.4vw,1.375rem)] leading-snug",
+                          "wd-body-serif -mt-0.5 text-[clamp(1.05rem,3.4vw,1.375rem)] md:text-[clamp(calc(1.05rem_+_8px),calc(3.4vw_+_8px),calc(1.375rem_+_8px))] leading-snug",
                           isLast ? "pb-0" : "pb-5 sm:pb-6",
                         )}
                       >

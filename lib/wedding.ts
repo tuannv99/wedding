@@ -177,9 +177,18 @@ export const wedding = {
 
   /**
    * Chương trình nghi lễ — Timeline.tsx hiển thị dạng tab, mặc định chọn mục
-   * đầu tiên. Hiện chỉ còn Lễ Thành Hôn.
+   * đầu tiên (Lễ Vu Quy).
    */
   timeline: [
+    {
+      id: "vu-quy",
+      label: "Lễ Vu Quy",
+      venue: "Tại Tư Gia Nhà Gái",
+      items: [
+        { time: "06:30", title: "Đón khách" },
+        { time: "07:00", title: "Lễ Vu Quy" },
+      ],
+    },
     {
       id: "thanh-hon",
       label: "Lễ Thành Hôn",
@@ -457,7 +466,7 @@ export const wedding = {
   },
 
   site: {
-    url: "https://tuanhoa-wedding-invatation.vercel.app",
+    url: "https://tuanhoa-wedding-invitation.vercel.app",
     title: "Tuấn & Hoa · 25.10.2026",
     description:
       "Văn Tuấn & Mai Hoa — chúng mình sẽ kết hôn ngày 25 tháng 10 năm 2026. Rất mong được đón bạn trong ngày hạnh phúc.",

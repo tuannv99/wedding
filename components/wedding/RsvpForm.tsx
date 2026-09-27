@@ -118,8 +118,7 @@ export default function RsvpForm({
         }}
       >
         <p
-          className="wd-h1"
-          style={{ fontStyle: "italic", fontSize: "clamp(38px, 6vw, 68px)" }}
+          className="wd-h1 text-[clamp(38px,6vw,68px)] italic md:text-[clamp(46px,calc(6vw_+_8px),76px)]"
         >
           {successTitle}
         </p>
@@ -128,11 +127,7 @@ export default function RsvpForm({
             mobile — text-balance để trình duyệt tự chọn điểm ngắt đẹp thay
             vì ngắt cứng theo \n. */}
         <p
-          className="wd-body-serif mx-auto max-w-[260px] text-balance sm:max-w-none sm:text-wrap sm:whitespace-nowrap"
-          style={{
-            fontSize: "clamp(19px, 2.1vw, 26px)",
-            lineHeight: 1.7,
-          }}
+          className="wd-body-serif mx-auto max-w-[260px] text-balance sm:max-w-none sm:text-wrap sm:whitespace-nowrap text-[clamp(19px,2.1vw,26px)] leading-[1.7] md:text-[clamp(27px,calc(2.1vw_+_8px),34px)]"
         >
           {successBody}
         </p>

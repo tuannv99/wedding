@@ -6,11 +6,11 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { cn } from "@/lib/utils";
 
-/** Bọc các cụm chữ số (ví dụ "2023") trong .wd-num — số dùng DM Sans như cả site. */
+/** Bọc các cụm chữ số (ví dụ "2023") trong .wd-num-story — số dùng Times New Roman. */
 function withNumerals(text: string) {
   return text.split(/(\d+)/).map((part, i) =>
     i % 2 === 1 ? (
-      <span key={i} className="wd-num">
+      <span key={i} className="wd-num-story">
         {part}
       </span>
     ) : (
@@ -42,7 +42,7 @@ export function OurStory() {
         className="top-[16%] -right-[3vw] hidden h-[62vh] w-[24vh] lg:block"
       />
 
-      <div className="mx-auto w-full max-w-4xl">
+      <div className="wd-story mx-auto w-full max-w-4xl md:max-w-[1000px]">
         {/* Căn giữa ở mobile, dồn về trái từ md — nên không dùng align="left"
             mà ghi đè bằng biến thể md: trên chính wrapper của SectionHeading. */}
         <SectionHeading
@@ -64,12 +64,22 @@ export function OurStory() {
                 <Reveal delay={0.1} y={20}>
                   {/* Chữ và ảnh luôn nằm CÙNG MỘT HÀNG, kể cả mobile; thứ tự
                       trái/phải đảo so le theo mốc ở mọi bề rộng màn hình. */}
-                  <div className="grid grid-cols-[1fr_1.15fr] items-center gap-5 sm:gap-8 md:gap-14">
+                  {/* Từ md cột chữ rộng theo đúng tỉ lệ cỡ chữ PC / cỡ gốc
+                      (xem .wd-story-row trong wedding.css) để các dòng vẫn
+                      xuống hàng y như trước khi phóng chữ. */}
+                  <div
+                    className={cn(
+                      "wd-story-row grid grid-cols-[1fr_1.15fr] items-center gap-5 sm:gap-8 md:gap-14",
+                      photoFirst
+                        ? "md:grid-cols-[minmax(0,1fr)_var(--wd-story-col)]"
+                        : "md:grid-cols-[var(--wd-story-col)_minmax(0,1fr)]",
+                    )}
+                  >
                     {/* Số thứ tự + đường kẻ + chữ.
                         Ở desktop kéo khối chữ về sát ảnh cho cặp trái/phải cân nhau. */}
                     <div
                       className={cn(
-                        "min-w-0 md:max-w-[380px]",
+                        "min-w-0",
                         photoFirst
                           ? "order-2 md:justify-self-start"
                           : "order-1 md:justify-self-end",
@@ -78,7 +88,7 @@ export function OurStory() {
                       {/* Dùng đúng wd-body-serif (font-weight 300, không kéo
                           letter-spacing) như đoạn text bên cạnh — chỉ phóng
                           cỡ chữ lớn hơn để vẫn đọc ra là số thứ tự. */}
-                      <span className="wd-body-serif wd-num block text-[clamp(1.5rem,6.5vw,2.25rem)] leading-none">
+                      <span className="wd-body-serif wd-num block text-[clamp(1.5rem,6.5vw,2.25rem)] md:text-[clamp(calc(1.5rem_+_8px),calc(6.5vw_+_8px),calc(2.25rem_+_8px))] leading-none">
                         {String(index + 1).padStart(2, "0")}
                       </span>
 
@@ -93,7 +103,7 @@ export function OurStory() {
                         {/* Mỗi mốc giờ là 2–3 đoạn ngắn nên cỡ chữ nhỏ hơn
                             bản một câu cũ. Mobile bỏ qua \n (cột chữ chỉ ~½
                             màn hình, ngắt cứng + tự xuống dòng sẽ rất vụn). */}
-                        <div className="wd-body-serif flex flex-col gap-3 text-[clamp(0.875rem,3.6vw,1.3rem)] leading-[1.55] sm:gap-4 sm:leading-[1.65]">
+                        <div className="wd-body-serif flex flex-col gap-3 text-[clamp(0.875rem,3.6vw,1.3rem)] md:text-[clamp(calc(0.875rem_+_8px),calc(3.6vw_+_8px),calc(1.3rem_+_8px))] leading-[1.55] sm:gap-4 sm:leading-[1.65]">
                           {step.text.split("\n\n").map((paragraph) => (
                             <p key={paragraph} className="sm:whitespace-pre-line">
                               {withNumerals(paragraph)}
@@ -122,7 +132,9 @@ export function OurStory() {
                           src={step.image.src}
                           alt={step.image.alt}
                           fill
-                          loading="lazy"
+                          /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+
+                          loading="eager"
                           sizes="(max-width: 768px) 50vw, 400px"
                           className="object-cover"
                         />

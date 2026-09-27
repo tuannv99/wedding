@@ -51,7 +51,8 @@ function QrBlock({ account }: { account: BankAccount }) {
         // Label dài hơn các nút wd-btn-ghost khác — tracking hẹp hơn một
         // chút để vừa 1 dòng; modal đã được nới rộng (xem max-w ở dưới) để
         // mỗi cột đủ chỗ thay vì phải rút ngắn chữ.
-        className="tracking-[0.15em]"
+        // Từ md chữ nút lớn lên 21px (~400px cả padding) nên khoá hẳn 1 dòng.
+        className="tracking-[0.15em] md:whitespace-nowrap"
       />
     </div>
   );
@@ -138,7 +139,7 @@ export function GiftCTA() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.97, y: reduceMotion ? 0 : 8 }}
                     transition={{ duration: 0.4, ease: EASE_OUT }}
-                    className="relative max-h-[95svh] w-full max-w-[560px] overflow-y-auto bg-ivory px-6 py-12 sm:max-w-[780px] sm:px-10 sm:py-6"
+                    className="relative max-h-[95svh] w-full max-w-[560px] overflow-y-auto bg-ivory px-6 py-12 sm:max-w-[780px] sm:px-10 sm:py-6 lg:max-w-[1000px]"
                   >
                     <button
                       ref={closeRef}
@@ -154,7 +155,7 @@ export function GiftCTA() {
                       <Botanical variant="mark" className="h-5 w-14 text-sage/75" />
                       <h2
                         id="gift-modal-title"
-                        className="wd-h1 mt-6 text-[clamp(28px,4vw,36px)] tracking-[0.1em] uppercase"
+                        className="wd-h1 mt-6 text-[clamp(28px,4vw,36px)] md:text-[clamp(36px,calc(4vw_+_8px),44px)] tracking-[0.1em] uppercase"
                       >
                         Mừng cưới
                       </h2>
@@ -167,9 +168,12 @@ export function GiftCTA() {
                       </p>
                     </div>
 
-                    <div className="mt-12 flex flex-col items-center gap-12 sm:mt-6 sm:flex-row sm:items-start sm:justify-center sm:gap-12">
+                    {/* md→lg (768–1023px) chưa đủ chỗ cho 2 cột ~400px (nút
+                        "Sao chép số tài khoản" ở cỡ chữ PC) nên xếp dọc; từ lg
+                        mới lại 2 cột. */}
+                    <div className="mt-12 flex flex-col items-center gap-12 sm:mt-6 sm:flex-row sm:items-start sm:justify-center sm:gap-12 md:flex-col md:items-center lg:flex-row lg:items-start">
                       <QrBlock account={weddingBankAccounts.groom} />
-                      <div aria-hidden="true" className="h-px w-16 bg-taupe/25 sm:h-auto sm:w-px sm:self-stretch" />
+                      <div aria-hidden="true" className="h-px w-16 bg-taupe/25 sm:h-auto sm:w-px sm:self-stretch md:h-px md:w-16 md:self-auto lg:h-auto lg:w-px lg:self-stretch" />
                       <QrBlock account={weddingBankAccounts.bride} />
                     </div>
                   </motion.div>
