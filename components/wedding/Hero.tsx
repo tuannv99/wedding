@@ -84,12 +84,9 @@ export function Hero({ invitation }: HeroProps) {
     // trước là bị chặn (Android thì dễ dãi hơn nên vẫn phát).
     if (wedding.music.startOnOpen) emitOpenInvitation();
 
-    if (reduceMotion) {
-      open();
-      scrollToCeremony();
-      return;
-    }
-
+    // Hiệu ứng mở thiệp chạy cho MỌI khách, kể cả máy bật "Giảm chuyển động"
+    // (prefers-reduced-motion) — chủ nhà muốn ai mở thiệp cũng thấy khoảnh
+    // khắc này. CSS tương ứng được gỡ khỏi override reduced-motion trong globals.css.
     setPhase("closing");
 
     // Mount phần thiệp + cuộn tới #couple lúc hai cánh vừa khép kín, SAU lưng

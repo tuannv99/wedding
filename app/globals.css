@@ -86,7 +86,12 @@
       scroll-behavior: auto;
     }
 
-    *,
+    /* Trừ hiệu ứng "Mở thiệp" (cánh + con dấu ở Hero.tsx, khối nổi lên ở
+       AfterOpen.tsx): chủ nhà muốn mọi khách đều thấy, kể cả máy bật Giảm
+       chuyển động. Phải loại trừ ngay tại đây chứ không override được ở
+       wedding.css — với !important, layer khai báo trước (base) luôn thắng
+       layer components bất kể độ đặc hiệu. */
+    *:not(.wd-leaf, .wd-seal, .wd-rise > *),
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
