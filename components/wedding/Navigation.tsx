@@ -85,7 +85,8 @@ export function Navigation() {
   const pathname = usePathname();
   const isHome = !NON_HOME_ROUTES.some((route) => pathname.startsWith(route));
 
-  // Khoá scroll + đóng bằng Escape khi menu mobile mở
+  // Khoá scroll + đóng bằng Escape khi menu mobile mở. Trên iPhone khoá này
+  // không đổi overflow của <html> (nguồn gây nháy) — xem lib/scroll-lock.ts.
   useScrollLock(open);
 
   useEffect(() => {
@@ -272,7 +273,7 @@ export function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-10 bg-ivory px-6 xl:hidden"
+            className="fixed inset-0 z-40 flex touch-none flex-col items-center justify-center gap-10 overscroll-none bg-ivory px-6 xl:hidden"
           >
             <ul className="flex flex-col items-center gap-8">
               {wedding.nav.map((item, index) => (

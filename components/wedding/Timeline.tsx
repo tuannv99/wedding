@@ -78,64 +78,71 @@ export function Timeline() {
 
           {/* Nội dung đổi theo tab — fade + dịch nhẹ (~0.28s), không dùng
               vertical timeline dài như bản cũ để mỗi nghi lễ gọn trên một
-              màn hình, kể cả mobile. */}
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={schedule.id}
-              role="tabpanel"
-              id={`timeline-panel-${schedule.id}`}
-              aria-labelledby={`timeline-tab-${schedule.id}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.28, ease: EASE_OUT }}
-              className="mt-9 flex w-full flex-col items-center sm:mt-10"
-            >
-              <span className="wd-label tracking-[0.3em] text-taupe">
-                {schedule.venue}
-              </span>
+              màn hình, kể cả mobile.
 
-              <ol className="mt-8 w-full max-w-sm sm:mt-9">
-                {schedule.items.map((entry, index) => {
-                  const isLast = index === schedule.items.length - 1;
+              Mờ CHỒNG (hai panel cùng nằm một ô grid), không dùng
+              mode="wait": wait gỡ panel cũ ra rồi mới dựng panel mới, ở
+              khoảng giữa khối này cao 0px — mọi thứ bên dưới giật lên rồi
+              rơi lại chỗ cũ, trên điện thoại nhìn ra một cái nháy. */}
+          <div className="grid w-full">
+            <AnimatePresence initial={false}>
+              <motion.div
+                key={schedule.id}
+                role="tabpanel"
+                id={`timeline-panel-${schedule.id}`}
+                aria-labelledby={`timeline-tab-${schedule.id}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.28, ease: EASE_OUT }}
+                className="mt-9 flex w-full flex-col items-center [grid-area:1/1] sm:mt-10"
+              >
+                <span className="wd-label tracking-[0.3em] text-taupe">
+                  {schedule.venue}
+                </span>
 
-                  return (
-                    <li
-                      key={entry.time}
-                      className="relative grid grid-cols-[3.5rem_1px_1fr] items-stretch gap-x-5 sm:grid-cols-[4.5rem_1px_1fr] sm:gap-x-6"
-                    >
-                      <span
-                        className={cn(
-                          "wd-label wd-num pt-1 text-right text-[13px] text-ink/70 sm:text-sm md:text-[22px]",
-                          isLast ? "pb-0" : "pb-5 sm:pb-6",
-                        )}
+                <ol className="mt-8 w-full max-w-sm sm:mt-9">
+                  {schedule.items.map((entry, index) => {
+                    const isLast = index === schedule.items.length - 1;
+
+                    return (
+                      <li
+                        key={entry.time}
+                        className="relative grid grid-cols-[3.5rem_1px_1fr] items-stretch gap-x-5 sm:grid-cols-[4.5rem_1px_1fr] sm:gap-x-6"
                       >
-                        {entry.time}
-                      </span>
+                        <span
+                          className={cn(
+                            "wd-label wd-num pt-1 text-right text-[13px] text-ink/70 sm:text-sm md:text-[22px]",
+                            isLast ? "pb-0" : "pb-5 sm:pb-6",
+                          )}
+                        >
+                          {entry.time}
+                        </span>
 
-                      {/* Đường line mảnh + điểm mốc — đúng ngôn ngữ decoration
-                          của bản cũ, chỉ rút ngắn cho vừa nhịp gọn hơn. */}
-                      <span
-                        aria-hidden="true"
-                        className={cn("relative w-px bg-taupe/35", isLast && "h-5")}
-                      >
-                        <span className="absolute -top-0.5 -left-[2px] h-[5px] w-[5px] rounded-full bg-champagne" />
-                      </span>
+                        {/* Đường line mảnh + điểm mốc — đúng ngôn ngữ decoration
+                            của bản cũ, chỉ rút ngắn cho vừa nhịp gọn hơn. */}
+                        <span
+                          aria-hidden="true"
+                          className={cn("relative w-px bg-taupe/35", isLast && "h-5")}
+                        >
+                          <span className="absolute -top-0.5 -left-[2px] h-[5px] w-[5px] rounded-full bg-champagne" />
+                        </span>
 
-                      <span
-                        className={cn(
-                          "wd-body-serif -mt-0.5 text-[clamp(1.05rem,3.4vw,1.375rem)] md:text-[clamp(calc(1.05rem_+_8px),calc(3.4vw_+_8px),calc(1.375rem_+_8px))] leading-snug",
-                          isLast ? "pb-0" : "pb-5 sm:pb-6",
-                        )}
-                      >
-                        {entry.title}
-                      </span>
-                    </li>
-                  );
-                })}
-              </ol>
-            </motion.div>
-          </AnimatePresence>
+                        <span
+                          className={cn(
+                            "wd-body-serif -mt-0.5 text-[clamp(1.05rem,3.4vw,1.375rem)] md:text-[clamp(calc(1.05rem_+_8px),calc(3.4vw_+_8px),calc(1.375rem_+_8px))] leading-snug",
+                            isLast ? "pb-0" : "pb-5 sm:pb-6",
+                          )}
+                        >
+                          {entry.title}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </Reveal>
       </div>
     </section>

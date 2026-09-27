@@ -21,7 +21,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // Chỉ WebP, cố ý bỏ AVIF. iPhone giải mã AVIF bằng CPU, chậm hơn WebP
+    // nhiều lần, mà Safari lại xả bitmap của ảnh vừa ra khỏi màn hình để tiết
+    // kiệm RAM — cuộn qua lại là ảnh phải giải mã lại, trong lúc chờ thì ô ảnh
+    // trống (lộ nền bg-warm) một nhịp: đúng hiện tượng ảnh nháy khi cuộn trên
+    // iPhone. WebP nặng hơn AVIF chút ít, với ~40 ảnh cưới thì không đáng kể.
+    formats: ["image/webp"],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

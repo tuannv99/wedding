@@ -240,6 +240,19 @@
   animation: wd-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.82s both;
 }
 
+/* Reveal (components/ui/Reveal.tsx) trên máy cảm ứng: hiện sẵn ngay từ khung
+   hình đầu tiên. Reveal tự đẩy về trạng thái hiện bằng JS, nhưng chỉ SAU khi
+   mount + effect chạy — ở lần tải/chuyển sang /album, /wishes thì cả trang
+   render ra với opacity 0 trước, rồi mới bật lên: một cú nháy trắng. Ghi đè
+   bằng CSS thì không phải chờ JS. !important để thắng style inline của
+   framer-motion. */
+@media (hover: none), (pointer: coarse) {
+  .wd-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* Hai cánh thiệp của hiệu ứng "Mở thiệp" (Hero.tsx).
    Dùng CSS animation chứ không để framer-motion tính từng frame: transform
    kiểu x/rotateY của framer-motion chạy trên main thread, mà đúng lúc cánh mở

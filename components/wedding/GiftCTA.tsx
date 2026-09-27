@@ -125,7 +125,11 @@ export function GiftCTA() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.35, ease: EASE_OUT }}
-                  className="fixed inset-0 z-60 flex items-center justify-center bg-ink/50 p-4 backdrop-blur-sm sm:p-6"
+                  /* Blur nền chỉ từ md. Safari (nhất là iPhone) nháy khi vừa
+                     animate opacity vừa có backdrop-filter trên cùng một lớp —
+                     cùng lý do Lightbox bỏ hẳn blur. Dưới md bù bằng nền đậm
+                     hơn một chút. */
+                  className="fixed inset-0 z-60 flex items-center justify-center bg-ink/60 p-4 sm:p-6 md:bg-ink/50 md:backdrop-blur-sm"
                   onClick={(event) => {
                     if (event.target === event.currentTarget) setOpen(false);
                   }}
@@ -135,11 +139,12 @@ export function GiftCTA() {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="gift-modal-title"
+                    data-scroll-lock-allow
                     initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.97, y: reduceMotion ? 0 : 8 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.97, y: reduceMotion ? 0 : 8 }}
                     transition={{ duration: 0.4, ease: EASE_OUT }}
-                    className="relative max-h-[95svh] w-full max-w-[560px] overflow-y-auto bg-ivory px-6 py-12 sm:max-w-[780px] sm:px-10 sm:py-6 lg:max-w-[1000px]"
+                    className="relative max-h-[95svh] w-full max-w-[560px] overflow-y-auto overscroll-contain bg-ivory px-6 py-12 sm:max-w-[780px] sm:px-10 sm:py-6 lg:max-w-[1000px]"
                   >
                     <button
                       ref={closeRef}

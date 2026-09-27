@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
@@ -51,7 +52,7 @@ export function Reveal({
 
   return (
     <motion.div
-      className={className}
+      className={cn("wd-reveal", className)}
       initial={{ opacity: 0, y: reduceMotion ? 0 : y }}
       // animate chỉ đặt khi là máy cảm ứng: framer đẩy thẳng tới trạng thái
       // hiện (duration 0 ở transition bên dưới), whileInView thành vô hại.
