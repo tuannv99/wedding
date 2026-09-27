@@ -121,7 +121,8 @@ export const wedding = {
         src: "/images/album/studio/06.jpg",
         alt: "Tuấn và Hoa trong studio",
       },
-      mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Thôn Trà Đông, xã Xuân Hưng, Ninh Bình")}`,
+      // Link thật do gia đình cung cấp, trỏ đúng nhà gái.
+      mapsUrl: "https://maps.app.goo.gl/3zr4NU3u1CfNyHrj8",
     },
     groom: {
       label: "Nhà trai",
