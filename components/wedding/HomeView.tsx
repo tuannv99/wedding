@@ -9,6 +9,7 @@ import { Gallery } from "@/components/wedding/Gallery";
 import { RSVP } from "@/components/wedding/RSVP";
 import { Closing } from "@/components/wedding/Closing";
 import { AfterOpen } from "@/components/wedding/AfterOpen";
+import { DebugPanel } from "@/components/ui/DebugPanel";
 import type { GuestInvitation } from "@/lib/guest-invitation";
 
 type HomeViewProps = {
@@ -34,6 +35,7 @@ export function HomeView({ invitation }: HomeViewProps) {
           <Closing />
         </AfterOpen>
       </main>
+      <DebugPanel />
     </>
   );
 }
