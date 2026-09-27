@@ -44,8 +44,16 @@ export function BotanicalAccent({
   // false, nên nếu gắn/không gắn `style` ngay ở lần render đầu thì HTML server
   // và client sẽ khác nhau với người bật prefers-reduced-motion -> React báo
   // hydration mismatch. Lần render đầu ở cả hai phía đều không có transform.
+  //
+  // Chỉ bật trên thiết bị có chuột (desktop). Trên điện thoại, transform theo
+  // scroll của framer-motion chạy ở main thread, luôn trễ một nhịp so với cú
+  // cuộn native — iPhone thấy rõ là giật, trong khi biên độ 4–6px trên màn nhỏ
+  // gần như không nhìn ra.
   const [parallax, setParallax] = useState(false);
-  useEffect(() => setParallax(!reduceMotion), [reduceMotion]);
+  useEffect(() => {
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    setParallax(!reduceMotion && finePointer);
+  }, [reduceMotion]);
 
   return (
     <motion.div

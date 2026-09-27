@@ -195,8 +195,15 @@
 }
 
 /* Nội dung nổi lên khi tấm thiệp mở ra (xem Hero.tsx + AfterOpen.tsx).
-   Delay 0.42s khớp với lúc hai cánh bắt đầu xoay mở — nội dung mount đúng lúc
-   đó nên chạy animation-delay là đủ, không cần đồng bộ qua state. */
+   Nội dung mount lúc hai cánh vừa khép kín (CLOSE_MS), tức 0.4s trước khi
+   cánh bắt đầu xoay mở (UNFOLD_START_MS) — delay 0.82s = 0.4s đó + 0.42s nhịp
+   trễ sau khi cánh bắt đầu mở như trước.
+
+   Chỉ animate section ĐẦU TIÊN (khối đang nằm trong màn hình sau khi cuộn tới),
+   không animate cả wrapper: wrapper cao bằng cả trang (hàng chục nghìn px, đầy
+   ảnh) — iOS/WebKit phải dựng một layer khổng lồ để làm opacity/transform cho
+   nó, vượt giới hạn texture nên giật và nháy. Các section bên dưới lúc đó còn
+   ngoài màn hình nên không cần hiệu ứng. */
 @keyframes wd-rise {
   from {
     opacity: 0;
@@ -207,8 +214,79 @@
     transform: none;
   }
 }
-.wd-rise {
-  animation: wd-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+.wd-rise > :first-child {
+  animation: wd-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.82s both;
+}
+
+/* Hai cánh thiệp của hiệu ứng "Mở thiệp" (Hero.tsx).
+   Dùng CSS animation chứ không để framer-motion tính từng frame: transform
+   kiểu x/rotateY của framer-motion chạy trên main thread, mà đúng lúc cánh mở
+   thì React đang mount cả phần thiệp phía dưới — trên iPhone main thread bận
+   là cánh thiệp đứng hình / nhảy cóc tới cuối. CSS animation transform/opacity
+   chạy trên compositor nên vẫn mượt dù main thread đang bận. */
+@keyframes wd-leaf-in-left {
+  from { transform: translate3d(-100%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+@keyframes wd-leaf-in-right {
+  from { transform: translate3d(100%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+@keyframes wd-leaf-open-left {
+  from { transform: translate3d(0, 0, 0) rotateY(0deg); }
+  to { transform: translate3d(0, 0, 0) rotateY(-108deg); }
+}
+@keyframes wd-leaf-open-right {
+  from { transform: translate3d(0, 0, 0) rotateY(0deg); }
+  to { transform: translate3d(0, 0, 0) rotateY(108deg); }
+}
+@keyframes wd-seal-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes wd-seal-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.wd-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+.wd-leaf-left {
+  left: 0;
+  transform-origin: left center;
+  background: linear-gradient(to right, #f9f7f2, #f5f2eb);
+  border-right: 1px solid rgba(216, 197, 165, 0.55);
+}
+.wd-leaf-right {
+  right: 0;
+  transform-origin: right center;
+  background: linear-gradient(to left, #f9f7f2, #f5f2eb);
+}
+/* Thời lượng khớp CLOSE_MS / UNFOLD_MS trong Hero.tsx. */
+.is-closing .wd-leaf-left {
+  animation: wd-leaf-in-left 0.95s cubic-bezier(0.32, 0.72, 0.3, 1) both;
+}
+.is-closing .wd-leaf-right {
+  animation: wd-leaf-in-right 0.95s cubic-bezier(0.32, 0.72, 0.3, 1) both;
+}
+.is-unfolding .wd-leaf-left {
+  animation: wd-leaf-open-left 1.5s cubic-bezier(0.45, 0.05, 0.2, 1) both;
+}
+.is-unfolding .wd-leaf-right {
+  animation: wd-leaf-open-right 1.5s cubic-bezier(0.45, 0.05, 0.2, 1) both;
+}
+.is-closing .wd-seal {
+  animation: wd-seal-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
+}
+.is-unfolding .wd-seal {
+  animation: wd-seal-out 0.34s ease-out both;
 }
 
 /* Icon nút nhạc xoay chậm khi đang phát (xem Navigation.tsx).

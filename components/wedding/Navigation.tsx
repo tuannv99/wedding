@@ -142,8 +142,12 @@ export function Navigation() {
           will-change-transform + translateZ(0): ép header lên layer GPU riêng —
           nếu không, backdrop-blur kết hợp với các section `isolate` (từ decoration
           botanical) khiến trình duyệt phải tính lại blur/layout liên tục lúc cuộn,
-          gây flicker rõ trên mobile. Không đổi gì về hiển thị. */}
-      <header className="fixed inset-x-0 top-0 z-50 [transform:translateZ(0)] border-b border-taupe/20 bg-ivory/85 backdrop-blur-md will-change-transform">
+          gây flicker rõ trên mobile. Không đổi gì về hiển thị.
+          Dưới md bỏ hẳn blur, thay bằng nền đặc hơn: iPhone phải chụp + làm mờ
+          lại toàn bộ phần ảnh chạy bên dưới header ở MỖI frame cuộn — nguồn lag
+          lớn nhất khi cuộn trên Safari, mà nền 85% ivory thì blur gần như không
+          nhìn ra. */}
+      <header className="fixed inset-x-0 top-0 z-50 [transform:translateZ(0)] border-b border-taupe/20 bg-ivory/95 will-change-transform md:bg-ivory/85 md:backdrop-blur-md">
         <nav
           aria-label="Điều hướng chính"
           className="mx-auto flex h-16 w-full max-w-[104rem] items-center justify-between px-6 md:h-[72px] md:px-10"

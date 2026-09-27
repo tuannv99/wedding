@@ -12,8 +12,6 @@ import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
-const EASE_CLOSE = [0.32, 0.72, 0.3, 1] as const;
-const EASE_OPEN = [0.45, 0.05, 0.2, 1] as const;
 
 /** "TUẤN" (wedding.groom.short, luôn viết hoa) → "Tuấn" cho chữ ký trên con dấu. */
 const toTitleCase = (value: string) => value.charAt(0) + value.slice(1).toLowerCase();
@@ -24,9 +22,10 @@ const toTitleCase = (value: string) => value.charAt(0) + value.slice(1).toLowerC
  *  0 – 0.95s     hai cánh trượt vào khép lại giữa màn hình (phase "closing")
  *  0.8 – 1.35s   con dấu hiện lên giữa mặt thiệp
  *  1.35 – 2.85s  hai cánh xoay mở ra hai bên, con dấu fade out (phase "unfolding")
+ * Thời lượng/easing của cánh + con dấu nằm ở .wd-leaf/.wd-seal trong
+ * wedding.css — đổi số ở đây thì đổi luôn bên đó.
  */
 const CLOSE_MS = 950;
-const SEAL_DELAY_MS = 800;
 const UNFOLD_START_MS = 1350;
 const UNFOLD_MS = 1500;
 
@@ -63,9 +62,9 @@ export function Hero({ invitation }: HeroProps) {
   const scrollToCeremony = () => {
     // open() chỉ setState — DOM của khối Lễ Thành Hôn (#couple) chưa kịp mount ngay trong cùng
     // tick, nên đợi hai animation frame để React commit xong rồi mới đo & cuộn.
-    // Đo bằng viewport (getBoundingClientRect), KHÔNG dùng offsetTop: wrapper
-    // nội dung có transform (wd-rise) nên trở thành offsetParent, khiến
-    // offsetTop luôn bằng 0.
+    // Đo bằng viewport (getBoundingClientRect), KHÔNG dùng offsetTop: offsetTop
+    // tính theo offsetParent gần nhất chứ không phải theo trang, dễ sai lệch khi
+    // cấu trúc wrapper phía trên thay đổi.
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         const el = document.getElementById("couple");
@@ -79,8 +78,12 @@ export function Hero({ invitation }: HeroProps) {
   const handleOpen = () => {
     if (phase) return;
 
+    // Bật nhạc NGAY trong click handler: iOS Safari chỉ cho audio.play() khi
+    // lệnh gọi còn nằm trong user gesture — gọi trong setTimeout 1.35s như
+    // trước là bị chặn (Android thì dễ dãi hơn nên vẫn phát).
+    if (wedding.music.startOnOpen) emitOpenInvitation();
+
     if (reduceMotion) {
-      if (wedding.music.startOnOpen) emitOpenInvitation();
       open();
       scrollToCeremony();
       return;
@@ -88,12 +91,17 @@ export function Hero({ invitation }: HeroProps) {
 
     setPhase("closing");
 
+    // Mount phần thiệp + cuộn tới #couple lúc hai cánh vừa khép kín, SAU lưng
+    // tấm thiệp đang che màn hình — không phải đúng lúc cánh bắt đầu mở. Mount
+    // cả trang là việc nặng; trên iPhone nó từng chiếm main thread đúng nhịp
+    // cánh xoay nên hiệu ứng bị giật / mất hẳn. Giờ việc nặng rơi vào khoảng
+    // con dấu đứng yên (CLOSE_MS → UNFOLD_START_MS).
     window.setTimeout(() => {
-      if (wedding.music.startOnOpen) emitOpenInvitation();
       open();
-      setPhase("unfolding");
       scrollToCeremony();
-    }, UNFOLD_START_MS);
+    }, CLOSE_MS);
+
+    window.setTimeout(() => setPhase("unfolding"), UNFOLD_START_MS);
 
     window.setTimeout(() => setPhase(null), UNFOLD_START_MS + UNFOLD_MS);
   };
@@ -297,65 +305,26 @@ export function Hero({ invitation }: HeroProps) {
         mô phỏng mở một tấm thiệp thật thay vì một veil phẳng chớp qua.
         overflow-hidden bắt buộc: rotateY nếu không sẽ sinh thanh cuộn ngang.
       */}
-      <AnimatePresence>
-        {phase ? (
-          <div
-            key="opening-overlay"
-            aria-hidden="true"
-            className="fixed inset-0 z-100 overflow-hidden pointer-events-none"
-            style={{ perspective: 1900 }}
-          >
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={phase === "closing" ? { x: 0 } : { rotateY: -108 }}
-              transition={
-                phase === "closing"
-                  ? { duration: CLOSE_MS / 1000, ease: EASE_CLOSE }
-                  : { duration: UNFOLD_MS / 1000, ease: EASE_OPEN }
-              }
-              style={{
-                transformOrigin: "left center",
-                backfaceVisibility: "hidden",
-                background: "linear-gradient(to right, #F9F7F2, #F5F2EB)",
-                borderRight: "1px solid rgba(216,197,165,0.55)",
-              }}
-              className="absolute inset-y-0 left-0 w-1/2"
-            />
+      {phase ? (
+        <div
+          aria-hidden="true"
+          className={`fixed inset-0 z-100 overflow-hidden pointer-events-none ${
+            phase === "closing" ? "is-closing" : "is-unfolding"
+          }`}
+          style={{ perspective: 1900, WebkitPerspective: 1900 }}
+        >
+          {/* Animation của cánh + con dấu nằm ở wedding.css (.wd-leaf, .wd-seal). */}
+          <div className="wd-leaf wd-leaf-left" />
+          <div className="wd-leaf wd-leaf-right" />
 
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={phase === "closing" ? { x: 0 } : { rotateY: 108 }}
-              transition={
-                phase === "closing"
-                  ? { duration: CLOSE_MS / 1000, ease: EASE_CLOSE }
-                  : { duration: UNFOLD_MS / 1000, ease: EASE_OPEN }
-              }
-              style={{
-                transformOrigin: "right center",
-                backfaceVisibility: "hidden",
-                background: "linear-gradient(to left, #F9F7F2, #F5F2EB)",
-              }}
-              className="absolute inset-y-0 right-0 w-1/2"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={phase === "closing" ? { opacity: 1, scale: 1 } : { opacity: 0 }}
-              transition={
-                phase === "closing"
-                  ? { duration: 0.4, delay: SEAL_DELAY_MS / 1000, ease: EASE_OUT }
-                  : { duration: 0.34, ease: "easeOut" }
-              }
-              className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-            >
-              <Botanical variant="mark" className="h-8 w-[88px] text-sage/85" />
-              <span className="text-[22px] font-light tracking-[0.35em] text-taupe md:text-[26px]">
-                {toTitleCase(wedding.groom.short)} &amp; {toTitleCase(wedding.bride.short)}
-              </span>
-            </motion.div>
+          <div className="wd-seal absolute inset-0 flex flex-col items-center justify-center gap-3">
+            <Botanical variant="mark" className="h-8 w-[88px] text-sage/85" />
+            <span className="text-[22px] font-light tracking-[0.35em] text-taupe md:text-[26px]">
+              {toTitleCase(wedding.groom.short)} &amp; {toTitleCase(wedding.bride.short)}
+            </span>
           </div>
-        ) : null}
-      </AnimatePresence>
+        </div>
+      ) : null}
     </section>
   );
 }
