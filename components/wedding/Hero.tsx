@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -304,8 +305,12 @@ export function Hero({ invitation }: HeroProps) {
         xoay mở ra hai bên bằng rotateY quanh mép ngoài (phase "unfolding") —
         mô phỏng mở một tấm thiệp thật thay vì một veil phẳng chớp qua.
         overflow-hidden bắt buộc: rotateY nếu không sẽ sinh thanh cuộn ngang.
+
+        Portal ra <body>: section này có `isolate` nên z-100 bên trong chỉ có
+        nghĩa trong phạm vi Hero — header (fixed z-50, mount lúc cánh vừa khép)
+        sẽ nổi đè lên tấm thiệp. Chỉ render sau khi bấm nút nên không đụng SSR.
       */}
-      {phase ? (
+      {phase ? createPortal(
         <div
           aria-hidden="true"
           className={`fixed inset-0 z-100 overflow-hidden pointer-events-none ${
@@ -323,7 +328,8 @@ export function Hero({ invitation }: HeroProps) {
               {toTitleCase(wedding.groom.short)} &amp; {toTitleCase(wedding.bride.short)}
             </span>
           </div>
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </section>
   );
