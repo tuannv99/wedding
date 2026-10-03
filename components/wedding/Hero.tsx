@@ -119,7 +119,7 @@ export function Hero({ invitation }: HeroProps) {
         chú rể, chữ dồn xuống nửa dưới nơi chỉ còn tà váy trắng mờ, và lớp phủ
         ivory chỉ đậm dần đúng ở vùng có chữ.
       */
-      className="relative isolate grid h-[100svh] w-full grid-cols-1 overflow-hidden md:grid-cols-[1fr_1.05fr]"
+      className="relative isolate grid h-[calc(100*var(--wd-vh))] w-full grid-cols-1 overflow-hidden md:grid-cols-[1fr_1.05fr]"
     >
       {/* Ảnh cưới: mobile = nền tràn viền phía sau chữ; từ md = ô bên phải */}
       <motion.div
@@ -136,7 +136,7 @@ export function Hero({ invitation }: HeroProps) {
           càng bắt đầu cao, nên phải kéo vùng sáng lên theo. Điều kiện bọc
           thêm max-md để một cửa sổ desktop thấp không rơi vào nhánh mobile.
         */
-        className="absolute inset-x-0 bottom-0 -z-10 h-[118%] max-md:[@media(max-height:700px)]:h-[132%] md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
+        className="wd-hero-media absolute inset-x-0 bottom-0 -z-10 h-[118%] max-md:[@media(max-height:700px)]:h-[132%] md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
       >
         <Image
           src={hero.src}
@@ -184,7 +184,7 @@ export function Hero({ invitation }: HeroProps) {
         opacity={0.32}
         depth={6}
         flip
-        className="-bottom-[6svh] -left-[8svh] h-[62vh] w-[24vh]"
+        className="-bottom-[calc(6*var(--wd-vh))] -left-[calc(8*var(--wd-vh))] h-[calc(62*var(--wd-vh))] w-[calc(24*var(--wd-vh))]"
       />
 
       {/*
@@ -192,7 +192,7 @@ export function Hero({ invitation }: HeroProps) {
         hơn desktop, để cả khối nằm gọn dưới mốc 56% nói trên. Từ md quay lại
         đúng nhịp của bản design: căn giữa theo trục dọc, canh trái.
       */}
-      <div className="flex flex-col items-center justify-end gap-[clamp(7px,1.6svh,26px)] px-6 pb-[clamp(22px,5svh,64px)] text-center md:col-start-1 md:row-start-1 md:items-start md:justify-center md:gap-[clamp(10px,2.4svh,30px)] md:px-[clamp(32px,6vw,104px)] md:pb-0 md:text-left">
+      <div className="flex flex-col items-center justify-end gap-[clamp(7px,calc(1.6*var(--wd-vh)),26px)] px-6 pb-[clamp(22px,calc(5*var(--wd-vh)),64px)] text-center md:col-start-1 md:row-start-1 md:items-start md:justify-center md:gap-[clamp(10px,calc(2.4*var(--wd-vh)),30px)] md:px-[clamp(32px,6vw,104px)] md:pb-0 md:text-left">
         <motion.p
           {...rise(0.4)}
           /* Mobile chữ đậm hơn desktop: dòng này nằm trực tiếp trên ảnh. */
@@ -241,7 +241,7 @@ export function Hero({ invitation }: HeroProps) {
               delay: reduceMotion ? 0 : 1.35,
               ease: "easeOut",
             }}
-            className="font-display block text-[clamp(1.75rem,min(7vw,6svh),3.25rem)] leading-none text-champagne italic md:self-center md:pr-[0.3em] md:text-[clamp(2rem,3.2vw,3.75rem)]"
+            className="font-display block text-[clamp(1.75rem,min(7vw,calc(6*var(--wd-vh))),3.25rem)] leading-none text-champagne italic md:self-center md:pr-[0.3em] md:text-[clamp(2rem,3.2vw,3.75rem)]"
           >
             &amp;
           </motion.span>
@@ -270,7 +270,7 @@ export function Hero({ invitation }: HeroProps) {
         */}
         <motion.div
           {...rise(2.45)}
-          className="mt-[clamp(8px,2svh,28px)] flex flex-col items-center gap-5 md:items-start"
+          className="mt-[clamp(8px,calc(2*var(--wd-vh)),28px)] flex flex-col items-center gap-5 md:items-start"
         >
           <span aria-hidden="true" className="h-px w-10 bg-ink/25" />
 

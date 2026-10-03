@@ -41,7 +41,7 @@
 .wd-display {
   font-family: var(--wd-font-display);
   font-weight: 300;
-  font-size: clamp(56px, min(14vw, 15svh), 140px);
+  font-size: clamp(56px, min(14vw, calc(15 * var(--wd-vh))), 140px);
   line-height: 0.92;
   letter-spacing: 0.04em;
   color: var(--wd-brown);
@@ -566,7 +566,7 @@
    bằng utility Tailwind trong component thì có md:text-[…] tương ứng ngay
    cạnh — nhớ cộng cả hai nơi nếu sau này đổi thang chữ. */
 @media (min-width: 768px) {
-  .wd-display { font-size: clamp(64px, calc(min(14vw, 15svh) + 8px), 148px); }
+  .wd-display { font-size: clamp(64px, calc(min(14vw, calc(15 * var(--wd-vh))) + 8px), 148px); }
   .wd-h1 { font-size: clamp(44px, calc(5vw + 8px), 68px); }
   .wd-numeral { font-size: clamp(70px, calc(13vw + 8px), 140px); }
   .wd-quote { font-size: clamp(28px, calc(2.4vw + 8px), 36px); }

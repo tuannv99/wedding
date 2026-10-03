@@ -108,7 +108,7 @@ export default function RsvpForm({
         // min-h lấp gần hết phần viewport còn lại dưới header (trừ đúng
         // chiều cao header) — nội dung cảm ơn ngắn nên nếu không ép chiều
         // cao, footer phía sau sẽ lộ lên ngay trong cùng khung nhìn.
-        className="flex min-h-[calc(100svh-65px)] flex-col items-center justify-center scroll-mt-[65px] outline-none md:min-h-[calc(100svh-73px)] md:scroll-mt-[73px]"
+        className="flex min-h-[calc(100*var(--wd-vh)-65px)] flex-col items-center justify-center scroll-mt-[65px] outline-none md:min-h-[calc(100*var(--wd-vh)-73px)] md:scroll-mt-[73px]"
         style={{ textAlign: "center" }}
         initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -163,7 +163,7 @@ export default function RsvpForm({
         title={title}
         titleClassName="wd-h1-fit"
         reveal={false}
-        className="mb-[clamp(40px,5vh,56px)]"
+        className="mb-[clamp(40px,calc(5*var(--wd-vh)),56px)]"
       />
 
       <form className="wd-form" onSubmit={handleSubmit} noValidate>

@@ -12,6 +12,10 @@ import { OPEN_INVITATION_EVENT } from "@/lib/events";
 export function DebugPanel() {
   const [enabled, setEnabled] = useState(false);
   const [lines, setLines] = useState<string[]>([]);
+  // Webview của Zalo/Messenger/Facebook đổi chiều cao khi thanh công cụ của
+  // app co/giãn lúc cuộn — đếm để biết máy thật có rơi vào trường hợp này
+  // không, và --wd-vh (app/layout.tsx) có giữ nguyên được hay không.
+  const [resizeLine, setResizeLine] = useState("");
 
   useEffect(() => {
     if (new URLSearchParams(window.location.search).get("debug") !== "1") return;
@@ -78,7 +82,23 @@ export function DebugPanel() {
     };
 
     window.addEventListener(OPEN_INVITATION_EVENT, onOpen);
-    return () => window.removeEventListener(OPEN_INVITATION_EVENT, onOpen);
+
+    const heights = new Set([window.innerHeight]);
+    let resizes = 0;
+    const onResize = () => {
+      resizes += 1;
+      heights.add(window.innerHeight);
+      const vh = getComputedStyle(document.documentElement).getPropertyValue("--wd-vh");
+      setResizeLine(
+        `resize: ${resizes} lần, innerHeight đã gặp: ${[...heights].join("/")}, --wd-vh: ${vh}`,
+      );
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener(OPEN_INVITATION_EVENT, onOpen);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   if (!enabled) return null;
@@ -90,6 +110,7 @@ export function DebugPanel() {
           {line}
         </div>
       ))}
+      {resizeLine ? <div className="break-all">{resizeLine}</div> : null}
     </div>
   );
 }

@@ -55,6 +55,9 @@
 
 @layer base {
   html {
+    /* 1% chiều cao màn hình, được script ở app/layout.tsx chốt thành px lúc
+       tải trang. Giá trị dưới đây chỉ là dự phòng khi script chưa chạy. */
+    --wd-vh: 1svh;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     /* Chừa sẵn máng thanh cuộn.
@@ -141,4 +144,32 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+/* ---------- TẠM THỜI: test cô lập hiện tượng nháy (?ft=...) ----------
+   Chỉ có hiệu lực khi URL có ?ft=..., xem FLICKER_TESTS ở app/layout.tsx.
+   Ngoài layer để !important ở đây thắng cả style inline lẫn animation của
+   framer-motion. Xoá cả khối sau khi tìm ra nguyên nhân. */
+html[data-ft~="noimg"] img {
+  visibility: hidden !important;
+}
+html[data-ft~="norise"] .wd-rise > * {
+  animation: none !important;
+}
+html[data-ft~="noheroanim"] .wd-hero-media {
+  opacity: 1 !important;
+  transform: none !important;
+}
+html[data-ft]::after {
+  content: "TEST: " attr(data-ft);
+  position: fixed;
+  left: 8px;
+  bottom: 8px;
+  z-index: 300;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font: 11px/1.4 ui-monospace, Menlo, monospace;
+  pointer-events: none;
 }
