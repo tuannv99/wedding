@@ -83,6 +83,13 @@ const FREEZE_VIEWPORT_HEIGHT = `(function(){var r=document.documentElement;if(/(
  *   norise      Tắt hiệu ứng nội dung nổi lên sau khi mở thiệp (.wd-rise).
  *   noheroanim  Tắt hiệu ứng mờ dần + thu nhỏ của ảnh Hero.
  *   nofreeze    Tắt việc chốt --wd-vh (quay về 100svh như cũ).
+ *   noanim      Tắt mọi CSS animation/transition + framer-motion.
+ *   nohdrfx     Header bỏ translateZ(0) + will-change.
+ *   nofixed     Header không cố định (cuộn đi theo trang).
+ *   nocount     Đồng hồ đếm ngược đứng yên, không vẽ lại mỗi giây.
+ *   noobs       Tắt IntersectionObserver gạch chân mục menu (header không
+ *               re-render khi cuộn).
+ * Cờ dùng trong component đọc qua lib/flicker-test.ts.
  */
 const FLICKER_TESTS = `(function(){var ft=new URLSearchParams(location.search).get("ft");if(!ft)return;var r=document.documentElement,flags=ft.split(",");r.setAttribute("data-ft",flags.join(" "));function has(f){return flags.indexOf(f)>=0}if(has("nodecode")){HTMLImageElement.prototype.decode=function(){return Promise.resolve()}}if(has("async")){var fix=function(n){if(n.nodeType!==1)return;if(n.tagName==="IMG")n.decoding="async";else n.querySelectorAll("img").forEach(function(i){i.decoding="async"})};new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(fix)})}).observe(r,{childList:true,subtree:true})}})();`;
 

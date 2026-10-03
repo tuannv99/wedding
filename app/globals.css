@@ -160,6 +160,24 @@ html[data-ft~="noheroanim"] .wd-hero-media {
   opacity: 1 !important;
   transform: none !important;
 }
+/* noanim: mọi CSS animation/transition (framer-motion tắt ở lib/flicker-test.ts),
+   gồm cả icon nhạc xoay liên tục trên header và hiệu ứng mở thiệp. */
+html[data-ft~="noanim"] *,
+html[data-ft~="noanim"] *::before,
+html[data-ft~="noanim"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+/* nohdrfx: header vẫn cố định nhưng bỏ translateZ(0) + will-change (không ép
+   layer GPU riêng). nofixed: header không cố định nữa, cuộn đi theo trang. */
+html[data-ft~="nohdrfx"] .wd-site-header,
+html[data-ft~="nofixed"] .wd-site-header {
+  transform: none !important;
+  will-change: auto !important;
+}
+html[data-ft~="nofixed"] .wd-site-header {
+  position: absolute !important;
+}
 html[data-ft]::after {
   content: "TEST: " attr(data-ft);
   position: fixed;

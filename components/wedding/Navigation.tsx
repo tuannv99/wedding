@@ -10,6 +10,7 @@ import { scrollToSection } from "@/lib/utils";
 import { useInvitation } from "@/lib/invitation";
 import { useMusic } from "@/lib/music";
 import { useScrollLock } from "@/lib/scroll-lock";
+import { hasFlickerFlag } from "@/lib/flicker-test";
 import { cn } from "@/lib/utils";
 
 /**
@@ -107,6 +108,8 @@ export function Navigation() {
    */
   useEffect(() => {
     if (!opened || !isHome) return;
+    // TẠM THỜI (?ft=noobs): không theo dõi section, header không re-render khi cuộn.
+    if (hasFlickerFlag("noobs")) return;
 
     const sections = wedding.nav
       .filter((item) => "id" in item)
@@ -163,7 +166,7 @@ export function Navigation() {
           nhìn ra. Đặc hẳn 100% chứ không 95%: còn trong suốt chút nào là mỗi
           frame cuộn vẫn phải trộn màu header với ảnh chạy bên dưới, nhất là
           trong webview Zalo/Messenger vốn yếu hơn Safari. */}
-      <header className="fixed inset-x-0 top-0 z-50 [transform:translateZ(0)] border-b border-taupe/20 bg-ivory will-change-transform md:bg-ivory/85 md:backdrop-blur-md">
+      <header className="wd-site-header fixed inset-x-0 top-0 z-50 [transform:translateZ(0)] border-b border-taupe/20 bg-ivory will-change-transform md:bg-ivory/85 md:backdrop-blur-md">
         <nav
           aria-label="Điều hướng chính"
           className="mx-auto flex h-16 w-full max-w-[104rem] items-center justify-between px-6 md:h-[72px] md:px-10"
