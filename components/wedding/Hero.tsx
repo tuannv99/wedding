@@ -136,7 +136,7 @@ export function Hero({ invitation }: HeroProps) {
           càng bắt đầu cao, nên phải kéo vùng sáng lên theo. Điều kiện bọc
           thêm max-md để một cửa sổ desktop thấp không rơi vào nhánh mobile.
         */
-        className="wd-hero-media absolute inset-x-0 bottom-0 -z-10 h-[118%] max-md:[@media(max-height:700px)]:h-[132%] md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
+        className="absolute inset-x-0 bottom-0 -z-10 h-[118%] max-md:[@media(max-height:700px)]:h-[132%] md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
       >
         <Image
           src={hero.src}

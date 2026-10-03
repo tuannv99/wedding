@@ -8,8 +8,6 @@ import {
   type ReactNode,
 } from "react";
 import { useScrollLock } from "@/lib/scroll-lock";
-// TẠM THỜI: nạp sớm để cờ ?ft=noanim kịp tắt framer-motion trước mọi animation.
-import "@/lib/flicker-test";
 
 /**
  * Trạng thái "đã mở thiệp": ban đầu trang chỉ hiện Hero và khoá scroll,

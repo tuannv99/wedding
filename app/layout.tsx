@@ -63,37 +63,7 @@ export const viewport: Viewport = {
  * máy); đổi chiều cao do thanh công cụ thì bỏ qua. Máy có chuột (cửa sổ
  * desktop kéo giãn) thì vẫn cập nhật theo mọi lần resize.
  */
-const FREEZE_VIEWPORT_HEIGHT = `(function(){var r=document.documentElement;if(/(^| )nofreeze( |$)/.test(r.getAttribute("data-ft")||""))return;var w=-1,fine=window.matchMedia("(hover: hover) and (pointer: fine)").matches;function f(){var x=window.innerWidth;if(!fine&&x===w)return;w=x;r.style.setProperty("--wd-vh",window.innerHeight/100+"px")}f();window.addEventListener("resize",f)})();`;
-
-/**
- * TẠM THỜI — bộ test cô lập hiện tượng nháy trên iPhone. Khách bình thường
- * không bị ảnh hưởng gì: chỉ bật khi URL có ?ft=<cờ>[,<cờ>...], ví dụ
- * /?ft=nodecode hoặc /album?ft=noimg,norise. Góc dưới trái màn hình hiện nhãn
- * "TEST: ..." để biết test đang bật. Xoá hằng này + khối CSS "Test cô lập"
- * cuối app/globals.css + class wd-hero-media ở Hero.tsx sau khi tìm ra nguyên
- * nhân.
- *
- *   nodecode    HTMLImageElement.decode() thành no-op. next/image gọi decode()
- *               cho MỌI ảnh ngay lúc ảnh tải xong (và lúc hydrate với ảnh đã
- *               tải sẵn) — nghi phạm số 1.
- *   async       Đổi mọi ảnh về decoding="async" (giá trị mặc định cũ của
- *               next/image, trước commit 0873cae).
- *   noimg       Ẩn mọi ảnh (vẫn tải, nhưng không vẽ/không giải mã) — nếu vẫn
- *               nháy thì nguyên nhân không nằm ở ảnh.
- *   norise      Tắt hiệu ứng nội dung nổi lên sau khi mở thiệp (.wd-rise).
- *   noheroanim  Tắt hiệu ứng mờ dần + thu nhỏ của ảnh Hero.
- *   nofreeze    Tắt việc chốt --wd-vh (quay về 100svh như cũ).
- *   noanim      Tắt mọi CSS animation/transition + framer-motion.
- *   nocssanim   Chỉ tắt CSS animation.      notrans   Chỉ tắt CSS transition.
- *   nomotion    Chỉ tắt framer-motion.      nospin    Chỉ tắt icon nhạc xoay.
- *   nohdrfx     Header bỏ translateZ(0) + will-change.
- *   nofixed     Header không cố định (cuộn đi theo trang).
- *   nocount     Đồng hồ đếm ngược đứng yên, không vẽ lại mỗi giây.
- *   noobs       Tắt IntersectionObserver gạch chân mục menu (header không
- *               re-render khi cuộn).
- * Cờ dùng trong component đọc qua lib/flicker-test.ts.
- */
-const FLICKER_TESTS = `(function(){var ft=new URLSearchParams(location.search).get("ft");if(!ft)return;var r=document.documentElement,flags=ft.split(",");r.setAttribute("data-ft",flags.join(" "));function has(f){return flags.indexOf(f)>=0}if(has("nodecode")){HTMLImageElement.prototype.decode=function(){return Promise.resolve()}}if(has("async")){var fix=function(n){if(n.nodeType!==1)return;if(n.tagName==="IMG")n.decoding="async";else n.querySelectorAll("img").forEach(function(i){i.decoding="async"})};new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(fix)})}).observe(r,{childList:true,subtree:true})}})();`;
+const FREEZE_VIEWPORT_HEIGHT = `(function(){var r=document.documentElement;var w=-1,fine=window.matchMedia("(hover: hover) and (pointer: fine)").matches;function f(){var x=window.innerWidth;if(!fine&&x===w)return;w=x;r.style.setProperty("--wd-vh",window.innerHeight/100+"px")}f();window.addEventListener("resize",f)})();`;
 
 export default function RootLayout({
   children,
@@ -106,8 +76,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Thứ tự quan trọng: FLICKER_TESTS ghi data-ft trước, FREEZE đọc nó. */}
-        <script dangerouslySetInnerHTML={{ __html: FLICKER_TESTS }} />
         <script dangerouslySetInnerHTML={{ __html: FREEZE_VIEWPORT_HEIGHT }} />
       </head>
       <body>

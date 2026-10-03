@@ -5,7 +5,6 @@ import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { Botanical, BotanicalRule } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
-import { hasFlickerFlag } from "@/lib/flicker-test";
 
 type Remaining = {
   days: number;
@@ -48,9 +47,6 @@ export function Countdown() {
 
     tick();
     setMounted(true);
-
-    // TẠM THỜI (?ft=nocount): số đứng yên, không vẽ lại mỗi giây.
-    if (hasFlickerFlag("nocount")) return;
 
     const timer = window.setInterval(tick, 1000);
     return () => window.clearInterval(timer);
