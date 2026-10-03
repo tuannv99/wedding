@@ -293,7 +293,6 @@ export const wedding = {
 
     /** Phần xem tổng thể đặt ngay sau hero. */
     overview: {
-      eyebrow: "Chuyện chúng mình",
       hint: "Một hành trình nhỏ,\ncủa hai người và những ngày thật đẹp.",
       cta: "Chạm vào từng bức ảnh để khám phá.",
     },

@@ -107,17 +107,24 @@ function OverviewGrid({
                     src={tile.src}
                     alt=""
                     fill
-                    loading="lazy"
-                    decoding="async"
+                    /* eager + sync: ô thumbnail nhỏ, tải hết từ
+                       đầu thì cuộn không gặp ô nào đang chờ tải "bụp" hiện ra;
+                       sync để khi iPhone xả bitmap rồi giải mã lại lúc cuộn
+                       quay lại, Safari không vẽ ô trống trước (nháy). */
+                    loading="eager"
+                    decoding="sync"
                     sizes="(max-width: 640px) 42vw, (max-width: 1024px) 28vw, 380px"
                     className={cn(
                       "object-cover transition-opacity duration-500",
                       // Ô thường lùi lại một bước để cả lưới đọc ra là một bản
                       // đồ chứ không phải từng ấy tấm ảnh đang tranh nhau; rê
                       // chuột vào, hoặc đang đứng ở tấm nào, thì tấm đó rõ hẳn.
+                      // Chỉ trên máy có chuột: màn cảm ứng không rê được nên
+                      // làm mờ chẳng để làm gì, mà 37 ô opacity < 1 bắt Safari
+                      // vẽ 37 lớp trong suốt riêng mỗi khung hình cuộn.
                       active
                         ? "opacity-100"
-                        : "opacity-[0.86] group-hover:opacity-100",
+                        : "[@media(hover:hover)_and_(pointer:fine)]:opacity-[0.86] group-hover:opacity-100",
                     )}
                   />
 
@@ -150,34 +157,41 @@ export function OverviewSection({
   onPick,
   current,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title?: string;
-  hint: string;
+  hint?: string;
   cta?: string;
   tiles: readonly OverviewTile[];
   onPick: (n: number) => void;
   current?: number;
 }) {
+  // Trang /album đã đưa phần chữ lên khối mở đầu, nên ở đó lưới đứng một mình.
+  const hasHeader = Boolean(eyebrow || title || hint || cta);
+
   return (
     <>
-      <div className="flex flex-col items-start border-l border-champagne/50 pl-5 md:pl-7">
-        <p className="wd-eyebrow text-taupe">{eyebrow}</p>
-        {title ? (
-          <h2 className="font-display mt-4 text-[clamp(1.5rem,3.2vw,2.25rem)] md:text-[clamp(calc(1.5rem_+_8px),calc(3.2vw_+_8px),calc(2.25rem_+_8px))] leading-[1.25] font-light text-ink">
-            {title}
-          </h2>
-        ) : null}
-        <p className="wd-body-sm mt-3 text-[15px] md:text-[23px] whitespace-pre-line text-taupe">{hint}</p>
-        {cta ? (
-          <p className="wd-body-sm mt-2 text-[15px] md:text-[23px] text-taupe/80 italic">{cta}</p>
-        ) : null}
-      </div>
+      {hasHeader ? (
+        <div className="flex flex-col items-start border-l border-champagne/50 pl-5 md:pl-7">
+          {eyebrow ? <p className="wd-eyebrow text-taupe">{eyebrow}</p> : null}
+          {title ? (
+            <h2 className="font-display mt-4 text-[clamp(1.5rem,3.2vw,2.25rem)] md:text-[clamp(calc(1.5rem_+_8px),calc(3.2vw_+_8px),calc(2.25rem_+_8px))] leading-[1.25] font-light text-ink">
+              {title}
+            </h2>
+          ) : null}
+          {hint ? (
+            <p className="wd-body-sm mt-3 text-[15px] md:text-[23px] whitespace-pre-line text-taupe">{hint}</p>
+          ) : null}
+          {cta ? (
+            <p className="wd-body-sm mt-2 text-[15px] md:text-[23px] text-taupe/80 italic">{cta}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       <OverviewGrid
         tiles={tiles}
         onPick={onPick}
         current={current}
-        className="mt-[clamp(28px,4vw,48px)]"
+        className={hasHeader ? "mt-[clamp(28px,4vw,48px)]" : undefined}
       />
     </>
   );

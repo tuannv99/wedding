@@ -27,6 +27,8 @@ type FrameProps = {
   wide?: boolean;
   /** Tải ngay thay vì đợi tới gần khung nhìn. */
   eager?: boolean;
+  /** Ẩn dấu thứ tự "01" dưới ảnh. */
+  hideNumber?: boolean;
 };
 
 /**
@@ -51,6 +53,7 @@ export function Frame({
   className,
   wide,
   eager,
+  hideNumber,
 }: FrameProps) {
   return (
     <div className={className}>
@@ -75,7 +78,9 @@ export function Frame({
           sizes={sizes}
           priority={eager}
           loading={eager ? "eager" : "lazy"}
-          decoding="async"
+          /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn
+             quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy). */
+          decoding="sync"
           className="object-cover transition-opacity duration-500 group-hover:opacity-90"
         />
 
@@ -92,9 +97,11 @@ export function Frame({
 
       {/* Dấu thứ tự rất nhỏ dưới mép trái — đủ để đối chiếu với ô thumbnail
           vừa bấm, không đủ to để thành một lưới đánh số kiểu trang quản lý. */}
-      <span className="wd-eyebrow wd-num mt-3 block text-[10px] md:text-[18px] tracking-[0.28em] text-taupe/70">
-        {String(n).padStart(2, "0")}
-      </span>
+      {hideNumber ? null : (
+        <span className="wd-eyebrow wd-num mt-3 block text-[10px] md:text-[18px] tracking-[0.28em] text-taupe/70">
+          {String(n).padStart(2, "0")}
+        </span>
+      )}
     </div>
   );
 }

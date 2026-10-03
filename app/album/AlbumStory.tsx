@@ -55,6 +55,10 @@ export function AlbumStory() {
     [],
   );
 
+  // Tấm mở đầu đã hiện to ngay phía trên nên lưới bỏ nó đi cho khỏi trùng;
+  // lightbox vẫn giữ đủ cả bộ để bấm tấm mở đầu cũng mở lớn được.
+  const gridTiles = useMemo(() => tiles.filter((t) => t.n !== FIRST_INDEX), [tiles]);
+
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   // Lightbox nhận index 0-based, còn cả trang nói chuyện bằng số thứ tự
@@ -96,6 +100,13 @@ export function AlbumStory() {
             <p className="wd-body-sm mt-6 max-w-[480px] text-[15px] leading-[1.9] md:text-[23px] sm:whitespace-pre-line">
               {opening.intro}
             </p>
+
+            <p className="wd-body-sm mt-6 text-[15px] md:text-[23px] whitespace-pre-line text-taupe">
+              {overview.hint}
+            </p>
+            <p className="wd-body-sm mt-2 text-[15px] md:text-[23px] text-taupe/80 italic">
+              {overview.cta}
+            </p>
           </Reveal>
 
           <Reveal delay={0.1} className="mt-[clamp(40px,7vw,80px)]">
@@ -106,6 +117,7 @@ export function AlbumStory() {
               alt={cover.alt}
               wide
               eager
+              hideNumber
               sizes="(max-width: 1100px) 100vw, 1100px"
             />
           </Reveal>
@@ -122,10 +134,7 @@ export function AlbumStory() {
         <div className={BODY}>
           <Reveal>
             <OverviewSection
-              eyebrow={overview.eyebrow}
-              hint={overview.hint}
-              cta={overview.cta}
-              tiles={tiles}
+              tiles={gridTiles}
               onPick={openLightbox}
             />
           </Reveal>
