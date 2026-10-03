@@ -11,9 +11,9 @@ export function hasFlickerFlag(flag: string): boolean {
   return flags ? flags.split(" ").includes(flag) : false;
 }
 
-// noanim: framer-motion nhảy thẳng tới trạng thái cuối, không chạy animation
-// nào (phần CSS animation/transition được tắt ở cuối app/globals.css).
-if (hasFlickerFlag("noanim")) {
+// noanim / nomotion: framer-motion nhảy thẳng tới trạng thái cuối, không chạy
+// animation nào (phần CSS animation/transition tắt ở cuối app/globals.css).
+if (hasFlickerFlag("noanim") || hasFlickerFlag("nomotion")) {
   MotionGlobalConfig.skipAnimations = true;
   MotionGlobalConfig.instantAnimations = true;
 }

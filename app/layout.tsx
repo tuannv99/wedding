@@ -84,6 +84,8 @@ const FREEZE_VIEWPORT_HEIGHT = `(function(){var r=document.documentElement;if(/(
  *   noheroanim  Tắt hiệu ứng mờ dần + thu nhỏ của ảnh Hero.
  *   nofreeze    Tắt việc chốt --wd-vh (quay về 100svh như cũ).
  *   noanim      Tắt mọi CSS animation/transition + framer-motion.
+ *   nocssanim   Chỉ tắt CSS animation.      notrans   Chỉ tắt CSS transition.
+ *   nomotion    Chỉ tắt framer-motion.      nospin    Chỉ tắt icon nhạc xoay.
  *   nohdrfx     Header bỏ translateZ(0) + will-change.
  *   nofixed     Header không cố định (cuộn đi theo trang).
  *   nocount     Đồng hồ đếm ngược đứng yên, không vẽ lại mỗi giây.

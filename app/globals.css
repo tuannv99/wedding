@@ -168,6 +168,22 @@ html[data-ft~="noanim"] *::after {
   animation: none !important;
   transition: none !important;
 }
+/* Vòng 3 — tách noanim thành từng nhóm: nocssanim (chỉ CSS animation),
+   notrans (chỉ CSS transition), nospin (chỉ icon nhạc xoay trên header);
+   nomotion (chỉ framer-motion) xử lý ở lib/flicker-test.ts. */
+html[data-ft~="nocssanim"] *,
+html[data-ft~="nocssanim"] *::before,
+html[data-ft~="nocssanim"] *::after {
+  animation: none !important;
+}
+html[data-ft~="notrans"] *,
+html[data-ft~="notrans"] *::before,
+html[data-ft~="notrans"] *::after {
+  transition: none !important;
+}
+html[data-ft~="nospin"] .wd-spin {
+  animation: none !important;
+}
 /* nohdrfx: header vẫn cố định nhưng bỏ translateZ(0) + will-change (không ép
    layer GPU riêng). nofixed: header không cố định nữa, cuộn đi theo trang. */
 html[data-ft~="nohdrfx"] .wd-site-header,
