@@ -8,6 +8,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { wedding } from "@/lib/wedding";
 import { emitOpenInvitation } from "@/lib/events";
 import { useInvitation } from "@/lib/invitation";
+import { cn } from "@/lib/utils";
 import type { GuestInvitation } from "@/lib/guest-invitation";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
@@ -195,8 +196,15 @@ export function Hero({ invitation }: HeroProps) {
       <div className="flex flex-col items-center justify-end gap-[clamp(7px,calc(1.6*var(--wd-vh)),26px)] px-6 pb-[clamp(22px,calc(5*var(--wd-vh)),64px)] text-center md:col-start-1 md:row-start-1 md:items-start md:justify-center md:gap-[clamp(10px,calc(2.4*var(--wd-vh)),30px)] md:px-[clamp(32px,6vw,104px)] md:pb-0 md:text-left">
         <motion.p
           {...rise(0.4)}
-          /* Mobile chữ đậm hơn desktop: dòng này nằm trực tiếp trên ảnh. */
-          className="wd-eyebrow wd-num text-ink md:text-ink/70 md:tracking-[0.5em]"
+          /* Mobile chữ đậm hơn desktop: dòng này nằm trực tiếp trên ảnh.
+             Link gửi khách (có lời mời bên dưới): khối chữ cao thêm một đoạn
+             nên dòng ngày bị đẩy lên vùng ảnh sáng, khó đọc — mobile kéo nó
+             sát xuống dòng lời mời. Dùng margin chứ không translate: transform
+             của phần tử này do framer-motion (rise) điều khiển. */
+          className={cn(
+            "wd-eyebrow wd-num text-ink md:text-ink/70 md:tracking-[0.5em]",
+            invitation && "max-md:-mb-2",
+          )}
         >
           {wedding.date.display}
         </motion.p>
