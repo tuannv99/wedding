@@ -136,12 +136,21 @@
        chuyển động. Phải loại trừ ngay tại đây chứ không override được ở
        wedding.css — với !important, layer khai báo trước (base) luôn thắng
        layer components bất kể độ đặc hiệu. */
+    /* transition: none, KHÔNG phải transition-duration: 0.01ms như trước.
+       transition-property mặc định là `all`, nên đặt riêng duration cho `*`
+       là gắn ngầm "transition: all 0.01ms" cho MỌI phần tử — kể cả phần tử
+       không hề khai báo transition. Mỗi lần framer-motion ghi opacity/
+       transform vào phần tử, Safari lại khởi động một CSS transition từ giá
+       trị cũ: phần tử lên/xuống layer GPU và có khung hình vẽ lại giá trị cũ —
+       trang nháy trên iPhone bật Giảm chuyển động (đã kiểm chứng: tắt riêng
+       transition hoặc tắt riêng framer-motion đều hết nháy). Với các
+       transition có khai báo thật, "none" và 0.01ms nhìn y hệt nhau. */
     *:not(.wd-leaf, .wd-seal, .wd-rise > *),
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition: none !important;
     }
   }
 }
