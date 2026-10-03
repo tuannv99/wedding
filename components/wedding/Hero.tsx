@@ -31,9 +31,6 @@ const CLOSE_MS = 950;
 const UNFOLD_START_MS = 1350;
 const UNFOLD_MS = 1500;
 
-/** Khớp scroll-margin-top của section[id] trong globals.css (mốc md). */
-const HEADER_H = 73;
-
 type Phase = null | "closing" | "unfolding";
 
 type HeroProps = {
@@ -71,7 +68,18 @@ export function Hero({ invitation }: HeroProps) {
       window.requestAnimationFrame(() => {
         const el = document.getElementById("couple");
         if (!el) return;
-        const y = el.getBoundingClientRect().top + window.scrollY - HEADER_H;
+        const style = window.getComputedStyle(el);
+        // Chỗ chừa cho header = scroll-margin-top của section[id] (globals.css):
+        // 65px mobile, 73px từ md. Trước đây trừ cứng 73px nên trên mobile
+        // luôn hở ra 8px mép Hero phía trên khối Lễ Thành Hôn.
+        const headerSpace = Number.parseFloat(style.scrollMarginTop) || 0;
+        // Lần mở đầu tiên khối này vừa mount và còn đang bị .wd-rise
+        // (wedding.css) dịch xuống 26px; getBoundingClientRect tính cả phần
+        // dịch đó. Trừ nó ra để đo vị trí THẬT — nếu không, lần đầu cuộn lố
+        // 26px còn từ lần bấm thứ hai (hiệu ứng đã xong) lại dừng ở chỗ khác.
+        const riseShift =
+          style.transform === "none" ? 0 : new DOMMatrixReadOnly(style.transform).m42;
+        const y = el.getBoundingClientRect().top + window.scrollY - riseShift - headerSpace;
         window.scrollTo({ top: Math.max(0, y), behavior: "instant" });
       });
     });
