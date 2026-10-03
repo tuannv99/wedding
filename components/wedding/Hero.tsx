@@ -143,6 +143,7 @@ export function Hero({ invitation }: HeroProps) {
           alt={hero.alt}
           fill
           priority
+          decoding="sync"
           sizes="(max-width: 768px) 100vw, 55vw"
           className="object-cover object-center"
         />
@@ -206,12 +207,17 @@ export function Hero({ invitation }: HeroProps) {
         {invitation ? (
           <motion.p
             {...rise(0.62)}
-            className="wd-quote max-w-[34ch] text-[clamp(1rem,2.2vw,1.35rem)] md:text-[clamp(calc(1rem_+_8px),calc(2.2vw_+_8px),calc(1.35rem_+_8px))] text-ink/85 md:text-ink/60"
+            className="wd-quote text-[clamp(1rem,2.2vw,1.35rem)] md:text-[clamp(calc(1rem_+_8px),calc(2.2vw_+_8px),calc(1.35rem_+_8px))] text-ink/85 md:text-ink/60"
           >
             <span className="block">
               {invitation.greeting} <span className="text-ink">{invitation.name}</span>,
             </span>
-            <span className="mt-1 block">{invitation.message}</span>
+            {/* Lời mời luôn nằm trên MỘT dòng: cỡ chữ co theo bề rộng chỗ chứa
+                (~22em cho câu dài nhất "…của chúng anh chị.."). Mobile: cả màn
+                trừ px-6; desktop: cột chữ ~49vw trừ padding hai bên ~12vw. */}
+            <span className="mt-1 block whitespace-nowrap text-[clamp(12px,calc((100vw_-_48px)/22),1.35rem)] md:text-[clamp(12px,1.6vw,calc(1.35rem_+_8px))]">
+              {invitation.message}
+            </span>
           </motion.p>
         ) : null}
 

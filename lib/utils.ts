@@ -37,8 +37,12 @@ const easeInOutCubic = (t: number) =>
 /** Huỷ lượt cuộn đang chạy (nếu có) — đặt ở module để hai lần bấm liên tiếp không chồng nhau. */
 let cancelActiveScroll: (() => void) | null = null;
 
-/** Cuộn tới một section theo id, tôn trọng prefers-reduced-motion. */
-export function scrollToSection(id: string) {
+/**
+ * Cuộn tới một section theo id, tôn trọng prefers-reduced-motion.
+ * `instant`: nhảy thẳng tới đích, không animation — dùng khi một lớp phủ đặc
+ * đang che trang (menu mobile), xem Navigation.tsx.
+ */
+export function scrollToSection(id: string, { instant = false } = {}) {
   const el = document.getElementById(id);
   if (!el) return;
 
@@ -62,7 +66,7 @@ export function scrollToSection(id: string) {
   const delta = target - start;
   if (Math.abs(delta) < 1) return;
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (instant || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     window.scrollTo({ top: target, behavior: "instant" });
     return;
   }

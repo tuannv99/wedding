@@ -135,6 +135,8 @@ export function OurStory() {
                           /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
 
                           loading="eager"
+                          /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
+                          decoding="sync"
                           sizes="(max-width: 768px) 50vw, 400px"
                           className="object-cover"
                         />

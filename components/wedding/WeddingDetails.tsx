@@ -208,6 +208,8 @@ export function WeddingDetails() {
                         /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
 
                         loading="eager"
+                        /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
+                        decoding="sync"
                         sizes="(max-width: 767px) 40vw, 46vw"
                         className="object-cover"
                       />

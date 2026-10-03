@@ -26,6 +26,8 @@ export function Closing() {
           /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
 
           loading="eager"
+          /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
+          decoding="sync"
           sizes="100vw"
           className="object-cover object-center"
         />
@@ -57,6 +59,8 @@ export function Closing() {
             /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
 
             loading="eager"
+            /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
+            decoding="sync"
             sizes="100vw"
             className="object-cover object-center"
           />

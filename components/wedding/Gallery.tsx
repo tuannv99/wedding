@@ -88,6 +88,8 @@ export function Gallery() {
                     /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
 
                     loading="eager"
+                    /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
+                    decoding="sync"
                     sizes={GALLERY_SIZES}
                     className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.035]"
                   />

@@ -130,7 +130,10 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
              Cú vẽ lại rơi đúng vào khung hình cuối của hiệu ứng mờ đi, thành
              một cái "nháy" ngay lúc ảnh biến mất. Nền đã đục 95% nên phần
              nhoè chỉ tác động lên 5% còn lại: bỏ đi gần như không thấy khác. */
-          className="fixed inset-0 z-60 flex flex-col bg-ink/95"
+          /* will-change: giữ lớp phủ trên layer GPU suốt lúc nó còn mount —
+             không có nó thì fade vào vừa xong là Safari gỡ layer và vẽ lại cả
+             màn (nháy một nhịp), rồi dựng lại layer lúc bắt đầu fade ra. */
+          className="fixed inset-0 z-60 flex flex-col bg-ink/95 will-change-[opacity]"
           onTouchStart={(event) => {
             touchStartX.current = event.touches[0]?.clientX ?? null;
           }}
@@ -195,12 +198,13 @@ export function Lightbox({ images, index, onClose, onChange }: LightboxProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.99 }}
                   transition={{ duration: 0.5, ease: EASE_OUT }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 will-change-[opacity,transform]"
                 >
                   <Image
                     src={current.src}
                     alt={current.alt}
                     fill
+                    decoding="sync"
                     sizes="100vw"
                     className="object-contain"
                   />

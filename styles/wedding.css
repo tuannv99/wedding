@@ -240,16 +240,26 @@
   animation: wd-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.82s both;
 }
 
-/* Reveal (components/ui/Reveal.tsx) trên máy cảm ứng: hiện sẵn ngay từ khung
-   hình đầu tiên. Reveal tự đẩy về trạng thái hiện bằng JS, nhưng chỉ SAU khi
-   mount + effect chạy — ở lần tải/chuyển sang /album, /wishes thì cả trang
-   render ra với opacity 0 trước, rồi mới bật lên: một cú nháy trắng. Ghi đè
-   bằng CSS thì không phải chờ JS. !important để thắng style inline của
-   framer-motion. */
-@media (hover: none), (pointer: coarse) {
+/* Reveal (components/ui/Reveal.tsx): fade-up khi cuộn tới, CHỈ trên máy có
+   chuột. Máy cảm ứng không khớp media query này nên khối luôn hiện sẵn từ
+   khung hình đầu tiên, không có transition nào — xem lý do ở Reveal.tsx.
+   Media query phải khớp đúng hằng FINE_POINTER trong Reveal.tsx. */
+@media (hover: hover) and (pointer: fine) {
   .wd-reveal {
-    opacity: 1 !important;
-    transform: none !important;
+    transition:
+      opacity var(--wd-reveal-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1)
+        var(--wd-reveal-delay, 0s),
+      transform var(--wd-reveal-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1)
+        var(--wd-reveal-delay, 0s);
+  }
+  .wd-reveal:not([data-shown]) {
+    opacity: 0;
+    transform: translate3d(0, var(--wd-reveal-y, 24px), 0);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .wd-reveal:not([data-shown]) {
+    transform: none;
   }
 }
 

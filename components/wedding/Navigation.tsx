@@ -134,6 +134,19 @@ export function Navigation() {
     window.setTimeout(() => scrollToSection(id), 120);
   }, []);
 
+  /**
+   * Bấm một mục trong menu mobile: nhảy TỨC THÌ tới section ngay sau lưng tấm
+   * menu (lúc này còn đặc 100%, khách không thấy cú nhảy), rồi mới cho menu mờ
+   * đi để lộ ra đúng section đó.
+   * Trước đây menu mờ dần trong lúc trang cuộn mượt 0.65–1.9s phía dưới —
+   * iPhone phải giải mã từng tấm ảnh lướt qua dưới lớp phủ đang mờ, ảnh nào
+   * chưa kịp thì lộ ô trống: cả trang nháy liên tục suốt cú cuộn.
+   */
+  const goToFromMenu = useCallback((id: string) => {
+    scrollToSection(id, { instant: true });
+    setOpen(false);
+  }, []);
+
   // Trước khi khách bấm "Mở thiệp", trang chủ chỉ hiện Hero — chưa cần menu.
   if (!opened && isHome) return null;
 
@@ -273,7 +286,12 @@ export function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex touch-none flex-col items-center justify-center gap-10 overscroll-none bg-ivory px-6 xl:hidden"
+            /* will-change giữ menu (và từng dòng bên dưới) trên layer GPU suốt
+               lúc nó còn mount. Không có nó thì animation vừa xong là
+               framer-motion trả opacity/transform về tĩnh, Safari gỡ layer và
+               vẽ lại cả lớp phủ full màn hình — chữ menu nháy một nhịp đúng
+               lúc vừa hiện xong, và lần nữa khi bắt đầu đóng. */
+            className="fixed inset-0 z-40 flex touch-none flex-col items-center justify-center gap-10 overscroll-none bg-ivory px-6 will-change-[opacity] xl:hidden"
           >
             <ul className="flex flex-col items-center gap-8">
               {wedding.nav.map((item, index) => (
@@ -286,6 +304,7 @@ export function Navigation() {
                     delay: 0.1 + index * 0.08,
                     ease: [0.22, 1, 0.36, 1],
                   }}
+                  className="will-change-[opacity,transform]"
                 >
                   {"href" in item || !isHome ? (
                     <Link
@@ -306,7 +325,7 @@ export function Navigation() {
                   ) : (
                     <button
                       type="button"
-                      onClick={() => goTo(item.id)}
+                      onClick={() => goToFromMenu(item.id)}
                       className="font-display text-center text-[1.375rem] tracking-[0.1em] text-ink uppercase"
                     >
                       {item.label}

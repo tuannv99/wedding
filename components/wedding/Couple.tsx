@@ -81,6 +81,9 @@ function PersonColumn({ label, name, portrait }: PersonColumnProps) {
           src={portrait.src}
           alt={portrait.alt}
           fill
+          loading="eager"
+          /* sync: xem Gallery.tsx — tránh ô trống nháy khi cuộn quay lại */
+          decoding="sync"
           sizes="(max-width: 768px) 80vw, 300px"
           className="object-cover"
         />
