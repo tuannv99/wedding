@@ -203,7 +203,7 @@ export function Hero({ invitation }: HeroProps) {
              của phần tử này do framer-motion (rise) điều khiển. */
           className={cn(
             "wd-eyebrow wd-num text-ink md:text-ink/70 md:tracking-[0.5em]",
-            invitation && "max-md:-mb-2",
+            invitation && "max-md:-mb-3",
           )}
         >
           {wedding.date.display}
