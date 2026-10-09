@@ -7,14 +7,32 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import { Botanical } from "@/components/ui/Botanical";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { SaveImageButton } from "@/components/ui/SaveImageButton";
 import { weddingBankAccounts, type BankAccount } from "@/lib/wedding-bank";
 import { useScrollLock } from "@/lib/scroll-lock";
+import { cn } from "@/lib/utils";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
-function QrBlock({ account }: { account: BankAccount }) {
+/** "Chú Rể" + ".png" → "qr-mung-cuoi-chu-re.png" — tên file không dấu cho dễ tìm trong máy. */
+function qrFileName(account: BankAccount): string {
+  const slug = account.displayName
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/đ/gi, "d")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  const ext = account.qrImage?.match(/\.\w+$/)?.[0] ?? ".png";
+  return `qr-mung-cuoi-${slug}${ext}`;
+}
+
+type Side = "groom" | "bride";
+const SIDES: Side[] = ["groom", "bride"];
+
+function QrBlock({ account, className }: { account: BankAccount; className?: string }) {
   return (
-    <div className="flex flex-col items-center gap-4 text-center sm:gap-2.5">
+    <div className={cn("flex-col items-center gap-4 text-center sm:gap-2.5", className)}>
       <p className="wd-label text-ink">{account.displayName}</p>
 
       {account.qrImage ? (
@@ -54,13 +72,25 @@ function QrBlock({ account }: { account: BankAccount }) {
         // Từ md chữ nút lớn lên 21px (~400px cả padding) nên khoá hẳn 1 dòng.
         className="tracking-[0.15em] md:whitespace-nowrap"
       />
+
+      {account.qrImage ? (
+        <SaveImageButton
+          src={account.qrImage}
+          fileName={qrFileName(account)}
+          label="Lưu ảnh QR"
+          className="tracking-[0.15em] md:whitespace-nowrap"
+        />
+      ) : null}
     </div>
   );
 }
 
-export function GiftCTA() {
+/** `className`: chỉnh màu nút mở modal theo nền đặt nó (vd. chữ trắng trên ảnh ở Closing). */
+export function GiftCTA({ className }: { className?: string }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  /** Chỉ dùng dưới sm: mobile xem từng QR một qua tab thay vì một danh sách dài. */
+  const [side, setSide] = useState<Side>("groom");
   const containerRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
@@ -110,7 +140,7 @@ export function GiftCTA() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="wd-btn-ghost"
+        className={cn("wd-btn-ghost", className)}
       >
         ♡ Mừng cưới
       </button>
@@ -173,13 +203,57 @@ export function GiftCTA() {
                       </p>
                     </div>
 
+                    {/* Tab chỉ có trên mobile (dưới sm) — từ sm hai QR đã nằm
+                        cạnh nhau nên không cần. Kiểu gạch chân giống tab cũ của
+                        Timeline. */}
+                    <div
+                      role="tablist"
+                      aria-label="Chọn tài khoản mừng cưới"
+                      className="mt-10 flex items-center justify-center gap-10 sm:hidden"
+                    >
+                      {SIDES.map((key) => {
+                        const isActive = key === side;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            role="tab"
+                            aria-selected={isActive}
+                            onClick={() => setSide(key)}
+                            className={cn(
+                              "wd-nav-link relative pb-2.5 text-[13px] tracking-[0.24em] transition-colors duration-300",
+                              isActive ? "text-ink" : "text-ink/50",
+                            )}
+                          >
+                            {weddingBankAccounts[key].displayName}
+                            {isActive ? (
+                              <motion.span
+                                layoutId="gift-tab-underline"
+                                aria-hidden="true"
+                                className="absolute inset-x-0 bottom-0 h-[1.5px] bg-ink"
+                                transition={{ duration: 0.28, ease: EASE_OUT }}
+                              />
+                            ) : null}
+                          </button>
+                        );
+                      })}
+                    </div>
+
                     {/* md→lg (768–1023px) chưa đủ chỗ cho 2 cột ~400px (nút
                         "Sao chép số tài khoản" ở cỡ chữ PC) nên xếp dọc; từ lg
                         mới lại 2 cột. */}
-                    <div className="mt-12 flex flex-col items-center gap-12 sm:mt-6 sm:flex-row sm:items-start sm:justify-center sm:gap-12 md:flex-col md:items-center lg:flex-row lg:items-start">
-                      <QrBlock account={weddingBankAccounts.groom} />
-                      <div aria-hidden="true" className="h-px w-16 bg-taupe/25 sm:h-auto sm:w-px sm:self-stretch md:h-px md:w-16 md:self-auto lg:h-auto lg:w-px lg:self-stretch" />
-                      <QrBlock account={weddingBankAccounts.bride} />
+                    <div className="mt-8 flex flex-col items-center gap-12 sm:mt-6 sm:flex-row sm:items-start sm:justify-center sm:gap-12 md:flex-col md:items-center lg:flex-row lg:items-start">
+                      {/* Dưới sm chỉ hiện QR của tab đang chọn (và ẩn vạch
+                          ngăn); từ sm hiện cả hai như trước. */}
+                      <QrBlock
+                        account={weddingBankAccounts.groom}
+                        className={side === "groom" ? "flex" : "hidden sm:flex"}
+                      />
+                      <div aria-hidden="true" className="hidden h-px w-16 bg-taupe/25 sm:block sm:h-auto sm:w-px sm:self-stretch md:h-px md:w-16 md:self-auto lg:h-auto lg:w-px lg:self-stretch" />
+                      <QrBlock
+                        account={weddingBankAccounts.bride}
+                        className={side === "bride" ? "flex" : "hidden sm:flex"}
+                      />
                     </div>
                   </motion.div>
                 </motion.div>

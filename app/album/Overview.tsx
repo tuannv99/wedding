@@ -113,7 +113,14 @@ function OverviewGrid({
                        quay lại, Safari không vẽ ô trống trước (nháy). */
                     loading="eager"
                     decoding="sync"
-                    sizes="(max-width: 640px) 42vw, (max-width: 1024px) 28vw, 380px"
+                    /* Bề ngang mỗi ô đã biết chính xác sau khi đo lưới — báo
+                       đúng con số đó. Một mức chung cho mọi ô (380px) làm tấm
+                       ngang khép lại (~750px trên desktop) bị phóng to và mờ. */
+                    sizes={
+                      itemWidth > 0
+                        ? `${Math.ceil(itemWidth)}px`
+                        : "(max-width: 640px) 42vw, (max-width: 1024px) 28vw, 380px"
+                    }
                     className={cn(
                       "object-cover transition-opacity duration-500",
                       // Ô thường lùi lại một bước để cả lưới đọc ra là một bản

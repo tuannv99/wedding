@@ -36,16 +36,6 @@ export type TimelineItem = {
   title: string;
 };
 
-export type TimelineSchedule = {
-  /** Dùng làm React key + để tab nhớ đang chọn nghi lễ nào. */
-  id: string;
-  /** Nhãn trên tab, ví dụ "Lễ Thành Hôn". */
-  label: string;
-  /** Nhà tổ chức nghi lễ này, ví dụ "Nhà gái". */
-  venue: string;
-  items: TimelineItem[];
-};
-
 export type StoryStep = {
   /**
    * Phần chữ chính. \n\n để tách đoạn; \n để tự ngắt dòng theo ý muốn (chỉ
@@ -176,32 +166,13 @@ export const wedding = {
     },
   ] satisfies StoryStep[],
 
-  /**
-   * Chương trình nghi lễ — Timeline.tsx hiển thị dạng tab, mặc định chọn mục
-   * đầu tiên (Lễ Vu Quy).
-   */
+  /** Chương trình ngày cưới — MỘT dòng thời gian chung (Timeline.tsx). */
   timeline: [
-    {
-      id: "vu-quy",
-      label: "Lễ Vu Quy",
-      venue: "Tại Tư Gia Nhà Gái",
-      items: [
-        { time: "06:30", title: "Đón khách" },
-        { time: "07:00", title: "Lễ Vu Quy" },
-      ],
-    },
-    {
-      id: "thanh-hon",
-      label: "Lễ Thành Hôn",
-      venue: "Tại Tư Gia Nhà Trai",
-      items: [
-        { time: "10:45", title: "Đón khách" },
-        { time: "11:00", title: "Lễ Thành Hôn" },
-        { time: "12:00", title: "Tiệc cưới" },
-        { time: "12:10", title: "Nâng ly chúc mừng" },
-      ],
-    },
-  ] satisfies TimelineSchedule[],
+    { time: "07:00", title: "Lễ Vu Quy" },
+    { time: "08:30", title: "Lễ Rước Dâu" },
+    { time: "11:00", title: "Lễ Thành Hôn" },
+    { time: "12:00", title: "Tiệc cưới" },
+  ] satisfies TimelineItem[],
 
   images: {
     hero: {
@@ -439,7 +410,9 @@ export const wedding = {
     },
     closing: {
       eyebrow: "Thương mến",
-      thanks: "Cảm ơn đã là một phần trong câu chuyện của chúng mình",
+      title: "Cảm ơn",
+      thanks:
+        "Văn Tuấn và Mai Hoa xin gửi lời cảm ơn chân thành đến tất cả gia đình, bạn bè và người thân đã luôn yêu thương, đồng hành và chúc phúc cho chúng mình.",
     },
   },
 

@@ -11,14 +11,15 @@ export function Closing() {
   return (
     <footer className="relative isolate flex w-full flex-col items-center justify-center overflow-hidden bg-ivory px-5 py-16 md:min-h-[85svh] md:py-40">
       {/*
-        Ảnh khép thiệp làm nền, chữ đè lên trên — nhưng cắt ảnh theo hai cách
-        khác nhau, vì ảnh gốc là khung NGANG (2200×1467) còn màn điện thoại
-        thì dọc.
+        Ảnh khép thiệp phủ kín footer ở mọi bề ngang (object-cover). Trên mobile
+        khung dọc nên ảnh ngang bị xén hai bên — cặp đôi đứng gần giữa ảnh nên
+        vẫn còn đủ cả hai người.
 
-        Desktop: khung nhìn cũng nằm ngang nên ảnh tràn viền được, object-cover
-        chỉ xén bớt trên/dưới mà vẫn giữ nguyên bề ngang — cả hai người còn đủ.
+        Toàn bộ chữ footer màu TRẮNG (giống Hero trên mobile), nên lớp phủ là
+        một lớp SẪM suốt chiều cao — nhẹ nhất ở giữa cho ảnh còn thấy rõ, đậm
+        hơn ở hai đầu nơi ảnh nhiều mảng sáng (trời, tà váy, voan).
       */}
-      <div className="absolute inset-0 -z-10 hidden md:block">
+      <div className="absolute inset-0 -z-10">
         <Image
           src={closing.src}
           alt={closing.alt}
@@ -31,49 +32,10 @@ export function Closing() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div aria-hidden="true" className="absolute inset-0 bg-ivory/55" />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-ivory/40 via-ivory/25 to-ivory/70"
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(40,36,32,0.58)_0%,rgba(40,36,32,0.42)_45%,rgba(40,36,32,0.5)_75%,rgba(40,36,32,0.6)_100%)]"
         />
-      </div>
-
-      {/*
-        Mobile: nếu để ảnh tràn viền cả footer thì object-cover phải xén theo
-        BỀ NGANG — một footer 390×660 chỉ giữ lại đúng 37% giữa ảnh, tức mất
-        hẳn chú rể ở mép phải. Nên ở đây khung nền giữ đúng tỉ lệ gốc 3:2 và
-        rộng hết bề ngang màn: ảnh không bị xén một milimet nào.
-
-        Khung đó canh giữa theo trục dọc của footer và mép trên/mép dưới tan
-        dần vào ivory, nên nó vẫn là NỀN nằm sau khối chữ (đúng ý "ảnh làm
-        background"), không quay lại thành một khối ảnh riêng đặt phía trên
-        khối chữ như bản cũ. Chữ chạy qua ảnh ở khoảng giữa — chỗ có cô dâu,
-        tà voan và vòm đá — rồi ra ngoài nền ivory ở hai đầu.
-      */}
-      <div className="absolute inset-x-0 top-1/2 -z-10 w-full -translate-y-1/2 md:hidden">
-        <div className="relative aspect-[3/2] w-full">
-          <Image
-            src={closing.src}
-            alt={closing.alt}
-            fill
-            /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
-
-            loading="eager"
-            /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
-            decoding="sync"
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-          <div aria-hidden="true" className="absolute inset-0 bg-ivory/45" />
-          {/* Ivory đặc ở đúng hai mép rồi nhạt nhanh: mép ảnh tan vào nền thay
-              vì cắt ngang thành một đường thẳng. Ở khoảng giữa (18–82%) lớp
-              phủ chỉ còn 0.18 — cộng với 0.45 bên trên là ~0.55, đúng bằng độ
-              phủ của bản desktop. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(249,247,242,1)_0%,rgba(249,247,242,0.18)_18%,rgba(249,247,242,0.18)_82%,rgba(249,247,242,1)_100%)]"
-          />
-        </div>
       </div>
 
       {/* Branch mép trái + sprig mép phải, đúng cỡ chuẩn hoá dùng chung toàn
@@ -92,16 +54,20 @@ export function Closing() {
         className="-right-[3vw] -bottom-[5vh] hidden h-[36vh] w-[20vh] lg:block"
       />
 
-      {/* Thứ tự theo bản design: lời cảm ơn → tên → ngày */}
-      <div className="flex w-full max-w-2xl flex-col items-center px-1 text-center md:px-0">
+      {/* Thứ tự theo bản design: lời cảm ơn → tên → ngày. Chữ trắng + bóng rất
+          nhẹ để không chìm vào những mảng sáng của ảnh. */}
+      <div className="flex w-full max-w-2xl flex-col items-center px-1 text-center text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.35)] md:px-0">
         <Reveal>
-          <p className="wd-body-serif whitespace-pre-line">
+          <h2 className="wd-h1 tracking-[0.16em] text-white uppercase">
+            {wedding.copy.closing.title}
+          </h2>
+          <p className="wd-body-serif mt-6 whitespace-pre-line text-white md:mt-8">
             {wedding.copy.closing.thanks}
           </p>
         </Reveal>
 
         <Reveal delay={0.16}>
-          <p className="wd-display mt-12 text-[clamp(2.5rem,11vw,5.5rem)] md:text-[clamp(calc(2.5rem_+_8px),calc(11vw_+_8px),calc(5.5rem_+_8px))] uppercase md:mt-16">
+          <p className="wd-display mt-12 text-white text-[clamp(2.5rem,11vw,5.5rem)] md:text-[clamp(calc(2.5rem_+_8px),calc(11vw_+_8px),calc(5.5rem_+_8px))] uppercase md:mt-16">
             {wedding.groom.short}
             <span className="mx-3 text-champagne italic lowercase">&amp;</span>
             {wedding.bride.short}
@@ -109,17 +75,17 @@ export function Closing() {
         </Reveal>
 
         <Reveal delay={0.3} className="mt-8 flex flex-col items-center gap-7">
-          <span aria-hidden="true" className="h-px w-16 bg-ink/25" />
-          <p className="wd-eyebrow wd-num text-ink/70">{wedding.date.display}</p>
+          <span aria-hidden="true" className="h-px w-16 bg-white/50" />
+          <p className="wd-eyebrow wd-num text-white/90">{wedding.date.display}</p>
         </Reveal>
 
         <Reveal delay={0.42}>
-          <Botanical variant="mark" className="mt-12 h-5 w-16 text-sage/75" />
+          <Botanical variant="mark" className="mt-12 h-5 w-16 text-white/70" />
         </Reveal>
 
         {/* Kín đáo, đặt cuối cùng — không phải một section mừng cưới lớn. */}
         <Reveal delay={0.5} className="mt-10">
-          <GiftCTA />
+          <GiftCTA className="border-white/80 text-white" />
         </Reveal>
       </div>
     </footer>

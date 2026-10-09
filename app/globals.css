@@ -2,6 +2,8 @@
 /* Design system export từ Claude Design (.wd-* classes).
    Đưa vào layer(components) để utility Tailwind (text-*, mt-*, ...) vẫn ghi đè được. */
 @import "../styles/wedding.css" layer(components);
+/* Mobile: chữ to + đậm hơn một chút (trừ Hero). Layer utilities — xem đầu file. */
+@import "../styles/mobile-type.css" layer(utilities);
 
 /* Mọi chữ số 0–9 trên toàn site vẽ bằng Times New Roman, không bao giờ đậm.
 

@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Mobile: chữ to hơn + đậm hơn một chút (trừ Hero)
+   ==========================================================================
+
+   Chỉ áp cho điện thoại (< 640px). Từ sm trở lên mọi chỗ đều đã có cỡ chữ
+   sm:/md: riêng, nên PC (≥ 768px) không bị đụng tới — đúng như khối "+8px"
+   cuối wedding.css chỉ áp cho PC.
+
+   Phạm vi: nội dung thiệp (#main), thanh menu và modal Mừng cưới — TRỪ #hero.
+
+   Import ở globals.css vào layer `utilities` (không phải components như
+   wedding.css): nhiều phần tử có cả class wd-* lẫn utility text-[…] của
+   Tailwind, mà utility luôn thắng layer components. Ở cùng layer utilities,
+   selector dưới đây đặc hiệu hơn utility nhờ :not(#hero *) (tính như một
+   #id). Phạm vi bọc trong :where() để không cộng thêm độ đặc hiệu — nhờ vậy
+   vài chỗ chỉnh riêng (modal, lời cảm ơn) chỉ cần thêm một class là thắng. Cỡ chữ Tailwind
+   tuỳ ý được bắt bằng [class~="text-[13px]"] — khớp đúng nguyên token class.
+
+   Quy tắc:
+     - Độ đậm tăng một bậc: 300 → 400, 400 → 500. Font chỉ tải 300/400/500
+       (app/layout.tsx), nên chữ đã 500 giữ nguyên — ép 600 sẽ thành đậm giả.
+     - Cỡ chữ: chữ nhỏ +1px, chữ vừa/lớn ~+5–7%.
+     - KHÔNG được làm dòng nào xuống thêm: mọi con số dưới đây đã đo bằng
+       trình duyệt ở 360/375/390/414/430px, số dòng của từng đoạn chữ giữ y
+       như trước. Chỗ nào sát mép (tiêu đề section, khối địa điểm 2 cột) chỉ
+       tăng độ đậm hoặc tăng ít hơn. Đổi số ở đây thì đo lại.
+   ========================================================================== */
+
+@media (max-width: 639px) {
+  /* ---------- Độ đậm ---------- */
+  :where(#main, nav, [role="dialog"])
+    :is(.wd-h1, .wd-body-serif, .wd-quote, .wd-display, .wd-numeral, .font-light):not(#hero *) {
+    font-weight: 400;
+  }
+  :where(#main, nav, [role="dialog"])
+    :is(.wd-body-sm, .wd-num-story, .wd-stepper-btn, .wd-stepper-value, .font-display:not(.font-light), .font-normal):not(#hero *) {
+    font-weight: 500;
+  }
+
+  /* ---------- Cỡ chữ: class wd-* ---------- */
+  :where(#main, nav, [role="dialog"]) .wd-eyebrow:not(#hero *) { font-size: 14px; }
+  :where(#main, nav, [role="dialog"]) .wd-label:not(#hero *) { font-size: 17px; }
+  :where(#main, nav, [role="dialog"]) .wd-nav-link:not(#hero *) { font-size: 16px; }
+  :where(#main, nav, [role="dialog"]) .wd-body-sm:not(#hero *) { font-size: 17px; }
+  :where(#main, nav, [role="dialog"]) .wd-fact-label:not(#hero *) { font-size: 14px; }
+  :where(#main, nav, [role="dialog"]) .wd-field-label:not(#hero *) { font-size: 13px; }
+  :where(#main, nav, [role="dialog"]) .wd-rsvp-option:not(#hero *) { font-size: 17px; }
+  :where(#main, nav, [role="dialog"]) :is(.wd-stepper-btn, .wd-stepper-value):not(#hero *) { font-size: 21px; }
+  :where(#main, nav, [role="dialog"]) .wd-cta:not(#hero *) { font-size: 15px; }
+  :where(#main, nav, [role="dialog"]) :is(.wd-input, .wd-textarea):not(#hero *) { font-size: 17px; }
+  :where(#main, nav, [role="dialog"]) .wd-btn-ghost:not(#hero *) { font-size: 14px; }
+  /* Lời cảm ơn cuối trang (Closing) — 23px đã làm dư một dòng ở máy 390px. */
+  :where(#main, nav, [role="dialog"]) .wd-body-serif:not(#hero *) { font-size: 22.5px; }
+  :where(#main, nav, [role="dialog"]) .wd-h1:not(#hero *) { font-size: 37px; }
+  /* Tiêu đề section đã được tính vừa khít một dòng theo bề ngang màn
+     (.wd-h1-fit, wedding.css) — chỉ nới phần dự phòng 9.6 → 9.4. */
+  :where(#main, nav, [role="dialog"]) .wd-h1-fit:not(#hero *) {
+    font-size: min(37px, calc((100vw - 48px) / 9.4));
+  }
+
+  /* ---------- Cỡ chữ: utility Tailwind tuỳ ý trong component ----------
+     Đặt SAU khối wd-* để thắng khi một phần tử có cả hai. */
+  :where(#main, nav, [role="dialog"]) [class~="text-[9px]"]:not(#hero *) { font-size: 10px; }
+  :where(#main, nav, [role="dialog"]) [class~="text-[10px]"]:not(#hero *) { font-size: 11px; }
+  :where(#main, nav, [role="dialog"]) [class~="text-[11px]"]:not(#hero *) { font-size: 12px; }
+  :where(#main, nav, [role="dialog"]) [class~="text-[12px]"]:not(#hero *) { font-size: 13px; }
+  :where(#main, nav, [role="dialog"]) [class~="text-[13px]"]:not(#hero *) { font-size: 14px; }
+  :where(#main, nav, [role="dialog"]) [class~="text-sm"]:not(#hero *) { font-size: 15px; }
+  :where(#main, nav, [role="dialog"]) [class~="text-[15px]"]:not(#hero *) { font-size: 16px; }
+
+  /* Couple: tên cô dâu / chú rể, chữ "&" */
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(1.75rem,3.6vw,2.5rem)]"]:not(#hero *),
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(1.75rem,3vw,2.75rem)]"]:not(#hero *) {
+    font-size: 1.85rem;
+  }
+  /* OurStory: số 01/02/03 và đoạn kể chuyện. Đoạn kể chuyện tự xuống dòng
+     trong cột hẹp: máy ≤ 375px giữ sàn 14px (chỉ đậm hơn), từ ~390px mới to
+     dần theo vw — tăng ở máy hẹp là dư ra một dòng. Nét 400 rộng hơn nét
+     300 chừng 2–3%, bù bằng letter-spacing âm rất nhẹ để giữ đúng số dòng. */
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(1.5rem,6.5vw,2.25rem)]"]:not(#hero *) {
+    font-size: clamp(1.6rem, 6.9vw, 2.25rem);
+  }
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(0.875rem,3.6vw,1.3rem)]"]:not(#hero *) {
+    font-size: clamp(0.875rem, 3.75vw, 1.3rem);
+    letter-spacing: -0.012em;
+  }
+  /* WeddingDetails: ngày 24/10 · 25/10 */
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(1.35rem,5.5vw,2.5rem)]"]:not(#hero *) {
+    font-size: clamp(1.45rem, 5.85vw, 2.5rem);
+  }
+  /* Countdown: số đếm ngược */
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(2.25rem,10vw,6.25rem)]"]:not(#hero *) {
+    font-size: clamp(2.4rem, 10.5vw, 6.25rem);
+  }
+  /* Timeline: tiêu đề "Ngày vui" và tên nghi lễ */
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(40px,5.6vw,68px)]"]:not(#hero *) {
+    font-size: 42px;
+  }
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(1.05rem,3.4vw,1.375rem)]"]:not(#hero *) {
+    font-size: clamp(1.125rem, 3.65vw, 1.375rem);
+  }
+  /* Closing: TUẤN & HOA */
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(2.5rem,11vw,5.5rem)]"]:not(#hero *) {
+    font-size: clamp(2.6rem, 11.5vw, 5.5rem);
+  }
+  /* Modal Mừng cưới: đoạn giới thiệu tự xuống dòng trong khung 380px — tăng
+     nhẹ hơn chữ wd-body-sm khác để vẫn đủ 4 dòng ở máy 360px. Nút "Sao chép
+     số tài khoản" là nhãn dài nhất: thu tracking một chút để vẫn một dòng. */
+  [role="dialog"] .wd-body-sm.mx-auto:not(#hero *) { font-size: 16.5px; letter-spacing: -0.015em; }
+  [role="dialog"] .wd-btn-ghost:not(#hero *) { letter-spacing: 0.1em; }
+
+  /* Modal Mừng cưới: tiêu đề */
+  :where(#main, nav, [role="dialog"]) [class~="text-[clamp(28px,4vw,36px)]"]:not(#hero *) {
+    font-size: 30px;
+  }
+}

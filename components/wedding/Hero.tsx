@@ -8,7 +8,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { wedding } from "@/lib/wedding";
 import { emitOpenInvitation } from "@/lib/events";
 import { useInvitation } from "@/lib/invitation";
-import { cn } from "@/lib/utils";
 import type { GuestInvitation } from "@/lib/guest-invitation";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
@@ -145,7 +144,7 @@ export function Hero({ invitation }: HeroProps) {
           càng bắt đầu cao, nên phải kéo vùng sáng lên theo. Điều kiện bọc
           thêm max-md để một cửa sổ desktop thấp không rơi vào nhánh mobile.
         */
-        className="absolute inset-x-0 bottom-0 -z-10 h-[118%] max-md:[@media(max-height:700px)]:h-[132%] md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
+        className="absolute inset-x-0 bottom-0 -z-10 h-[118%] overflow-hidden max-md:[@media(max-height:700px)]:h-[132%] md:relative md:z-0 md:col-start-2 md:row-start-1 md:h-full md:w-full"
       >
         <Image
           src={hero.src}
@@ -154,7 +153,10 @@ export function Hero({ invitation }: HeroProps) {
           priority
           decoding="sync"
           sizes="(max-width: 768px) 100vw, 55vw"
-          className="object-cover object-center"
+          /* Phóng nhẹ 10% quanh vùng cô dâu chú rể (~45% chiều cao ảnh) cho
+             hai người lớn hơn trong khung; overflow-hidden ở khung bọc giữ
+             ảnh không lấn sang cột chữ trên PC. */
+          className="origin-[50%_45%] scale-110 object-cover object-center"
         />
 
         {/*
@@ -202,21 +204,6 @@ export function Hero({ invitation }: HeroProps) {
         đúng nhịp của bản design: căn giữa theo trục dọc, canh trái.
       */}
       <div className="flex flex-col items-center justify-end gap-[clamp(7px,calc(1.6*var(--wd-vh)),26px)] px-6 pb-[clamp(22px,calc(5*var(--wd-vh)),64px)] text-center md:col-start-1 md:row-start-1 md:items-start md:justify-center md:gap-[clamp(10px,calc(2.4*var(--wd-vh)),30px)] md:px-[clamp(32px,6vw,104px)] md:pb-0 md:text-left">
-        <motion.p
-          {...rise(0.4)}
-          /* Mobile chữ đậm hơn desktop: dòng này nằm trực tiếp trên ảnh.
-             Link gửi khách (có lời mời bên dưới): khối chữ cao thêm một đoạn
-             nên dòng ngày bị đẩy lên vùng ảnh sáng, khó đọc — mobile kéo nó
-             sát xuống dòng lời mời. Dùng margin chứ không translate: transform
-             của phần tử này do framer-motion (rise) điều khiển. */
-          className={cn(
-            "wd-eyebrow wd-num text-ink md:text-ink/70 md:tracking-[0.5em]",
-            invitation && "max-md:-mb-3",
-          )}
-        >
-          {wedding.date.display}
-        </motion.p>
-
         {/* Gửi khách mời cá nhân hoá (URL /[guest]) — chỉ hiện khi có invitation,
             không đổi gì ở URL mặc định "/". Dùng lại đúng style wd-quote của
             câu tagline bên dưới, không tạo badge/card mới. */}
@@ -276,6 +263,15 @@ export function Hero({ invitation }: HeroProps) {
           className="wd-quote text-[clamp(1rem,2.2vw,1.35rem)] md:text-[clamp(calc(1rem_+_8px),calc(2.2vw_+_8px),calc(1.35rem_+_8px))] text-ink/85 md:text-ink/60"
         >
           {wedding.copy.hero.tagline}!
+        </motion.p>
+
+        {/* Ngày cưới đứng ngay sau câu tagline. Mobile chữ đậm hơn desktop:
+            dòng này nằm trực tiếp trên ảnh. */}
+        <motion.p
+          {...rise(2.25)}
+          className="wd-eyebrow wd-num text-ink md:text-ink/70 md:tracking-[0.5em]"
+        >
+          {wedding.date.display}
         </motion.p>
 
         {/*
