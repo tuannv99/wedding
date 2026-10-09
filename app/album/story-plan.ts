@@ -7,13 +7,13 @@ import type { AlbumInterlude, AlbumPhoto } from "@/lib/wedding";
  * giấy lật được: một ảnh là một trang, một trang là một màn hình. Muốn xem
  * lại tấm thứ 3 khi đang ở tấm thứ 25 thì phải lật ngược 22 lần.
  *
- * Ở đây không còn trang, không còn chương. 35 ảnh dọc chảy thành MỘT dòng
+ * Ở đây không còn trang, không còn chương. 16 ảnh dọc chảy thành MỘT dòng
  * liên tục, và nhịp thị giác đến từ việc mỗi khối ảnh có bố cục khác nhau —
  * lúc một tấm lớn giữa trang, lúc hai tấm cạnh nhau, lúc một tấm dồn hẳn về
  * một bên để chừa ra một mảng trắng.
  *
  * Nhịp này được VIẾT TAY chứ không sinh ra từ một chu kỳ lặp hay một hàm
- * random: 35 là con số cố định và đã biết trước, nên cứ xếp thẳng ra thì đọc
+ * random: 16 là con số cố định và đã biết trước, nên cứ xếp thẳng ra thì đọc
  * được ngay đoạn nào đang dồn dập, đoạn nào đang thở. Chu kỳ lặp (cách làm
  * của page-plan.ts cũ) tiết kiệm được vài dòng nhưng luôn để lại một đoạn
  * cụt ở cuối, đúng chỗ cần chắc tay nhất.
@@ -47,44 +47,32 @@ const CAPACITY: Record<StoryLayout, number> = {
 };
 
 /**
- * Nhịp đã viết sẵn, cộng lại đúng 35 ảnh.
+ * Nhịp đã viết sẵn, cộng lại đúng 16 ảnh.
  *
- * Bốn ranh giới 4 / 13 / 19 / 32 là chỗ bốn câu chen (wedding.album.interludes)
+ * Bốn ranh giới 3 / 7 / 9 / 14 là chỗ bốn câu chen (wedding.album.interludes)
  * rơi vào — buildStory() kiểm tra lại điều đó và ném lỗi nếu lệch, nên không
  * có cách nào sửa một bên mà quên bên kia.
  */
 const RHYTHM: StoryLayout[] = [
   // Mở ra: một tấm lớn, rồi dồn dập dần.
   "hero", // 1
-  "pair", // 2–3
-  "offset-left", // 4          ← câu chen 1
-  "asymmetric", // 5–6
-  "pair", // 7–8
-  "single", // 9
-  "trio", // 10–12
-  "offset-right", // 13        ← câu chen 2
-  "hero", // 14
-  "pair", // 15–16
-  "asymmetric", // 17–18
-  "single", // 19              ← câu chen 3
+  "pair", // 2–3             ← câu chen 1
+  "asymmetric", // 4–5
+  "pair", // 6–7             ← câu chen 2
+  "single", // 8
+  "offset-left", // 9        ← câu chen 3
   // Vào studio: mở lại bằng một tấm lớn, đúng như lúc mở đầu.
-  "hero", // 20
-  "pair", // 21–22
-  "offset-left", // 23
-  "asymmetric", // 24–25
-  "trio", // 26–28
-  "single", // 29
-  "pair", // 30–31
-  "offset-right", // 32        ← câu chen 4
-  // Ba tấm áo dài: một tấm lớn rồi hai tấm cạnh nhau, hết.
-  "hero", // 33
-  "pair", // 34–35
+  "hero", // 10
+  "pair", // 11–12
+  "asymmetric", // 13–14     ← câu chen 4
+  // Hai tấm áo dài cạnh nhau, hết.
+  "pair", // 15–16
 ];
 
 export type StoryItem = {
   photo: AlbumPhoto;
   /**
-   * Số thứ tự trong TOÀN BỘ 37 ảnh (1 = ảnh ngang mở đầu, 37 = ảnh ngang khép
+   * Số thứ tự trong TOÀN BỘ 18 ảnh (1 = ảnh ngang mở đầu, 18 = ảnh ngang khép
    * lại). Dùng cho anchor `#anh-07`, cho bộ đếm lightbox, và cho ô thumbnail
    * tương ứng ở phần xem tổng thể.
    */
@@ -96,13 +84,13 @@ export type StorySection =
   | { kind: "interlude"; key: string; tone: AlbumInterlude["tone"]; text: string };
 
 /**
- * Chỉ số 1-based trong bộ 37 ảnh, dùng cho anchor và cho lightbox.
+ * Chỉ số 1-based trong bộ 18 ảnh, dùng cho anchor và cho lightbox.
  *
- * Ảnh ngang mở đầu là số 1, 35 ảnh dọc là 2–36, ảnh ngang khép lại là 37 —
+ * Ảnh ngang mở đầu là số 1, 16 ảnh dọc là 2–17, ảnh ngang khép lại là 18 —
  * đúng thứ tự người xem gặp chúng khi cuộn từ trên xuống.
  */
 export const FIRST_INDEX = 1;
-export const LAST_INDEX = 37;
+export const LAST_INDEX = 18;
 
 /** Id của neo cuộn gắn trên từng ảnh. */
 export function anchorId(n: number): string {

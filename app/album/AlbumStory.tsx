@@ -39,11 +39,11 @@ const BODY = "mx-auto w-full max-w-[1100px]";
  */
 export function AlbumStory() {
   /**
-   * Cả 37 ảnh trong MỘT danh sách phẳng, đúng thứ tự người xem gặp chúng:
-   * ảnh ngang mở đầu, 35 ảnh dọc, ảnh ngang khép lại.
+   * Cả 18 ảnh trong MỘT danh sách phẳng, đúng thứ tự người xem gặp chúng:
+   * ảnh ngang mở đầu, 16 ảnh dọc, ảnh ngang khép lại.
    *
    * Cùng một danh sách này vừa là dữ liệu cho lưới thumbnail vừa là dữ liệu
-   * cho lightbox, nên ô được bấm và bộ đếm "07 / 37" trong lightbox không có
+   * cho lightbox, nên ô được bấm và bộ đếm "07 / 18" trong lightbox không có
    * cách nào lệch nhau.
    */
   const tiles = useMemo<OverviewTile[]>(

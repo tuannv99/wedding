@@ -38,6 +38,9 @@ const MOSAIC_LAYOUT = [
 const GALLERY_SIZES =
   "(max-width: 639px) 66vw, (max-width: 1023px) 55vw, 620px";
 
+/** Ô 1 chiếm 2/3 bề ngang lưới (max-w-6xl ≈ 1152px → ~770px), lớn hơn mức chung ở trên. */
+const FEATURE_SIZES = "(max-width: 1023px) 70vw, 780px";
+
 export function Gallery() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -90,7 +93,7 @@ export function Gallery() {
                     loading="eager"
                     /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
                     decoding="sync"
-                    sizes={GALLERY_SIZES}
+                    sizes={index === 0 ? FEATURE_SIZES : GALLERY_SIZES}
                     className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.035]"
                   />
                   <span

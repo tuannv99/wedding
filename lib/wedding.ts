@@ -23,7 +23,7 @@ export type AlbumPhoto = {
  * là một câu người nhà nói chen vào giữa lúc lật ảnh.
  */
 export type AlbumInterlude = {
-  /** Số thứ tự (1–35) của ảnh dọc mà câu này đứng ngay sau. */
+  /** Số thứ tự (1–16) của ảnh dọc mà câu này đứng ngay sau. */
   after: number;
   /** "quote" = in nghiêng, cỡ lớn; "note" = giọng kể bình thường. */
   tone: "quote" | "note";
@@ -64,9 +64,9 @@ export const wedding = {
     phone: "0973002464",
     portrait: {
       src: "/images/wedding/chu_re_1.jpg",
-      alt: "Chú rể Văn Tuấn chỉnh lại cà vạt trong bộ vest cưới",
-      width: 933,
-      height: 1400,
+      alt: "Chú rể Văn Tuấn trong bộ vest be ba mảnh",
+      width: 1200,
+      height: 1800,
     },
   },
   bride: {
@@ -75,9 +75,9 @@ export const wedding = {
     phone: "0914812001",
     portrait: {
       src: "/images/wedding/co_dau.jpg",
-      alt: "Cô dâu Mai Hoa trong váy cưới",
-      width: 1365,
-      height: 2048,
+      alt: "Cô dâu Mai Hoa trong váy cưới, tay cầm bó hoa",
+      width: 1200,
+      height: 1800,
     },
   },
 
@@ -118,8 +118,8 @@ export const wedding = {
       address: "Thôn Trà Đông,\nXã Xuân Hưng, Tỉnh Ninh Bình",
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
-        src: "/images/album/studio/06.jpg",
-        alt: "Tuấn và Hoa trong studio",
+        src: "/images/wedding/venue-bride.jpg",
+        alt: "Tuấn và Hoa giơ cao tấm thiệp cưới trong studio",
       },
       // Link thật do gia đình cung cấp, trỏ đúng nhà gái.
       mapsUrl: "https://maps.app.goo.gl/3zr4NU3u1CfNyHrj8",
@@ -131,8 +131,8 @@ export const wedding = {
       address: "Thôn Phụng Công,\nXã Quỳnh Phụ, Tỉnh Hưng Yên",
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
-        src: "/images/album/santori/09.jpg",
-        alt: "Tuấn và Hoa bên mái vòm trong vườn",
+        src: "/images/wedding/venue-groom.jpg",
+        alt: "Tuấn và Hoa trong studio nền sáng",
       },
       // Link thật do gia đình cung cấp, trỏ đúng "Miếu Hạ thôn Phụng Công".
       mapsUrl: "https://maps.app.goo.gl/WHHnQKhEMhDPR1kV7",
@@ -147,7 +147,7 @@ export const wedding = {
         "Khi ấy,\nchẳng ai nghĩ rằng\nđó lại mở đầu cho câu chuyện của hai đứa.",
       image: {
         src: "/images/wedding/home-story-01.jpg",
-        alt: "Tuấn và Hoa nắm tay bước trên lối vườn",
+        alt: "Tuấn và Hoa đứng trước vòm cửa đá giữa hai hàng cây",
         width: 1200,
         height: 1800,
       },
@@ -158,7 +158,7 @@ export const wedding = {
         "Rồi chúng mình trở thành người yêu,\ncùng nhau đi qua những ngày tháng\nvà những kỷ niệm thật đẹp.",
       image: {
         src: "/images/wedding/home-story-02.jpg",
-        alt: "Tuấn quỳ gối trao hoa cho Hoa giữa vườn",
+        alt: "Tuấn ôm Hoa giữa khu vườn xanh",
         width: 1200,
         height: 1800,
       },
@@ -169,7 +169,7 @@ export const wedding = {
       emphasis: "Và câu chuyện của chúng mình\nvẫn đang được viết tiếp...",
       image: {
         src: "/images/wedding/home-story-03.jpg",
-        alt: "Tuấn và Hoa cùng cầm tấm thiệp cưới trong studio",
+        alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ",
         width: 1200,
         height: 1800,
       },
@@ -206,13 +206,13 @@ export const wedding = {
   images: {
     hero: {
       src: "/images/wedding/home-hero.jpg",
-      alt: "Tuấn và Hoa nắm tay trước mái vòm, Hoa giơ cao bó hoa cưới",
+      alt: "Tuấn và Hoa hôn nhau dưới mái vòm, tà voan bay trong gió",
       width: 1200,
       height: 1800,
     },
     closing: {
       src: "/images/wedding/home-closing.jpg",
-      alt: "Hoa trong tà voan dài bên vòm đá, Tuấn đứng phía sau",
+      alt: "Tuấn và Hoa nhìn nhau trong vườn, tà voan dài bay trong gió",
       width: 2200,
       height: 1467,
     },
@@ -221,37 +221,38 @@ export const wedding = {
   gallery: [
     {
       src: "/images/wedding/home-gallery-01.jpg",
-      alt: "Tuấn và Hoa trên lối đi giữa hàng cây bên đài phun nước",
-      width: 1200,
-      height: 1800,
+      alt: "Tuấn và Hoa nắm tay bên đài phun nước giữa hàng cây",
+      // Xuất lớn hơn các ảnh khác vì nằm ở ô lớn 2×2 của mosaic (Gallery.tsx).
+      width: 2000,
+      height: 3000,
     },
     {
       src: "/images/wedding/home-gallery-02.jpg",
-      alt: "Tuấn và Hoa trong tà áo dài truyền thống",
+      alt: "Hoa trong áo dài hồng ôm Tuấn từ phía sau",
       width: 1200,
       height: 1800,
     },
     {
       src: "/images/wedding/home-gallery-03.jpg",
-      alt: "Tuấn và Hoa trong studio nền sáng",
+      alt: "Tuấn và Hoa khoe nhẫn cưới trong studio nền sáng",
       width: 1200,
       height: 1800,
     },
     {
       src: "/images/wedding/home-gallery-04.jpg",
-      alt: "Tuấn và Hoa nắm tay bên bồn nước đá",
+      alt: "Tuấn và Hoa dưới vòm gạch giữa tán lá xanh",
       width: 1200,
       height: 1800,
     },
     {
       src: "/images/wedding/home-gallery-05.jpg",
-      alt: "Tuấn và Hoa bước về phía nhau trong vườn",
+      alt: "Tuấn và Hoa sánh bước giữa khu vườn xanh",
       width: 2200,
       height: 1467,
     },
     {
       src: "/images/wedding/home-gallery-06.jpg",
-      alt: "Tuấn và Hoa giơ cao tấm thiệp cưới",
+      alt: "Tuấn và Hoa tựa vào nhau, cùng cầm tấm thiệp cưới",
       width: 1200,
       height: 1800,
     },
@@ -267,11 +268,12 @@ export const wedding = {
    * xem sẽ gặp, không có cấp trung gian nào nữa. Vẫn là đúng bộ ảnh đó, chỉ
    * khác cách xếp.
    *
-   * Ảnh nằm ở public/images/album/..., được nén sẵn từ bộ ảnh gốc trong
-   * public/images/anh_cuoi/ (xem scripts/build-album-images.mjs). Bản gốc
-   * ~332MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra.
+   * Ảnh nằm ở public/images/album/, được nén sẵn từ bộ ảnh gốc trong
+   * public/images/anh_cuoi/moi/ (xem scripts/build-album-images.mjs). Bản gốc
+   * ~300MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra. Album chỉ gồm
+   * các ảnh chưa dùng ở trang chủ.
    *
-   * Cả bộ có 37 file: 35 ảnh DỌC (2:3, 1200×1800) và đúng 2 ảnh NGANG (3:2,
+   * Cả bộ có 18 file: 16 ảnh DỌC (2:3, 1200×1800) và đúng 2 ảnh NGANG (3:2,
    * 2200×1467) là `cover` và `closing`. Hai tấm ngang đó là của hiếm nên được
    * dành riêng cho hai đầu câu chuyện — mở ra và khép lại — chứ không trộn
    * vào dòng ảnh dọc ở giữa.
@@ -287,8 +289,8 @@ export const wedding = {
 
     /** Ảnh NGANG mở đầu — dùng làm hero, không cắt. */
     cover: {
-      src: "/images/album/santori/cover.jpg",
-      alt: "Tuấn và Hoa nắm tay nhau giữa sân vườn Santori Yên Sở",
+      src: "/images/album/cover.jpg",
+      alt: "Tuấn và Hoa trên bậc thềm đá giữa những hàng cây xanh",
     } satisfies AlbumPhoto,
 
     /** Phần xem tổng thể đặt ngay sau hero. */
@@ -298,57 +300,33 @@ export const wedding = {
     },
 
     /**
-     * 35 ảnh DỌC, đúng thứ tự kể chuyện: một tấm mở màn ngoài trời, cả buổi
-     * ngoại cảnh ở Santori, một tấm mở màn trong studio, cả buổi studio, rồi
-     * ba tấm áo dài cuối ngày.
-     *
-     * Thứ tự này là thứ tự thật của ngày chụp, nên ai cuộn hết một lượt sẽ đi
-     * đúng hành trình của hai đứa — nhưng trang không hề nói ra điều đó thành
-     * tên chương, vì người xem không cần biết tên buổi chụp để xem ảnh.
+     * 16 ảnh DỌC, đúng thứ tự kể chuyện: buổi ngoại cảnh, buổi studio, rồi
+     * hai tấm áo dài cuối ngày.
      */
     photos: [
-      { src: "/images/album/hero-01.jpg", alt: "Tuấn và Hoa dưới mái vòm, tà voan bay trong gió" },
-      { src: "/images/album/santori/01.jpg", alt: "Tuấn và Hoa giữa sân vườn — 01" },
-      { src: "/images/album/santori/02.jpg", alt: "Tuấn và Hoa giữa sân vườn — 02" },
-      { src: "/images/album/santori/03.jpg", alt: "Tuấn và Hoa giữa sân vườn — 03" },
-      { src: "/images/album/santori/04.jpg", alt: "Tuấn và Hoa giữa sân vườn — 04" },
-      { src: "/images/album/santori/05.jpg", alt: "Tuấn và Hoa giữa sân vườn — 05" },
-      { src: "/images/album/santori/06.jpg", alt: "Tuấn và Hoa giữa sân vườn — 06" },
-      { src: "/images/album/santori/07.jpg", alt: "Tuấn và Hoa giữa sân vườn — 07" },
-      { src: "/images/album/santori/08.jpg", alt: "Tuấn và Hoa giữa sân vườn — 08" },
-      { src: "/images/album/santori/09.jpg", alt: "Tuấn và Hoa giữa sân vườn — 09" },
-      { src: "/images/album/santori/10.jpg", alt: "Tuấn và Hoa giữa sân vườn — 10" },
-      { src: "/images/album/santori/11.jpg", alt: "Tuấn và Hoa giữa sân vườn — 11" },
-      { src: "/images/album/santori/12.jpg", alt: "Tuấn và Hoa giữa sân vườn — 12" },
-      { src: "/images/album/santori/13.jpg", alt: "Tuấn và Hoa giữa sân vườn — 13" },
-      { src: "/images/album/santori/14.jpg", alt: "Tuấn và Hoa giữa sân vườn — 14" },
-      { src: "/images/album/santori/15.jpg", alt: "Tuấn và Hoa giữa sân vườn — 15" },
-      { src: "/images/album/santori/16.jpg", alt: "Tuấn và Hoa giữa sân vườn — 16" },
-      { src: "/images/album/santori/17.jpg", alt: "Tuấn và Hoa giữa sân vườn — 17" },
-      { src: "/images/album/santori/18.jpg", alt: "Tuấn và Hoa giữa sân vườn — 18" },
-      { src: "/images/album/hero-02.jpg", alt: "Tuấn và Hoa trao nhau chiếc nhẫn trong studio" },
-      { src: "/images/album/studio/01.jpg", alt: "Tuấn và Hoa trong studio — 01" },
-      { src: "/images/album/studio/02.jpg", alt: "Tuấn và Hoa trong studio — 02" },
-      { src: "/images/album/studio/03.jpg", alt: "Tuấn và Hoa trong studio — 03" },
-      { src: "/images/album/studio/04.jpg", alt: "Tuấn và Hoa trong studio — 04" },
-      { src: "/images/album/studio/05.jpg", alt: "Tuấn và Hoa trong studio — 05" },
-      { src: "/images/album/studio/06.jpg", alt: "Tuấn và Hoa trong studio — 06" },
-      { src: "/images/album/studio/07.jpg", alt: "Tuấn và Hoa trong studio — 07" },
-      { src: "/images/album/studio/08.jpg", alt: "Tuấn và Hoa trong studio — 08" },
-      { src: "/images/album/studio/09.jpg", alt: "Tuấn và Hoa trong studio — 09" },
-      { src: "/images/album/studio/10.jpg", alt: "Tuấn và Hoa trong studio — 10" },
-      { src: "/images/album/studio/11.jpg", alt: "Tuấn và Hoa trong studio — 11" },
-      { src: "/images/album/studio/12.jpg", alt: "Tuấn và Hoa trong studio — 12" },
-      { src: "/images/album/ao-dai/01.jpg", alt: "Tuấn và Hoa trong tà áo dài — 01" },
-      { src: "/images/album/ao-dai/02.jpg", alt: "Tuấn và Hoa trong tà áo dài — 02" },
-      { src: "/images/album/ao-dai/03.jpg", alt: "Tuấn và Hoa trong tà áo dài — 03" },
+      { src: "/images/album/01.jpg", alt: "Tuấn và Hoa dưới mái vòm giữa trời xanh" },
+      { src: "/images/album/02.jpg", alt: "Hoa giơ cao bó hoa cưới, tà voan bay trong gió" },
+      { src: "/images/album/03.jpg", alt: "Tuấn quỳ gối trao nhẫn dưới trời xanh" },
+      { src: "/images/album/04.jpg", alt: "Tuấn và Hoa bước lên bậc đá dưới vòm cột" },
+      { src: "/images/album/05.jpg", alt: "Tuấn dắt tay Hoa giữa vườn hoa" },
+      { src: "/images/album/06.jpg", alt: "Hoa trong tà voan ren, tay cầm bó hoa" },
+      { src: "/images/album/07.jpg", alt: "Tuấn và Hoa trên bãi cỏ giữa vườn" },
+      { src: "/images/album/08.jpg", alt: "Tuấn và Hoa dưới vòm gạch giữa tán lá xanh" },
+      { src: "/images/album/09.jpg", alt: "Tuấn và Hoa nắm tay bên đài phun nước" },
+      { src: "/images/album/10.jpg", alt: "Tuấn và Hoa khoác tay nhau trong studio" },
+      { src: "/images/album/11.jpg", alt: "Tuấn nhìn Hoa trong studio nền sáng" },
+      { src: "/images/album/12.jpg", alt: "Tuấn và Hoa khoe nhẫn cưới" },
+      { src: "/images/album/13.jpg", alt: "Tuấn và Hoa cùng cầm tấm thiệp cưới" },
+      { src: "/images/album/14.jpg", alt: "Hoa mỉm cười trong váy cưới" },
+      { src: "/images/album/15.jpg", alt: "Tuấn và Hoa trong áo dài truyền thống" },
+      { src: "/images/album/16.jpg", alt: "Hoa trong áo dài hồng ôm Tuấn từ phía sau" },
     ] satisfies AlbumPhoto[],
 
     /**
      * Mấy câu chen giữa dòng ảnh — giọng nói thật của hai đứa, không phải
      * tiêu đề chương.
      *
-     * `after` là số thứ tự (1–35) của ảnh DỌC mà câu này đứng ngay sau. Bốn
+     * `after` là số thứ tự (1–16) của ảnh DỌC mà câu này đứng ngay sau. Bốn
      * mốc dưới đây đều rơi đúng vào ranh giới giữa hai khối ảnh trong
      * story-plan.ts — nếu đổi số ở đây thì phải đổi nhịp bên đó cho khớp,
      * buildStory() sẽ ném lỗi ngay lúc build nếu hai bên lệch nhau.
@@ -357,16 +335,16 @@ export const wedding = {
      * `"note"` là giọng kể bình thường.
      */
     interludes: [
-      { after: 4, tone: "note", text: "Trộm vía hôm chụp trời khá đẹp và mát,\nnên hai đứa cũng có một ngày khá dễ chịu." },
-      { after: 13, tone: "quote", text: "Chúng mình cứ thế đi cùng nhau." },
-      { after: 19, tone: "note", text: "Sau những khung hình ngoài trời,\nchúng mình trở về studio,\nmang theo một chút mệt và thật nhiều niềm vui." },
-      { after: 32, tone: "note", text: "Ngày dài đã gần khép lại,\nnhưng chúng mình vẫn muốn giữ thêm vài khoảnh khắc\ntrong tà áo dài." },
+      { after: 3, tone: "note", text: "Trộm vía hôm chụp trời khá đẹp và mát,\nnên hai đứa cũng có một ngày khá dễ chịu." },
+      { after: 7, tone: "quote", text: "Chúng mình cứ thế đi cùng nhau." },
+      { after: 9, tone: "note", text: "Sau những khung hình ngoài trời,\nchúng mình trở về studio,\nmang theo một chút mệt và thật nhiều niềm vui." },
+      { after: 14, tone: "note", text: "Ngày dài đã gần khép lại,\nnhưng chúng mình vẫn muốn giữ thêm vài khoảnh khắc\ntrong tà áo dài." },
     ] satisfies AlbumInterlude[],
 
     /** Ảnh NGANG khép lại — tấm cuối cùng người xem nhìn thấy. */
     closing: {
       src: "/images/album/closing.jpg",
-      alt: "Tuấn và Hoa trên bậc thềm đá giữa vườn cây",
+      alt: "Tuấn và Hoa sánh bước giữa khu vườn xanh",
     } satisfies AlbumPhoto,
 
     /** Chữ khép lại. */

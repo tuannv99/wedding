@@ -76,7 +76,8 @@ function PersonColumn({ label, name, portrait }: PersonColumnProps) {
     <div className="flex flex-col items-center text-center">
       <span className="wd-eyebrow tracking-[0.4em]">{label}</span>
 
-      <figure className="relative mt-6 aspect-[4/5] w-full max-w-[300px] overflow-hidden bg-warm">
+      {/* 300×425: cao hơn khung 4:5 cũ (300×375) đúng 50px ở bề ngang tối đa. */}
+      <figure className="relative mt-6 aspect-[300/425] w-full max-w-[300px] overflow-hidden bg-warm">
         <Image
           src={portrait.src}
           alt={portrait.alt}
