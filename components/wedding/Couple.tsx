@@ -28,7 +28,7 @@ export function Couple() {
 
       <div className="mx-auto w-full max-w-5xl">
         <Reveal className="flex flex-col items-center gap-4">
-          <p className="wd-eyebrow tracking-[0.4em]">Lễ Thành Hôn</p>
+          <p className="wd-eyebrow tracking-[0.4em] md:text-[25px] md:font-semibold md:text-ink/85">Lễ Thành Hôn</p>
           <hr className="wd-rule" />
         </Reveal>
 
@@ -74,7 +74,7 @@ type PersonColumnProps = {
 function PersonColumn({ label, name, portrait }: PersonColumnProps) {
   return (
     <div className="flex flex-col items-center text-center">
-      <span className="wd-eyebrow tracking-[0.4em]">{label}</span>
+      <span className="wd-eyebrow tracking-[0.4em] md:text-[25px] md:font-semibold md:text-ink/85">{label}</span>
 
       {/* 300×425: cao hơn khung 4:5 cũ (300×375) đúng 50px ở bề ngang tối đa. */}
       <figure className="relative mt-6 aspect-[300/425] w-full max-w-[300px] overflow-hidden bg-warm">

@@ -192,8 +192,8 @@ export function Navigation() {
               // Cỡ chữ lên dần theo bề ngang thật sự có: chữ serif rộng hơn
               // sans nên nới sớm là hàng menu lại chạm nút nhạc.
               const linkClass = cn(
-                "wd-nav-link relative inline-flex min-h-11 items-center text-[14px] transition-colors duration-500 2xl:text-[15px]",
-                isActive ? "text-ink" : "text-ink/68",
+                "wd-nav-link relative inline-flex min-h-11 items-center text-[14px] font-semibold transition-colors duration-500 2xl:text-[15px]",
+                isActive ? "text-ink" : "text-ink/75",
               );
 
               // Gạch chân mục đang xem — trượt mượt giữa các mục
@@ -245,14 +245,14 @@ export function Navigation() {
             <button
               type="button"
               onClick={() => goTo(wedding.nav[0].id)}
-              className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase xl:hidden"
+              className="font-display inline-flex min-h-11 items-center text-sm font-semibold tracking-[0.28em] text-ink uppercase xl:hidden"
             >
               {wedding.groom.short} &amp; {wedding.bride.short}
             </button>
           ) : (
             <Link
               href="/"
-              className="font-display inline-flex min-h-11 items-center text-sm tracking-[0.28em] text-ink uppercase xl:hidden"
+              className="font-display inline-flex min-h-11 items-center text-sm font-semibold tracking-[0.28em] text-ink uppercase xl:hidden"
             >
               {wedding.groom.short} &amp; {wedding.bride.short}
             </Link>
@@ -316,7 +316,7 @@ export function Navigation() {
                         "href" in item && pathname === item.href ? "page" : undefined
                       }
                       className={cn(
-                        "font-display text-center text-[1.375rem] tracking-[0.1em] uppercase",
+                        "font-display text-center text-[1.375rem] font-semibold tracking-[0.1em] uppercase",
                         "href" in item && pathname === item.href
                           ? "text-ink underline underline-offset-8"
                           : "text-ink",
@@ -328,7 +328,7 @@ export function Navigation() {
                     <button
                       type="button"
                       onClick={() => goToFromMenu(item.id)}
-                      className="font-display text-center text-[1.375rem] tracking-[0.1em] text-ink uppercase"
+                      className="font-display text-center text-[1.375rem] font-semibold tracking-[0.1em] text-ink uppercase"
                     >
                       {item.label}
                     </button>

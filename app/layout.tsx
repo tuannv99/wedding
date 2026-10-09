@@ -7,8 +7,9 @@ import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin", "latin-ext", "vietnamese"],
-  // 600 không class nào dùng — bỏ đi để khỏi tải thừa 2 file font.
-  weight: ["300", "400", "500"],
+  // 600: chữ menu và các nhãn Lễ Thành Hôn / Cô dâu / Chú rể / Tiệc nhà…
+  // (PC) cần đậm hơn 500 — thiếu file 600 thì trình duyệt tự "đậm giả".
+  weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
   display: "swap",

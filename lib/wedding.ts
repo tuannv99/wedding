@@ -90,7 +90,7 @@ export const wedding = {
     time: "11:00",
   },
   reception: {
-    label: "Tiệc cưới",
+    label: "Tiệc Cưới",
     time: "11:00",
   },
 
@@ -217,9 +217,9 @@ export const wedding = {
     },
     {
       src: "/images/wedding/home-gallery-05.jpg",
-      alt: "Tuấn và Hoa sánh bước giữa khu vườn xanh",
-      width: 2200,
-      height: 1467,
+      alt: "Tuấn và Hoa nắm tay bước lên bậc đá dưới vòm cột",
+      width: 1200,
+      height: 1800,
     },
     {
       src: "/images/wedding/home-gallery-06.jpg",

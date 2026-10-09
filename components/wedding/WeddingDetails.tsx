@@ -126,7 +126,7 @@ export function WeddingDetails() {
                       photoFirst ? "order-2" : "order-1",
                     )}
                   >
-                    <h4 className="wd-label text-[13px] tracking-[0.18em] text-ink uppercase sm:text-[15px] sm:tracking-[0.26em] md:text-[25px]">
+                    <h4 className="wd-label text-[13px] tracking-[0.18em] text-ink uppercase sm:text-[15px] sm:tracking-[0.26em] md:text-[29px] md:font-semibold">
                       {copy.details.partyLabel} {place.label}
                     </h4>
                     <span

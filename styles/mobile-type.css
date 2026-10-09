@@ -33,7 +33,7 @@
     font-weight: 400;
   }
   :where(#main, nav, [role="dialog"])
-    :is(.wd-body-sm, .wd-num-story, .wd-stepper-btn, .wd-stepper-value, .font-display:not(.font-light), .font-normal):not(#hero *) {
+    :is(.wd-body-sm, .wd-num-story, .wd-stepper-btn, .wd-stepper-value, .font-display:not(.font-light, .font-semibold), .font-normal):not(#hero *) {
     font-weight: 500;
   }
 

@@ -15,8 +15,11 @@ import { Lightbox } from "@/components/wedding/Lightbox";
 /**
  * Mosaic bất đối xứng 3 cột — một ảnh lớn làm điểm nhấn, hai ảnh nhỏ xếp
  * chồng bên phải, hàng dưới ba ảnh nhỏ đều nhau. Dùng ở MỌI bề rộng màn hình
- * (kể cả mobile) để bố cục ảnh cưới trên điện thoại giống hệt trên desktop;
- * chỉ chiều cao hàng là co lại theo màn.
+ * (kể cả mobile) để bố cục ảnh cưới trên điện thoại giống hệt trên desktop.
+ *
+ * Mọi ô nhỏ giữ đúng tỉ lệ 2:3 của ảnh dọc (aspect-[2/3]) nên ảnh không bị
+ * xén; chiều cao hàng do chính các ô nhỏ quyết định, ô 1 trải 2 cột × 2 hàng
+ * nên cũng ra đúng ~2:3. Vì vậy cả 6 ảnh trong wedding.gallery phải là ảnh DỌC.
  *
  *   ┌───────┬───┐
  *   │       │ 2 │
@@ -28,11 +31,11 @@ import { Lightbox } from "@/components/wedding/Lightbox";
  */
 const MOSAIC_LAYOUT = [
   "col-start-1 col-span-2 row-start-1 row-span-2",
-  "col-start-3 row-start-1",
-  "col-start-3 row-start-2",
-  "col-start-1 row-start-3",
-  "col-start-2 row-start-3",
-  "col-start-3 row-start-3",
+  "col-start-3 row-start-1 aspect-[2/3]",
+  "col-start-3 row-start-2 aspect-[2/3]",
+  "col-start-1 row-start-3 aspect-[2/3]",
+  "col-start-2 row-start-3 aspect-[2/3]",
+  "col-start-3 row-start-3 aspect-[2/3]",
 ];
 
 const GALLERY_SIZES =
@@ -65,7 +68,7 @@ export function Gallery() {
           className="px-2"
         />
 
-        <div className="mt-14 grid auto-rows-[clamp(104px,30vw,380px)] grid-cols-3 gap-2 sm:mt-16 sm:auto-rows-[clamp(180px,26vw,380px)] sm:gap-3">
+        <div className="mx-auto mt-14 grid w-full max-w-[960px] grid-cols-3 gap-2 sm:mt-16 sm:gap-3">
           {wedding.gallery.map((image, index) => {
             return (
               <Reveal
