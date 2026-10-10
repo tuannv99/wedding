@@ -3,6 +3,7 @@ import { wedding, type GalleryImage } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
+import { PhotoZoom } from "@/components/wedding/PhotoZoom";
 
 /** "CÔ DÂU" / "CHÚ RỂ": tên + ảnh lấy nguyên từ lib/wedding.ts. */
 export function Couple() {
@@ -12,6 +13,7 @@ export function Couple() {
     { label: "Cô dâu", name: bride.name, portrait: bride.portrait },
     { label: "Chú rể", name: groom.name, portrait: groom.portrait },
   ];
+  const portraits = people.map((person) => person.portrait);
 
   return (
     <section
@@ -35,7 +37,7 @@ export function Couple() {
         <Reveal delay={0.1} y={20} className="mt-8 md:mt-14">
           <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-[clamp(24px,5vw,72px)]">
             {/* Cột trái */}
-            <PersonColumn {...people[0]} />
+            <PersonColumn {...people[0]} portraits={portraits} index={0} />
 
             {/* Cột giữa: nét dọc trên desktop, đổi thành divider ngang dưới md */}
             <div className="flex w-full flex-row items-center justify-center gap-4 md:h-auto md:w-auto md:flex-col md:gap-5">
@@ -53,7 +55,7 @@ export function Couple() {
             </div>
 
             {/* Cột phải */}
-            <PersonColumn {...people[1]} />
+            <PersonColumn {...people[1]} portraits={portraits} index={1} />
           </div>
         </Reveal>
 
@@ -69,26 +71,32 @@ type PersonColumnProps = {
   label: string;
   name: string;
   portrait: GalleryImage;
+  /** Cả hai chân dung — lightbox lướt qua lại được giữa cô dâu và chú rể. */
+  portraits: readonly GalleryImage[];
+  index: number;
 };
 
-function PersonColumn({ label, name, portrait }: PersonColumnProps) {
+function PersonColumn({ label, name, portrait, portraits, index }: PersonColumnProps) {
   return (
     <div className="flex flex-col items-center text-center">
       <span className="wd-eyebrow tracking-[0.4em] md:text-[25px] md:font-semibold md:text-ink/85">{label}</span>
 
       {/* 300×425: cao hơn khung 4:5 cũ (300×375) đúng 50px ở bề ngang tối đa. */}
       <figure className="relative mt-6 aspect-[300/425] w-full max-w-[300px] overflow-hidden bg-warm">
-        <Image
-          src={portrait.src}
-          alt={portrait.alt}
-          fill
-          loading="eager"
-          /* sync: xem Gallery.tsx — tránh ô trống nháy khi cuộn quay lại */
-          decoding="sync"
-          sizes="(max-width: 768px) 80vw, 300px"
-          className="object-cover"
-        />
-        <figcaption className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 bg-gradient-to-t from-ivory/94 via-ivory/72 to-ivory/0 px-4 pt-14 pb-[22px]">
+        <PhotoZoom images={portraits} index={index} className="absolute inset-0">
+          <Image
+            src={portrait.src}
+            alt={portrait.alt}
+            fill
+            loading="eager"
+            /* sync: xem Gallery.tsx — tránh ô trống nháy khi cuộn quay lại */
+            decoding="sync"
+            sizes="(max-width: 768px) 80vw, 300px"
+            className="object-cover"
+          />
+        </PhotoZoom>
+        {/* pointer-events-none: bấm vào vùng tên vẫn rơi xuống nút ảnh bên dưới. */}
+        <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 bg-gradient-to-t from-ivory/94 via-ivory/72 to-ivory/0 px-4 pt-14 pb-[22px]">
           <span aria-hidden="true" className="h-px w-[34px] bg-champagne/90" />
           <span className="font-display text-[clamp(1.75rem,3.6vw,2.5rem)] md:text-[clamp(calc(1.75rem_+_8px),calc(3.6vw_+_8px),calc(2.5rem_+_8px))] font-light tracking-[0.06em] text-ink">
             {name}

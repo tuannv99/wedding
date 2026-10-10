@@ -9,7 +9,7 @@ import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { Lightbox } from "@/components/wedding/Lightbox";
 import { OverviewSection, type OverviewTile } from "@/app/album/Overview";
 import { Frame, type FrameContext } from "@/app/album/StoryBlock";
-import { FIRST_INDEX, LAST_INDEX } from "@/app/album/story-plan";
+import { FIRST_INDEX } from "@/app/album/story-plan";
 import { wedding } from "@/lib/wedding";
 
 const { opening, overview, cover, photos, closing, ending } = wedding.album;
@@ -39,8 +39,8 @@ const BODY = "mx-auto w-full max-w-[1100px]";
  */
 export function AlbumStory() {
   /**
-   * Cả 18 ảnh trong MỘT danh sách phẳng, đúng thứ tự người xem gặp chúng:
-   * ảnh ngang mở đầu, 16 ảnh dọc, ảnh ngang khép lại.
+   * Cả bộ ảnh trong MỘT danh sách phẳng, đúng thứ tự người xem gặp chúng:
+   * ảnh ngang mở đầu, dòng ảnh giữa (kể cả ảnh trang chủ), ảnh ngang khép lại.
    *
    * Cùng một danh sách này vừa là dữ liệu cho lưới thumbnail vừa là dữ liệu
    * cho lightbox, nên ô được bấm và bộ đếm "07 / 18" trong lightbox không có
@@ -49,8 +49,13 @@ export function AlbumStory() {
   const tiles = useMemo<OverviewTile[]>(
     () => [
       { n: FIRST_INDEX, src: cover.src, alt: cover.alt, wide: true },
-      ...photos.map((photo, i) => ({ n: i + 2, src: photo.src, alt: photo.alt })),
-      { n: LAST_INDEX, src: closing.src, alt: closing.alt, wide: true },
+      ...photos.map((photo, i) => ({
+        n: i + 2,
+        src: photo.src,
+        alt: photo.alt,
+        wide: "wide" in photo && photo.wide,
+      })),
+      { n: photos.length + 2, src: closing.src, alt: closing.alt, wide: true },
     ],
     [],
   );

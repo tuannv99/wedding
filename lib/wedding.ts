@@ -14,6 +14,8 @@ export type GalleryImage = {
 export type AlbumPhoto = {
   src: string;
   alt: string;
+  /** Ảnh NGANG (3:2) — lưới tổng thể của /album xếp theo đúng tỉ lệ này. */
+  wide?: boolean;
 };
 
 /**
@@ -241,13 +243,17 @@ export const wedding = {
    *
    * Ảnh nằm ở public/images/album/, được nén sẵn từ bộ ảnh gốc trong
    * public/images/anh_cuoi/moi/ (xem scripts/build-album-images.mjs). Bản gốc
-   * ~300MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra. Album chỉ gồm
-   * các ảnh chưa dùng ở trang chủ.
+   * ~300MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra.
    *
-   * Cả bộ có 18 file: 16 ảnh DỌC (2:3, 1200×1800) và đúng 2 ảnh NGANG (3:2,
-   * 2200×1467) là `cover` và `closing`. Hai tấm ngang đó là của hiếm nên được
-   * dành riêng cho hai đầu câu chuyện — mở ra và khép lại — chứ không trộn
-   * vào dòng ảnh dọc ở giữa.
+   * Album là TOÀN BỘ ảnh của website: ngoài 18 file riêng của album, `photos`
+   * còn xen vào đúng chỗ các ảnh chỉ trang chủ mới có (hero, chân dung, ba ảnh
+   * chuyện, hai ảnh địa điểm, ảnh footer) — trỏ thẳng vào public/images/wedding/
+   * chứ không nhân bản file. Sáu ảnh mosaic Gallery vốn đã là ảnh trong album
+   * (cùng tấm, khác file) nên không thêm lần nữa. Đổi ảnh trang chủ thì nhớ đổi
+   * cả dòng tương ứng ở đây.
+   *
+   * `cover` và `closing` là hai ảnh NGANG dành cho hai đầu câu chuyện; ảnh
+   * ngang footer trang chủ nằm giữa dòng, đánh dấu `wide`.
    */
   album: {
     /** Chữ mở đầu. */
@@ -271,23 +277,36 @@ export const wedding = {
     },
 
     /**
-     * 16 ảnh DỌC, đúng thứ tự kể chuyện: buổi ngoại cảnh, buổi studio, rồi
-     * hai tấm áo dài cuối ngày.
+     * Dòng ảnh giữa, đúng thứ tự kể chuyện: buổi ngoại cảnh, buổi studio, rồi
+     * hai tấm áo dài cuối ngày. Ảnh trang chủ được xếp vào đúng buổi chụp của nó.
      */
     photos: [
       { src: "/images/album/01.jpg", alt: "Tuấn và Hoa dưới mái vòm giữa trời xanh" },
+      { src: "/images/wedding/home-hero.jpg", alt: "Tuấn và Hoa hôn nhau dưới mái vòm, tà voan bay trong gió" },
       { src: "/images/album/02.jpg", alt: "Hoa giơ cao bó hoa cưới, tà voan bay trong gió" },
       { src: "/images/album/03.jpg", alt: "Tuấn quỳ gối trao nhẫn dưới trời xanh" },
+      { src: "/images/wedding/home-story-03.jpg", alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ" },
       { src: "/images/album/04.jpg", alt: "Tuấn và Hoa bước lên bậc đá dưới vòm cột" },
+      { src: "/images/wedding/home-story-01.jpg", alt: "Tuấn và Hoa đứng trước vòm cửa đá giữa hai hàng cây" },
       { src: "/images/album/05.jpg", alt: "Tuấn dắt tay Hoa giữa vườn hoa" },
       { src: "/images/album/06.jpg", alt: "Hoa trong tà voan ren, tay cầm bó hoa" },
+      { src: "/images/wedding/home-story-02.jpg", alt: "Tuấn ôm Hoa giữa khu vườn xanh" },
       { src: "/images/album/07.jpg", alt: "Tuấn và Hoa trên bãi cỏ giữa vườn" },
       { src: "/images/album/08.jpg", alt: "Tuấn và Hoa dưới vòm gạch giữa tán lá xanh" },
       { src: "/images/album/09.jpg", alt: "Tuấn và Hoa nắm tay bên đài phun nước" },
+      {
+        src: "/images/wedding/home-closing.jpg",
+        alt: "Tuấn và Hoa nhìn nhau trong vườn, tà voan dài bay trong gió",
+        wide: true,
+      },
       { src: "/images/album/10.jpg", alt: "Tuấn và Hoa khoác tay nhau trong studio" },
+      { src: "/images/wedding/venue-groom.jpg", alt: "Tuấn và Hoa trong studio nền sáng" },
       { src: "/images/album/11.jpg", alt: "Tuấn nhìn Hoa trong studio nền sáng" },
+      { src: "/images/wedding/chu_re_1.jpg", alt: "Chú rể Văn Tuấn trong bộ vest be ba mảnh" },
+      { src: "/images/wedding/co_dau.jpg", alt: "Cô dâu Mai Hoa trong váy cưới, tay cầm bó hoa" },
       { src: "/images/album/12.jpg", alt: "Tuấn và Hoa khoe nhẫn cưới" },
       { src: "/images/album/13.jpg", alt: "Tuấn và Hoa cùng cầm tấm thiệp cưới" },
+      { src: "/images/wedding/venue-bride.jpg", alt: "Tuấn và Hoa giơ cao tấm thiệp cưới trong studio" },
       { src: "/images/album/14.jpg", alt: "Hoa mỉm cười trong váy cưới" },
       { src: "/images/album/15.jpg", alt: "Tuấn và Hoa trong áo dài truyền thống" },
       { src: "/images/album/16.jpg", alt: "Hoa trong áo dài hồng ôm Tuấn từ phía sau" },

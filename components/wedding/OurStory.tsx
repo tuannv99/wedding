@@ -4,7 +4,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Botanical, BotanicalRule } from "@/components/ui/Botanical";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
+import { PhotoZoom } from "@/components/wedding/PhotoZoom";
 import { cn } from "@/lib/utils";
+
+/** Ba ảnh của ba mốc — bấm một tấm là lướt được cả ba trong lightbox. */
+const storyImages = wedding.story.map((step) => step.image);
 
 /** Bọc các cụm chữ số (ví dụ "2023") trong .wd-num-story — số dùng Times New Roman. */
 function withNumerals(text: string) {
@@ -127,7 +131,11 @@ export function OurStory() {
                         photoFirst ? "order-1 md:mr-auto" : "order-2 md:ml-auto",
                       )}
                     >
-                      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3px] bg-warm">
+                      <PhotoZoom
+                        images={storyImages}
+                        index={index}
+                        className="relative aspect-[4/5] w-full overflow-hidden rounded-[3px] bg-warm"
+                      >
                         <Image
                           src={step.image.src}
                           alt={step.image.alt}
@@ -140,7 +148,7 @@ export function OurStory() {
                           sizes="(max-width: 768px) 50vw, 400px"
                           className="object-cover"
                         />
-                      </div>
+                      </PhotoZoom>
                     </div>
                   </div>
                 </Reveal>

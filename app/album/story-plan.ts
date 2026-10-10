@@ -84,13 +84,13 @@ export type StorySection =
   | { kind: "interlude"; key: string; tone: AlbumInterlude["tone"]; text: string };
 
 /**
- * Chỉ số 1-based trong bộ 18 ảnh, dùng cho anchor và cho lightbox.
+ * Chỉ số 1-based của ảnh ngang mở đầu, dùng cho anchor và cho lightbox.
  *
- * Ảnh ngang mở đầu là số 1, 16 ảnh dọc là 2–17, ảnh ngang khép lại là 18 —
- * đúng thứ tự người xem gặp chúng khi cuộn từ trên xuống.
+ * Dòng ảnh giữa nối tiếp từ số 2, ảnh ngang khép lại là số cuối cùng — đúng
+ * thứ tự người xem gặp chúng khi cuộn từ trên xuống. Số cuối không cố định
+ * nữa (album gồm cả ảnh trang chủ), nên AlbumStory tự tính từ độ dài `photos`.
  */
 export const FIRST_INDEX = 1;
-export const LAST_INDEX = 18;
 
 /** Id của neo cuộn gắn trên từng ảnh. */
 export function anchorId(n: number): string {

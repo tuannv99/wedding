@@ -63,6 +63,15 @@ function QrBlock({ account, className }: { account: BankAccount; className?: str
         <p className="wd-body-sm text-ink/60">{account.accountName}</p>
       </div>
 
+      {account.qrImage ? (
+        <SaveImageButton
+          src={account.qrImage}
+          fileName={qrFileName(account)}
+          label="Lưu ảnh QR"
+          className="tracking-[0.15em] md:whitespace-nowrap"
+        />
+      ) : null}
+
       <CopyButton
         value={account.accountNumber}
         label="Sao chép số tài khoản"
@@ -72,15 +81,6 @@ function QrBlock({ account, className }: { account: BankAccount; className?: str
         // Từ md chữ nút lớn lên 21px (~400px cả padding) nên khoá hẳn 1 dòng.
         className="tracking-[0.15em] md:whitespace-nowrap"
       />
-
-      {account.qrImage ? (
-        <SaveImageButton
-          src={account.qrImage}
-          fileName={qrFileName(account)}
-          label="Lưu ảnh QR"
-          className="tracking-[0.15em] md:whitespace-nowrap"
-        />
-      ) : null}
     </div>
   );
 }

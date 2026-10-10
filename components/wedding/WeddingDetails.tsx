@@ -7,6 +7,7 @@ import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { BotanicalRule } from "@/components/ui/Botanical";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { WeddingCalendar } from "@/components/wedding/WeddingCalendar";
+import { PhotoZoom } from "@/components/wedding/PhotoZoom";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
 
 /**
@@ -28,6 +29,7 @@ export function WeddingDetails() {
     { place: venues.bride, phone: bride.phone },
     { place: venues.groom, phone: groom.phone },
   ];
+  const partyPhotos = parties.map(({ place }) => place.photo);
 
   return (
     <section
@@ -200,7 +202,11 @@ export function WeddingDetails() {
                         Từ md cột rộng gấp ba nên kéo cao như vậy sẽ thành một
                         khung ngang bẹt cắt mất phần lớn ảnh dọc — chuyển về
                         đúng tỉ lệ 4:5 và để cột chữ căn giữa theo nó. */}
-                    <div className="relative h-full min-h-[240px] w-full overflow-hidden rounded-[3px] bg-warm sm:min-h-[320px] md:aspect-[4/5] md:h-auto md:min-h-0">
+                    <PhotoZoom
+                      images={partyPhotos}
+                      index={index}
+                      className="relative h-full min-h-[240px] w-full overflow-hidden rounded-[3px] bg-warm sm:min-h-[320px] md:aspect-[4/5] md:h-auto md:min-h-0"
+                    >
                       <Image
                         src={place.photo.src}
                         alt={place.photo.alt}
@@ -213,7 +219,7 @@ export function WeddingDetails() {
                         sizes="(max-width: 767px) 40vw, 46vw"
                         className="object-cover"
                       />
-                    </div>
+                    </PhotoZoom>
                   </div>
                 </div>
               );
