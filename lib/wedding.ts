@@ -57,8 +57,8 @@ export const wedding = {
     portrait: {
       src: "/images/wedding/chu_re_1.jpg",
       alt: "Chú rể Văn Tuấn trong bộ vest be ba mảnh",
-      width: 1200,
-      height: 1800,
+      width: 1600,
+      height: 2400,
     },
   },
   bride: {
@@ -68,8 +68,8 @@ export const wedding = {
     portrait: {
       src: "/images/wedding/co_dau.jpg",
       alt: "Cô dâu Mai Hoa trong váy cưới, tay cầm bó hoa",
-      width: 1200,
-      height: 1800,
+      width: 1600,
+      height: 2400,
     },
   },
 
@@ -111,7 +111,7 @@ export const wedding = {
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
         src: "/images/wedding/venue-bride.jpg",
-        alt: "Tuấn và Hoa giơ cao tấm thiệp cưới trong studio",
+        alt: "Tuấn và Hoa khoác tay nhau trong studio",
       },
       // Link thật do gia đình cung cấp, trỏ đúng nhà gái.
       mapsUrl: "https://maps.app.goo.gl/3zr4NU3u1CfNyHrj8",
@@ -124,7 +124,7 @@ export const wedding = {
       /** Ảnh đứng cạnh khối thông tin tiệc (WeddingDetails). */
       photo: {
         src: "/images/wedding/venue-groom.jpg",
-        alt: "Tuấn và Hoa trong studio nền sáng",
+        alt: "Tuấn và Hoa trên bãi cỏ giữa vườn",
       },
       // Link thật do gia đình cung cấp, trỏ đúng "Miếu Hạ thôn Phụng Công".
       mapsUrl: "https://maps.app.goo.gl/WHHnQKhEMhDPR1kV7",
@@ -140,8 +140,8 @@ export const wedding = {
       image: {
         src: "/images/wedding/home-story-01.jpg",
         alt: "Tuấn và Hoa đứng trước vòm cửa đá giữa hai hàng cây",
-        width: 1200,
-        height: 1800,
+        width: 1600,
+        height: 2400,
       },
     },
     {
@@ -151,8 +151,8 @@ export const wedding = {
       image: {
         src: "/images/wedding/home-story-02.jpg",
         alt: "Tuấn ôm Hoa giữa khu vườn xanh",
-        width: 1200,
-        height: 1800,
+        width: 1600,
+        height: 2400,
       },
     },
     {
@@ -161,9 +161,9 @@ export const wedding = {
       emphasis: "Và câu chuyện của chúng mình\nvẫn đang được viết tiếp...",
       image: {
         src: "/images/wedding/home-story-03.jpg",
-        alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ",
-        width: 1200,
-        height: 1800,
+        alt: "Tuấn quỳ gối trao nhẫn cho Hoa dưới trời xanh",
+        width: 1600,
+        height: 2400,
       },
     },
   ] satisfies StoryStep[],
@@ -173,21 +173,21 @@ export const wedding = {
     { time: "07:00", title: "Lễ Vu Quy" },
     { time: "08:30", title: "Lễ Rước Dâu" },
     { time: "11:00", title: "Lễ Thành Hôn" },
-    { time: "12:00", title: "Tiệc cưới" },
+    { time: "12:00", title: "Tiệc Cưới" },
   ] satisfies TimelineItem[],
 
   images: {
     hero: {
       src: "/images/wedding/home-hero.jpg",
       alt: "Tuấn và Hoa hôn nhau dưới mái vòm, tà voan bay trong gió",
-      width: 1200,
-      height: 1800,
+      width: 1600,
+      height: 2400,
     },
     closing: {
       src: "/images/wedding/home-closing.jpg",
       alt: "Tuấn và Hoa nhìn nhau trong vườn, tà voan dài bay trong gió",
-      width: 2200,
-      height: 1467,
+      width: 3000,
+      height: 2000,
     },
   },
 
@@ -195,39 +195,38 @@ export const wedding = {
     {
       src: "/images/wedding/home-gallery-01.jpg",
       alt: "Tuấn và Hoa nắm tay bên đài phun nước giữa hàng cây",
-      // Xuất lớn hơn các ảnh khác vì nằm ở ô lớn 2×2 của mosaic (Gallery.tsx).
-      width: 2000,
-      height: 3000,
+      width: 1600,
+      height: 2400,
     },
     {
       src: "/images/wedding/home-gallery-02.jpg",
       alt: "Hoa trong áo dài hồng ôm Tuấn từ phía sau",
-      width: 1200,
-      height: 1800,
+      width: 1600,
+      height: 2400,
     },
     {
       src: "/images/wedding/home-gallery-03.jpg",
-      alt: "Tuấn và Hoa khoe nhẫn cưới trong studio nền sáng",
-      width: 1200,
-      height: 1800,
+      alt: "Tuấn và Hoa trong áo dài truyền thống",
+      width: 1600,
+      height: 2400,
     },
     {
       src: "/images/wedding/home-gallery-04.jpg",
-      alt: "Tuấn và Hoa dưới vòm gạch giữa tán lá xanh",
-      width: 1200,
-      height: 1800,
+      alt: "Tuấn và Hoa trong studio nền sáng",
+      width: 1600,
+      height: 2400,
     },
     {
       src: "/images/wedding/home-gallery-05.jpg",
-      alt: "Tuấn và Hoa nắm tay bước lên bậc đá dưới vòm cột",
-      width: 1200,
-      height: 1800,
+      alt: "Tuấn và Hoa khoe nhẫn cưới trong studio nền sáng",
+      width: 1600,
+      height: 2400,
     },
     {
       src: "/images/wedding/home-gallery-06.jpg",
-      alt: "Tuấn và Hoa tựa vào nhau, cùng cầm tấm thiệp cưới",
-      width: 1200,
-      height: 1800,
+      alt: "Tuấn và Hoa giơ cao tấm thiệp cưới trong studio",
+      width: 1600,
+      height: 2400,
     },
   ] satisfies GalleryImage[],
 
@@ -242,8 +241,9 @@ export const wedding = {
    * khác cách xếp.
    *
    * Ảnh nằm ở public/images/album/, được nén sẵn từ bộ ảnh gốc trong
-   * public/images/anh_cuoi/moi/ (xem scripts/build-album-images.mjs). Bản gốc
-   * ~300MB nên KHÔNG commit — .gitignore đã loại thư mục đó ra.
+   * public/images/anh_cuoi/ (xem scripts/build-images.mjs — script đó dựng
+   * luôn ảnh trang chủ). Bản gốc ~270MB nên KHÔNG commit — .gitignore đã loại
+   * thư mục đó ra.
    *
    * Album là TOÀN BỘ ảnh của website: ngoài 18 file riêng của album, `photos`
    * còn xen vào đúng chỗ các ảnh chỉ trang chủ mới có (hero, chân dung, ba ảnh
@@ -284,14 +284,14 @@ export const wedding = {
       { src: "/images/album/01.jpg", alt: "Tuấn và Hoa dưới mái vòm giữa trời xanh" },
       { src: "/images/wedding/home-hero.jpg", alt: "Tuấn và Hoa hôn nhau dưới mái vòm, tà voan bay trong gió" },
       { src: "/images/album/02.jpg", alt: "Hoa giơ cao bó hoa cưới, tà voan bay trong gió" },
-      { src: "/images/album/03.jpg", alt: "Tuấn quỳ gối trao nhẫn dưới trời xanh" },
-      { src: "/images/wedding/home-story-03.jpg", alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ" },
+      { src: "/images/album/03.jpg", alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ" },
+      { src: "/images/wedding/home-story-03.jpg", alt: "Tuấn quỳ gối trao nhẫn dưới trời xanh" },
       { src: "/images/album/04.jpg", alt: "Tuấn và Hoa bước lên bậc đá dưới vòm cột" },
       { src: "/images/wedding/home-story-01.jpg", alt: "Tuấn và Hoa đứng trước vòm cửa đá giữa hai hàng cây" },
       { src: "/images/album/05.jpg", alt: "Tuấn dắt tay Hoa giữa vườn hoa" },
       { src: "/images/album/06.jpg", alt: "Hoa trong tà voan ren, tay cầm bó hoa" },
       { src: "/images/wedding/home-story-02.jpg", alt: "Tuấn ôm Hoa giữa khu vườn xanh" },
-      { src: "/images/album/07.jpg", alt: "Tuấn và Hoa trên bãi cỏ giữa vườn" },
+      { src: "/images/wedding/venue-groom.jpg", alt: "Tuấn và Hoa trên bãi cỏ giữa vườn" },
       { src: "/images/album/08.jpg", alt: "Tuấn và Hoa dưới vòm gạch giữa tán lá xanh" },
       { src: "/images/album/09.jpg", alt: "Tuấn và Hoa nắm tay bên đài phun nước" },
       {
@@ -299,14 +299,14 @@ export const wedding = {
         alt: "Tuấn và Hoa nhìn nhau trong vườn, tà voan dài bay trong gió",
         wide: true,
       },
-      { src: "/images/album/10.jpg", alt: "Tuấn và Hoa khoác tay nhau trong studio" },
-      { src: "/images/wedding/venue-groom.jpg", alt: "Tuấn và Hoa trong studio nền sáng" },
+      { src: "/images/wedding/venue-bride.jpg", alt: "Tuấn và Hoa khoác tay nhau trong studio" },
+      { src: "/images/album/07.jpg", alt: "Tuấn và Hoa trong studio nền sáng" },
       { src: "/images/album/11.jpg", alt: "Tuấn nhìn Hoa trong studio nền sáng" },
       { src: "/images/wedding/chu_re_1.jpg", alt: "Chú rể Văn Tuấn trong bộ vest be ba mảnh" },
       { src: "/images/wedding/co_dau.jpg", alt: "Cô dâu Mai Hoa trong váy cưới, tay cầm bó hoa" },
       { src: "/images/album/12.jpg", alt: "Tuấn và Hoa khoe nhẫn cưới" },
       { src: "/images/album/13.jpg", alt: "Tuấn và Hoa cùng cầm tấm thiệp cưới" },
-      { src: "/images/wedding/venue-bride.jpg", alt: "Tuấn và Hoa giơ cao tấm thiệp cưới trong studio" },
+      { src: "/images/album/10.jpg", alt: "Tuấn và Hoa giơ cao tấm thiệp cưới trong studio" },
       { src: "/images/album/14.jpg", alt: "Hoa mỉm cười trong váy cưới" },
       { src: "/images/album/15.jpg", alt: "Tuấn và Hoa trong áo dài truyền thống" },
       { src: "/images/album/16.jpg", alt: "Hoa trong áo dài hồng ôm Tuấn từ phía sau" },

@@ -240,6 +240,18 @@
   animation: wd-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.82s both;
 }
 
+/* Hero mobile: khối chữ đứng thẳng trên ảnh, lớp phủ ivory đã giảm xuống
+   ~0.28 cho ảnh giữ màu — bù lại bằng một quầng ivory mờ bám sát nét chữ.
+   Chỉ dưới md: từ md chữ nằm cột riêng trên nền ivory, không cần. */
+@media (max-width: 767px) {
+  .wd-hero-text {
+    text-shadow:
+      0 0 2px rgb(249 247 242 / 0.7),
+      0 0 14px rgb(249 247 242 / 0.85),
+      0 0 28px rgb(249 247 242 / 0.6);
+  }
+}
+
 /* Reveal (components/ui/Reveal.tsx): fade-up khi cuộn tới, CHỈ trên máy có
    chuột. Máy cảm ứng không khớp media query này nên khối luôn hiện sẵn từ
    khung hình đầu tiên, không có transition nào — xem lý do ở Reveal.tsx.
@@ -357,11 +369,11 @@
 .wd-field { display: grid; gap: 10px; }
 
 .wd-field-label {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--wd-taupe);
+  color: var(--wd-brown);
 }
 
 .wd-input,
@@ -372,7 +384,7 @@
   border-bottom: 1px solid var(--wd-line-strong);
   padding: 8px 2px;
   font-family: var(--wd-font-body);
-  font-weight: 400;
+  font-weight: 500;
   font-size: 18px;
   color: var(--wd-brown);
   outline: none;
@@ -382,7 +394,7 @@
 .wd-input:focus,
 .wd-textarea:focus { border-bottom-color: var(--wd-champagne); }
 .wd-input::placeholder,
-.wd-textarea::placeholder { color: var(--wd-taupe); }
+.wd-textarea::placeholder { color: var(--wd-brown-soft); opacity: 1; }
 
 /* Lựa chọn tham dự: chấm tròn nhỏ thay cho pill — giống đánh dấu trên thiệp
    hơn là hai nút CTA. Xếp dọc mobile, ngang hàng từ sm nếu đủ chỗ. */
@@ -399,11 +411,11 @@
   border: 0;
   background: transparent;
   font-family: var(--wd-font-body);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--wd-taupe);
+  color: var(--wd-brown-soft);
   cursor: pointer;
   transition: color 0.3s ease-out;
 }
@@ -471,7 +483,7 @@
   border: 0;
   background: transparent;
   font-family: var(--wd-font-body);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -516,17 +528,19 @@
   }
 }
 
-/* Card lời chúc: fade-in + dịch lên rất nhẹ khi trang /wishes load hoặc đổi
-   trang — thuần CSS (không cần client component/Framer Motion cho một trang
-   vốn render hoàn toàn ở server). animation-delay so le đặt qua inline style
-   theo index. Global reduced-motion override ở globals.css đã tự tắt animation
-   này (đặt animation-duration: 0.01ms !important cho mọi phần tử). */
-@keyframes wd-fade-up {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Card lời chúc: fade-in nhẹ khi trang /wishes load hoặc đổi trang — thuần
+   CSS (không cần client component/Framer Motion cho một trang vốn render
+   hoàn toàn ở server). animation-delay so le đặt qua inline style theo index.
+   Chỉ đổi opacity, KHÔNG translate: card nằm trong CSS columns (masonry), mà
+   transform trên phần tử trong multi-column dễ nháy hoặc mất nét lúc chạy ở
+   vài trình duyệt. Global reduced-motion override ở globals.css đã tự tắt
+   animation này (animation-duration: 0.01ms !important cho mọi phần tử). */
+@keyframes wd-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .wd-wish-card {
-  animation: wd-fade-up 350ms ease-out both;
+  animation: wd-fade-in 350ms ease-out both;
 }
 
 /* Honeypot chống bot: field thật tồn tại trong DOM/tab order để trình

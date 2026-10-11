@@ -34,8 +34,8 @@ type FrameProps = {
 /**
  * Một khung ảnh.
  *
- * Tỉ lệ luôn đúng bằng tỉ lệ file gốc — 2:3 cho ảnh dọc (1200×1800), 3:2 cho
- * hai tấm ngang (2200×1467) — nên `object-cover` ở đây không cắt gì, nó chỉ
+ * Tỉ lệ luôn đúng bằng tỉ lệ file gốc — 2:3 cho ảnh dọc (1600×2400), 3:2 cho
+ * hai tấm ngang (3000×2000) — nên `object-cover` ở đây không cắt gì, nó chỉ
  * lo phần lẻ do làm tròn pixel. Không bố cục nào được phép đổi tỉ lệ này:
  * muốn nhấn một tấm thì cho nó rộng hơn và chừa nhiều khoảng trắng quanh nó
  * hơn, chứ không xén vào ảnh.

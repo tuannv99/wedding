@@ -175,10 +175,13 @@ export function Hero({ invitation }: HeroProps) {
           Bản trước phủ tới 0.86 ở giữa và 0.46 ở 68% — cộng với việc nửa dưới
           tấm ảnh vốn đã là vệt tiền cảnh trắng mờ, cả phần dưới màn hình đọc
           ra là một nền ivory phẳng chứ không còn ra ảnh cưới.
+
+          Giờ đỉnh chỉ còn 0.28 để ảnh giữ được màu; phần đỡ chữ chuyển sang
+          quầng ivory mờ ngay sau từng con chữ (.wd-hero-text ở wedding.css).
         */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_30%,rgba(249,247,242,0.55)_44%,rgba(249,247,242,0.38)_56%,rgba(249,247,242,0.16)_72%,rgba(249,247,242,0.08)_100%)] md:hidden"
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_30%,rgba(249,247,242,0.28)_44%,rgba(249,247,242,0.22)_56%,rgba(249,247,242,0.1)_72%,rgba(249,247,242,0.05)_100%)] md:hidden"
         />
 
         {/* Từ md: một dải chuyển ivory → ảnh cho mép nối giữa hai nửa mềm lại */}
@@ -203,7 +206,7 @@ export function Hero({ invitation }: HeroProps) {
         hơn desktop, để cả khối nằm gọn dưới mốc 56% nói trên. Từ md quay lại
         đúng nhịp của bản design: căn giữa theo trục dọc, canh trái.
       */}
-      <div className="flex flex-col items-center justify-end gap-[clamp(7px,calc(1.6*var(--wd-vh)),26px)] px-6 pb-[clamp(22px,calc(5*var(--wd-vh)),64px)] text-center md:col-start-1 md:row-start-1 md:items-start md:justify-center md:gap-[clamp(10px,calc(2.4*var(--wd-vh)),30px)] md:px-[clamp(32px,6vw,104px)] md:pb-0 md:text-left">
+      <div className="wd-hero-text flex flex-col items-center justify-end gap-[clamp(7px,calc(1.6*var(--wd-vh)),26px)] px-6 pb-[clamp(22px,calc(5*var(--wd-vh)),64px)] text-center md:col-start-1 md:row-start-1 md:items-start md:justify-center md:gap-[clamp(10px,calc(2.4*var(--wd-vh)),30px)] md:px-[clamp(32px,6vw,104px)] md:pb-0 md:text-left">
         {/* Gửi khách mời cá nhân hoá (URL /[guest]) — chỉ hiện khi có invitation,
             không đổi gì ở URL mặc định "/". Dùng lại đúng style wd-quote của
             câu tagline bên dưới, không tạo badge/card mới. */}

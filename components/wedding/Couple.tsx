@@ -30,7 +30,7 @@ export function Couple() {
 
       <div className="mx-auto w-full max-w-5xl">
         <Reveal className="flex flex-col items-center gap-4">
-          <p className="wd-eyebrow tracking-[0.4em] md:text-[25px] md:font-semibold md:text-ink/85">Lễ Thành Hôn</p>
+          <p className="wd-eyebrow tracking-[0.4em] font-semibold text-ink/85 md:text-[25px]">Lễ Thành Hôn</p>
           <hr className="wd-rule" />
         </Reveal>
 
@@ -79,7 +79,7 @@ type PersonColumnProps = {
 function PersonColumn({ label, name, portrait, portraits, index }: PersonColumnProps) {
   return (
     <div className="flex flex-col items-center text-center">
-      <span className="wd-eyebrow tracking-[0.4em] md:text-[25px] md:font-semibold md:text-ink/85">{label}</span>
+      <span className="wd-eyebrow tracking-[0.4em] font-semibold text-ink/85 md:text-[25px]">{label}</span>
 
       {/* 300×425: cao hơn khung 4:5 cũ (300×375) đúng 50px ở bề ngang tối đa. */}
       <figure className="relative mt-6 aspect-[300/425] w-full max-w-[300px] overflow-hidden bg-warm">
@@ -97,7 +97,6 @@ function PersonColumn({ label, name, portrait, portraits, index }: PersonColumnP
         </PhotoZoom>
         {/* pointer-events-none: bấm vào vùng tên vẫn rơi xuống nút ảnh bên dưới. */}
         <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 bg-gradient-to-t from-ivory/94 via-ivory/72 to-ivory/0 px-4 pt-14 pb-[22px]">
-          <span aria-hidden="true" className="h-px w-[34px] bg-champagne/90" />
           <span className="font-display text-[clamp(1.75rem,3.6vw,2.5rem)] md:text-[clamp(calc(1.75rem_+_8px),calc(3.6vw_+_8px),calc(2.5rem_+_8px))] font-light tracking-[0.06em] text-ink">
             {name}
           </span>
