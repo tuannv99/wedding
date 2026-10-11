@@ -283,8 +283,8 @@ export const wedding = {
     photos: [
       { src: "/images/album/01.jpg", alt: "Tuấn và Hoa dưới mái vòm giữa trời xanh" },
       { src: "/images/wedding/home-hero.jpg", alt: "Tuấn và Hoa hôn nhau dưới mái vòm, tà voan bay trong gió" },
-      { src: "/images/album/02.jpg", alt: "Hoa giơ cao bó hoa cưới, tà voan bay trong gió" },
       { src: "/images/album/03.jpg", alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ" },
+      { src: "/images/album/02.jpg", alt: "Hoa giơ cao bó hoa cưới, tà voan bay trong gió" },
       { src: "/images/wedding/home-story-03.jpg", alt: "Tuấn quỳ gối trao nhẫn dưới trời xanh" },
       { src: "/images/album/04.jpg", alt: "Tuấn và Hoa bước lên bậc đá dưới vòm cột" },
       { src: "/images/wedding/home-story-01.jpg", alt: "Tuấn và Hoa đứng trước vòm cửa đá giữa hai hàng cây" },
@@ -339,7 +339,6 @@ export const wedding = {
 
     /** Chữ khép lại. */
     ending: {
-      lead: "Hết rồi !!",
       body: "Cảm ơn các bạn đã xem hết\nnhững khoảnh khắc của chúng mình.",
     },
   },

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { BotanicalRule } from "@/components/ui/Botanical";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
 export type RsvpData = {
@@ -156,159 +157,162 @@ export default function RsvpForm({
   return (
     <div>
       {/* Dòng nhỏ trên — chữ to dưới — nét lá: đúng khuôn tiêu đề của mọi
-          section khác. reveal={false} vì cả form đã nằm trong một Reveal ở
-          RSVP.tsx rồi. */}
+          section khác. Tiêu đề tự viết theo cuộn (TypewriterTitle). */}
       <SectionHeading
         label={eyebrow}
         title={title}
         titleClassName="wd-h1-fit"
-        reveal={false}
         className="mb-[clamp(40px,calc(5*var(--wd-vh)),56px)]"
       />
 
-      <form className="wd-form" onSubmit={handleSubmit} noValidate>
-        {/* Honeypot chống bot — người dùng thật không bao giờ thấy field này,
-            xem .wd-hp trong styles/wedding.css. */}
-        <label className="wd-hp" aria-hidden="true">
-          Để trống trường này
-          <input
-            type="text"
-            name="company"
-            tabIndex={-1}
-            autoComplete="off"
-            value={data.company}
-            onChange={(e) => set("company", e.target.value)}
-          />
-        </label>
+      {/* Form chờ tiêu đề viết xong (RevealGate ở RSVP.tsx) rồi mới hiện. */}
+      <Reveal>
+        <form className="wd-form" onSubmit={handleSubmit} noValidate>
+          {/* Honeypot chống bot — người dùng thật không bao giờ thấy field này,
+              xem .wd-hp trong styles/wedding.css. */}
+          <label className="wd-hp" aria-hidden="true">
+            Để trống trường này
+            <input
+              type="text"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+              value={data.company}
+              onChange={(e) => set("company", e.target.value)}
+            />
+          </label>
 
-        <label className="wd-field">
-          <span className="wd-field-label">Tên của bạn</span>
-          <input
-            className="wd-input"
-            name="name"
-            required
-            placeholder="Nguyễn Văn A"
-            autoComplete="name"
-            value={data.name}
-            onChange={(e) => set("name", e.target.value)}
-          />
-        </label>
+          <label className="wd-field">
+            <span className="wd-field-label">Tên của bạn</span>
+            <input
+              className="wd-input"
+              name="name"
+              required
+              placeholder="Nguyễn Văn A"
+              onFocus={(e) => (e.currentTarget.placeholder = "")}
+              onBlur={(e) => (e.currentTarget.placeholder = "Nguyễn Văn A")}
+              autoComplete="name"
+              value={data.name}
+              onChange={(e) => set("name", e.target.value)}
+            />
+          </label>
 
-        {/* Lựa chọn tham dự kiểu "đánh dấu trên thiệp" — chấm tròn nhỏ đổi
-            màu accent khi chọn, không phải hai nút CTA. */}
-        <fieldset
-          className="wd-field mt-11"
-          style={{ border: 0, padding: 0, gap: 14 }}
-        >
-          <legend className="wd-field-label">Bạn sẽ tham dự?</legend>
-          <div className="wd-rsvp-options">
-            <button
-              type="button"
-              className="wd-rsvp-option"
-              aria-pressed={data.attending === "yes"}
-              onClick={() => set("attending", "yes")}
-            >
-              <span className="wd-rsvp-dot" aria-hidden="true" />
-              Có, tôi sẽ đến
-            </button>
-            <button
-              type="button"
-              className="wd-rsvp-option"
-              aria-pressed={data.attending === "no"}
-              onClick={() => set("attending", "no")}
-            >
-              <span className="wd-rsvp-dot" aria-hidden="true" />
-              Rất tiếc, tôi không thể
+          {/* Lựa chọn tham dự kiểu "đánh dấu trên thiệp" — chấm tròn nhỏ đổi
+              màu accent khi chọn, không phải hai nút CTA. */}
+          <fieldset
+            className="wd-field mt-11"
+            style={{ border: 0, padding: 0, gap: 14 }}
+          >
+            <legend className="wd-field-label">Bạn sẽ tham dự?</legend>
+            <div className="wd-rsvp-options">
+              <button
+                type="button"
+                className="wd-rsvp-option"
+                aria-pressed={data.attending === "yes"}
+                onClick={() => set("attending", "yes")}
+              >
+                <span className="wd-rsvp-dot" aria-hidden="true" />
+                Có, tôi sẽ đến
+              </button>
+              <button
+                type="button"
+                className="wd-rsvp-option"
+                aria-pressed={data.attending === "no"}
+                onClick={() => set("attending", "no")}
+              >
+                <span className="wd-rsvp-dot" aria-hidden="true" />
+                Rất tiếc, tôi không thể
+              </button>
+            </div>
+          </fieldset>
+
+          {/* Không đến thì không cần hỏi số người — collapse nhẹ thay vì biến mất đột ngột */}
+          <AnimatePresence initial={false}>
+            {data.attending !== "no" ? (
+              <motion.div
+                key="guests"
+                initial={reduceMotion ? false : { opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={reduceMotion ? undefined : { opacity: 0, height: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+                style={{ overflow: "hidden" }}
+                className="mt-11"
+              >
+                <div className="wd-field">
+                  <span className="wd-field-label" id="guests-label">
+                    Số người tham dự
+                  </span>
+                  <div className="wd-stepper" role="group" aria-labelledby="guests-label">
+                    <button
+                      type="button"
+                      className="wd-stepper-btn"
+                      aria-label="Giảm số người tham dự"
+                      onClick={decGuests}
+                      disabled={data.guests <= 1}
+                    >
+                      −
+                    </button>
+                    <span className="wd-stepper-value" aria-live="polite">
+                      {data.guests}
+                    </span>
+                    <button
+                      type="button"
+                      className="wd-stepper-btn"
+                      aria-label="Tăng số người tham dự"
+                      onClick={incGuests}
+                      disabled={data.guests >= 20}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
+          <label
+            className={cn("wd-field", data.attending === "no" ? "mt-11" : "mt-12")}
+          >
+            <span className="wd-field-label">Lời chúc gửi đến Tuấn &amp; Hoa</span>
+            <textarea
+              className="wd-textarea"
+              name="note"
+              rows={3}
+              placeholder="Viết lời chúc dành cho Tuấn & Hoa..."
+              value={data.note}
+              onChange={(e) => set("note", e.target.value)}
+            />
+          </label>
+
+          {error ? (
+            <p role="alert" className="wd-body-sm mt-2" style={{ textAlign: "center" }}>
+              {error}
+            </p>
+          ) : null}
+
+          <div className="mt-9 flex flex-col items-center gap-4">
+            <span aria-hidden="true" className="h-px w-10 bg-champagne/50" />
+            <button className="wd-cta" type="submit" disabled={sending}>
+              {sending ? "Đang gửi…" : submitLabel}
+              <svg viewBox="0 0 12 12" fill="none" aria-hidden="true" className="wd-cta-arrow h-3 w-3">
+                <path
+                  d="M0 6h9M5.5 2 9 6l-3.5 4"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </button>
           </div>
-        </fieldset>
 
-        {/* Không đến thì không cần hỏi số người — collapse nhẹ thay vì biến mất đột ngột */}
-        <AnimatePresence initial={false}>
-          {data.attending !== "no" ? (
-            <motion.div
-              key="guests"
-              initial={reduceMotion ? false : { opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={reduceMotion ? undefined : { opacity: 0, height: 0 }}
-              transition={{ duration: reduceMotion ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-              style={{ overflow: "hidden" }}
-              className="mt-11"
-            >
-              <div className="wd-field">
-                <span className="wd-field-label" id="guests-label">
-                  Số người tham dự
-                </span>
-                <div className="wd-stepper" role="group" aria-labelledby="guests-label">
-                  <button
-                    type="button"
-                    className="wd-stepper-btn"
-                    aria-label="Giảm số người tham dự"
-                    onClick={decGuests}
-                    disabled={data.guests <= 1}
-                  >
-                    −
-                  </button>
-                  <span className="wd-stepper-value" aria-live="polite">
-                    {data.guests}
-                  </span>
-                  <button
-                    type="button"
-                    className="wd-stepper-btn"
-                    aria-label="Tăng số người tham dự"
-                    onClick={incGuests}
-                    disabled={data.guests >= 20}
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </motion.div>
+          {note ? (
+            <p className="wd-body-sm mt-4" style={{ textAlign: "center" }}>
+              {note}
+            </p>
           ) : null}
-        </AnimatePresence>
-
-        <label
-          className={cn("wd-field", data.attending === "no" ? "mt-11" : "mt-12")}
-        >
-          <span className="wd-field-label">Lời chúc gửi đến Tuấn &amp; Hoa</span>
-          <textarea
-            className="wd-textarea"
-            name="note"
-            rows={3}
-            placeholder="Viết lời chúc dành cho Tuấn & Hoa..."
-            value={data.note}
-            onChange={(e) => set("note", e.target.value)}
-          />
-        </label>
-
-        {error ? (
-          <p role="alert" className="wd-body-sm mt-2" style={{ textAlign: "center" }}>
-            {error}
-          </p>
-        ) : null}
-
-        <div className="mt-9 flex flex-col items-center gap-4">
-          <span aria-hidden="true" className="h-px w-10 bg-champagne/50" />
-          <button className="wd-cta" type="submit" disabled={sending}>
-            {sending ? "Đang gửi…" : submitLabel}
-            <svg viewBox="0 0 12 12" fill="none" aria-hidden="true" className="wd-cta-arrow h-3 w-3">
-              <path
-                d="M0 6h9M5.5 2 9 6l-3.5 4"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {note ? (
-          <p className="wd-body-sm mt-4" style={{ textAlign: "center" }}>
-            {note}
-          </p>
-        ) : null}
-      </form>
+        </form>
+      </Reveal>
     </div>
   );
 }

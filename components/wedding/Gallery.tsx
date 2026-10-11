@@ -7,6 +7,7 @@ import { Heart } from "lucide-react";
 import { wedding } from "@/lib/wedding";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
+import { RevealGate } from "@/components/ui/RevealGate";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
@@ -60,81 +61,82 @@ export function Gallery() {
         className="top-[6%] -left-[2vw] hidden h-[36vh] w-[20vh] lg:block"
       />
 
-      <div className="mx-auto w-full max-w-6xl">
-        <SectionHeading
-          label={wedding.copy.gallery.eyebrow}
-          title={wedding.copy.gallery.title}
-          rule={false}
-          className="px-2"
-        />
+      <RevealGate>
+        <div className="mx-auto w-full max-w-6xl">
+          <SectionHeading
+            label={wedding.copy.gallery.eyebrow}
+            title={wedding.copy.gallery.title}
+            rule={false}
+            className="px-2"
+          />
 
-        <div className="mx-auto mt-14 grid w-full max-w-[960px] grid-cols-3 gap-2 sm:mt-16 sm:gap-3">
-          {wedding.gallery.map((image, index) => {
-            return (
-              <Reveal
-                key={image.src}
-                delay={(index % 3) * 0.08}
-                y={18}
-                duration={0.4}
-                className={cn(MOSAIC_LAYOUT[index])}
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(index)}
-                  aria-label={"Mở ảnh lớn: " + image.alt}
-                  /* Hiệu ứng "nhấc ảnh polaroid lên" khi hover: chỉ xảy ra lúc
-                     hover (không phá layout masonry lúc nghỉ), tôn trọng
-                     prefers-reduced-motion cho phần xoay/dịch chuyển. */
-                  className="group relative block h-full w-full overflow-hidden bg-warm transition-all duration-500 ease-out hover:z-10 hover:shadow-[0_20px_45px_-15px_rgba(61,57,53,0.4)] motion-safe:hover:-translate-y-1 motion-safe:hover:rotate-[0.6deg]"
+          <div className="mx-auto mt-14 grid w-full max-w-[960px] grid-cols-3 gap-2 sm:mt-16 sm:gap-3">
+            {wedding.gallery.map((image, index) => {
+              return (
+                <Reveal
+                  key={image.src}
+                  delay={(index % 3) * 0.08}
+                  y={18}
+                  className={cn(MOSAIC_LAYOUT[index])}
                 >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+                  <button
+                    type="button"
+                    onClick={() => setOpenIndex(index)}
+                    aria-label={"Mở ảnh lớn: " + image.alt}
+                    /* Hiệu ứng "nhấc ảnh polaroid lên" khi hover: chỉ xảy ra lúc
+                       hover (không phá layout masonry lúc nghỉ), tôn trọng
+                       prefers-reduced-motion cho phần xoay/dịch chuyển. */
+                    className="group relative block h-full w-full overflow-hidden bg-warm transition-all duration-500 ease-out hover:z-10 hover:shadow-[0_20px_45px_-15px_rgba(61,57,53,0.4)] motion-safe:hover:-translate-y-1 motion-safe:hover:rotate-[0.6deg]"
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
 
-                    loading="eager"
-                    /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
-                    decoding="sync"
-                    sizes={index === 0 ? FEATURE_SIZES : GALLERY_SIZES}
-                    className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.035]"
-                  />
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-0 transition-colors duration-700 group-hover:bg-ivory/10"
-                  />
-                </button>
-              </Reveal>
-            );
-          })}
+                      loading="eager"
+                      /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
+                      decoding="sync"
+                      sizes={index === 0 ? FEATURE_SIZES : GALLERY_SIZES}
+                      className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.035]"
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 transition-colors duration-700 group-hover:bg-ivory/10"
+                    />
+                  </button>
+                </Reveal>
+              );
+            })}
+          </div>
+
+          {/*
+            Mosaic ở trang chủ chỉ là 6 ảnh chọn lọc — nút này dẫn sang /album
+            (toàn bộ ảnh, chia theo buổi chụp). Nhãn dài hơn mọi nút
+            wd-btn-ghost khác nên ở mobile phải hạ cỡ chữ + tracking để vẫn gọn
+            một dòng trong 375px; từ sm trở lên mới về đúng cỡ chuẩn.
+          */}
+          <Reveal delay={0.08} className="mt-14 flex justify-center">
+            <Link
+              href="/album"
+              className="wd-btn-ghost gap-3 px-7 text-[11px] tracking-[0.12em] sm:px-10 sm:text-[13px] md:text-[21px] sm:tracking-[0.2em]"
+            >
+              {wedding.copy.gallery.moreLabel}
+              <Heart
+                className="h-2.5 w-2.5 shrink-0 text-champagne"
+                fill="currentColor"
+                strokeWidth={0}
+                aria-hidden="true"
+              />
+            </Link>
+          </Reveal>
+
+          {/* Gallery thuộc về ảnh: botanical chỉ còn đúng một nét rất nhỏ khép lại. */}
+          <Reveal delay={0.1} className="mt-10 flex justify-center">
+            <Botanical variant="mark" className="h-4 w-11 text-sage/60" />
+          </Reveal>
         </div>
-
-        {/*
-          Mosaic ở trang chủ chỉ là 6 ảnh chọn lọc — nút này dẫn sang /album
-          (toàn bộ ảnh, chia theo buổi chụp). Nhãn dài hơn mọi nút
-          wd-btn-ghost khác nên ở mobile phải hạ cỡ chữ + tracking để vẫn gọn
-          một dòng trong 375px; từ sm trở lên mới về đúng cỡ chuẩn.
-        */}
-        <Reveal delay={0.08} className="mt-14 flex justify-center">
-          <Link
-            href="/album"
-            className="wd-btn-ghost gap-3 px-7 text-[11px] tracking-[0.12em] sm:px-10 sm:text-[13px] md:text-[21px] sm:tracking-[0.2em]"
-          >
-            {wedding.copy.gallery.moreLabel}
-            <Heart
-              className="h-2.5 w-2.5 shrink-0 text-champagne"
-              fill="currentColor"
-              strokeWidth={0}
-              aria-hidden="true"
-            />
-          </Link>
-        </Reveal>
-
-        {/* Gallery thuộc về ảnh: botanical chỉ còn đúng một nét rất nhỏ khép lại. */}
-        <Reveal delay={0.1} className="mt-10 flex justify-center">
-          <Botanical variant="mark" className="h-4 w-11 text-sage/60" />
-        </Reveal>
-      </div>
+      </RevealGate>
 
       <Lightbox
         images={wedding.gallery}

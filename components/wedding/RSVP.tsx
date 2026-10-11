@@ -1,7 +1,7 @@
 "use client";
 
 import { wedding } from "@/lib/wedding";
-import { Reveal } from "@/components/ui/Reveal";
+import { RevealGate } from "@/components/ui/RevealGate";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import RsvpForm, { type RsvpData } from "@/components/wedding/RsvpForm";
 
@@ -48,7 +48,8 @@ export function RSVP() {
       />
 
       <div className="mx-auto w-full max-w-[720px]">
-        <Reveal>
+        {/* Tiêu đề viết xong theo cuộn → form mới hiện (xem RsvpForm). */}
+        <RevealGate>
           <RsvpForm
             eyebrow={wedding.copy.rsvp.eyebrow}
             title={wedding.copy.rsvp.title}
@@ -57,7 +58,7 @@ export function RSVP() {
             successBody={wedding.copy.rsvp.successBody}
             onSubmit={handleSubmit}
           />
-        </Reveal>
+        </RevealGate>
       </div>
     </section>
   );

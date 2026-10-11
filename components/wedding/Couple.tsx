@@ -34,13 +34,15 @@ export function Couple() {
           <hr className="wd-rule" />
         </Reveal>
 
-        <Reveal delay={0.1} y={20} className="mt-8 md:mt-14">
+        <div className="mt-8 md:mt-14">
           <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-[clamp(24px,5vw,72px)]">
             {/* Cột trái */}
-            <PersonColumn {...people[0]} portraits={portraits} index={0} />
+            <Reveal y={20}>
+              <PersonColumn {...people[0]} portraits={portraits} index={0} />
+            </Reveal>
 
             {/* Cột giữa: nét dọc trên desktop, đổi thành divider ngang dưới md */}
-            <div className="flex w-full flex-row items-center justify-center gap-4 md:h-auto md:w-auto md:flex-col md:gap-5">
+            <Reveal delay={0.08} className="flex w-full flex-row items-center justify-center gap-4 md:h-auto md:w-auto md:flex-col md:gap-5">
               <span
                 aria-hidden="true"
                 className="h-px flex-1 bg-champagne/45 md:h-[clamp(40px,7vh,72px)] md:w-px md:flex-none"
@@ -52,12 +54,14 @@ export function Couple() {
                 aria-hidden="true"
                 className="h-px flex-1 bg-champagne/45 md:h-[clamp(40px,7vh,72px)] md:w-px md:flex-none"
               />
-            </div>
+            </Reveal>
 
             {/* Cột phải */}
-            <PersonColumn {...people[1]} portraits={portraits} index={1} />
+            <Reveal delay={0.15} y={20}>
+              <PersonColumn {...people[1]} portraits={portraits} index={1} />
+            </Reveal>
           </div>
-        </Reveal>
+        </div>
 
         <Reveal delay={0.15} className="mt-8 flex justify-center md:mt-14">
           <Botanical variant="mark" className="h-5 w-14 text-sage/65" />

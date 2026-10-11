@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
+import { RevealGate } from "@/components/ui/RevealGate";
 import { Botanical, BotanicalRule } from "@/components/ui/Botanical";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
@@ -46,26 +47,26 @@ export function OurStory() {
         className="top-[16%] -right-[3vw] hidden h-[62vh] w-[24vh] lg:block"
       />
 
-      <div className="wd-story mx-auto w-full max-w-4xl md:max-w-[1000px]">
-        {/* Căn giữa ở mobile, dồn về trái từ md — nên không dùng align="left"
-            mà ghi đè bằng biến thể md: trên chính wrapper của SectionHeading. */}
-        <SectionHeading
-          label={wedding.copy.story.eyebrow}
-          title={wedding.copy.story.title}
-          titleClassName="wd-h1-fit"
-          className="md:items-start md:text-left"
-        />
+      <RevealGate>
+        <div className="wd-story mx-auto w-full max-w-4xl md:max-w-[1000px]">
+          {/* Căn giữa ở mobile, dồn về trái từ md — nên không dùng align="left"
+              mà ghi đè bằng biến thể md: trên chính wrapper của SectionHeading. */}
+          <SectionHeading
+            label={wedding.copy.story.eyebrow}
+            title={wedding.copy.story.title}
+            titleClassName="wd-h1-fit"
+            className="md:items-start md:text-left"
+          />
 
-        <div className="mt-14 flex flex-col md:mt-16">
-          {wedding.story.map((step, index) => {
-            // Mốc chẵn (02) đảo ảnh sang trái để bố cục so le
-            const photoFirst = index % 2 === 1;
+          <div className="mt-14 flex flex-col md:mt-16">
+            {wedding.story.map((step, index) => {
+              // Mốc chẵn (02) đảo ảnh sang trái để bố cục so le
+              const photoFirst = index % 2 === 1;
 
-            return (
-              <div key={step.image.src}>
-                {index > 0 ? <BotanicalRule className="my-12 md:my-16" /> : null}
+              return (
+                <div key={step.image.src}>
+                  {index > 0 ? <BotanicalRule className="my-12 md:my-16" /> : null}
 
-                <Reveal delay={0.1} y={20}>
                   {/* Chữ và ảnh luôn nằm CÙNG MỘT HÀNG, kể cả mobile; thứ tự
                       trái/phải đảo so le theo mốc ở mọi bề rộng màn hình. */}
                   {/* Từ md cột chữ rộng theo đúng tỉ lệ cỡ chữ PC / cỡ gốc
@@ -81,7 +82,9 @@ export function OurStory() {
                   >
                     {/* Số thứ tự + đường kẻ + chữ.
                         Ở desktop kéo khối chữ về sát ảnh cho cặp trái/phải cân nhau. */}
-                    <div
+                    {/* Chữ và ảnh hiện riêng khi cuộn tới, ảnh chậm hơn chữ một nhịp. */}
+                    <Reveal
+                      y={20}
                       className={cn(
                         "min-w-0",
                         photoFirst
@@ -120,12 +123,14 @@ export function OurStory() {
                           ) : null}
                         </div>
                       </div>
-                    </div>
+                    </Reveal>
 
                     {/* Ảnh editorial: bỏ khung viền/nền kiểu card, chỉ còn
                         khối ảnh sạch bo góc rất nhẹ. Desktop giới hạn bề rộng
                         để ảnh không lấn hết section. */}
-                    <div
+                    <Reveal
+                      delay={0.15}
+                      y={20}
                       className={cn(
                         "min-w-0 md:w-full md:max-w-[400px]",
                         photoFirst ? "order-1 md:mr-auto" : "order-2 md:ml-auto",
@@ -149,24 +154,24 @@ export function OurStory() {
                           className="object-cover"
                         />
                       </PhotoZoom>
-                    </div>
+                    </Reveal>
                   </div>
-                </Reveal>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Chữ ký: — VĂN TUẤN · MAI HOA — + một nét lá nhỏ khép lại câu chuyện */}
-        <Reveal delay={0.15} className="mt-16 flex flex-col items-center md:mt-20">
-          <div className="flex items-center gap-5">
-            <span aria-hidden="true" className="h-px w-10 bg-champagne/70 sm:w-16" />
-                <Botanical variant="mark" className="h-4 w-11 text-sage/65" />
-            <span aria-hidden="true" className="h-px w-10 bg-champagne/70 sm:w-16" />
+                </div>
+              );
+            })}
           </div>
 
-        </Reveal>
-      </div>
+          {/* Chữ ký: — VĂN TUẤN · MAI HOA — + một nét lá nhỏ khép lại câu chuyện */}
+          <Reveal delay={0.15} className="mt-16 flex flex-col items-center md:mt-20">
+            <div className="flex items-center gap-5">
+              <span aria-hidden="true" className="h-px w-10 bg-champagne/70 sm:w-16" />
+                  <Botanical variant="mark" className="h-4 w-11 text-sage/65" />
+              <span aria-hidden="true" className="h-px w-10 bg-champagne/70 sm:w-16" />
+            </div>
+
+          </Reveal>
+        </div>
+      </RevealGate>
     </section>
   );
 }

@@ -137,12 +137,11 @@ export function AlbumStory() {
       ----------------------------------------------------------------- */}
       <section className="w-full px-6 pt-[clamp(80px,12vw,150px)] md:px-10">
         <div className={BODY}>
-          <Reveal>
-            <OverviewSection
-              tiles={gridTiles}
-              onPick={openLightbox}
-            />
-          </Reveal>
+          {/* Không bọc Reveal: từng hàng ảnh trong lưới tự hiện khi cuộn tới. */}
+          <OverviewSection
+            tiles={gridTiles}
+            onPick={openLightbox}
+          />
         </div>
       </section>
 
@@ -151,11 +150,7 @@ export function AlbumStory() {
       ----------------------------------------------------------------- */}
       <section className="w-full px-6 pt-[clamp(110px,18vw,220px)] md:px-10">
         <Reveal className="mx-auto flex max-w-[560px] flex-col items-center text-center">
-          <p className="wd-quote text-[clamp(1.4rem,3.4vw,2.1rem)] md:text-[clamp(calc(1.4rem_+_8px),calc(3.4vw_+_8px),calc(2.1rem_+_8px))] text-ink">
-            {ending.lead}
-          </p>
-
-          <p className="font-display mt-6 text-[clamp(1.05rem,1.5vw,1.3rem)] md:text-[clamp(calc(1.05rem_+_8px),calc(1.5vw_+_8px),calc(1.3rem_+_8px))] leading-[1.9] font-light text-ink/70 sm:whitespace-pre-line">
+          <p className="font-display text-[clamp(1.05rem,1.5vw,1.3rem)] md:text-[clamp(calc(1.05rem_+_8px),calc(1.5vw_+_8px),calc(1.3rem_+_8px))] leading-[1.9] font-light text-ink/70 sm:whitespace-pre-line">
             {ending.body}
           </p>
         </Reveal>

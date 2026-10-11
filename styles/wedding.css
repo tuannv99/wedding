@@ -253,15 +253,15 @@
 }
 
 /* Reveal (components/ui/Reveal.tsx): fade-up khi cuộn tới trên máy có chuột.
-   Máy cảm ứng không khớp media query này — ở đó chỉ khối chữ được fade, bằng
-   opacity thuần (data-touch, ngay dưới) — xem lý do ở Reveal.tsx.
+   Máy cảm ứng không khớp media query này — ở đó fade bằng opacity thuần
+   (data-touch, ngay dưới) — xem lý do ở Reveal.tsx.
    Media query phải khớp đúng hằng FINE_POINTER trong Reveal.tsx. */
 @media (hover: hover) and (pointer: fine) {
   .wd-reveal {
     transition:
-      opacity var(--wd-reveal-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1)
+      opacity var(--wd-reveal-duration, 1.3s) cubic-bezier(0.22, 1, 0.36, 1)
         var(--wd-reveal-delay, 0s),
-      transform var(--wd-reveal-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1)
+      transform var(--wd-reveal-duration, 1.3s) cubic-bezier(0.22, 1, 0.36, 1)
         var(--wd-reveal-delay, 0s);
   }
   .wd-reveal:not([data-shown]) {
@@ -274,12 +274,14 @@
     transform: none;
   }
 }
-/* Máy cảm ứng: chỉ opacity, chỉ khối chữ — data-touch do Reveal.tsx đặt, xem
-   lý do ở đó. "pending" = ẩn chờ cuộn tới; "in" = đang fade lên. */
+/* Máy cảm ứng: chỉ opacity — data-touch do Reveal.tsx đặt, xem lý do ở đó.
+   "pending" = ẩn chờ cuộn tới; "in" = đang fade lên. Khối có ảnh
+   (data-media) giữ layer GPU suốt, để Safari không huỷ layer → vẽ lại ảnh. */
 .wd-reveal[data-touch="pending"] { opacity: 0; }
 .wd-reveal[data-touch="in"] {
-  transition: opacity 0.8s ease-out var(--wd-reveal-delay, 0s);
+  transition: opacity var(--wd-reveal-duration, 1.3s) ease-out var(--wd-reveal-delay, 0s);
 }
+.wd-reveal[data-media] { will-change: opacity; }
 
 /* Hai cánh thiệp của hiệu ứng "Mở thiệp" (Hero.tsx).
    Dùng CSS animation chứ không để framer-motion tính từng frame: transform

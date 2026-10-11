@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { wedding } from "@/lib/wedding";
 import { Reveal } from "@/components/ui/Reveal";
+import { RevealGate } from "@/components/ui/RevealGate";
+import { TypewriterTitle } from "@/components/ui/TypewriterTitle";
 import { Botanical } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { GiftCTA } from "@/components/wedding/GiftCTA";
@@ -56,40 +58,47 @@ export function Closing() {
 
       {/* Thứ tự theo bản design: lời cảm ơn → tên → ngày. Chữ trắng + bóng rất
           nhẹ để không chìm vào những mảng sáng của ảnh. */}
-      <div className="flex w-full max-w-2xl flex-col items-center px-1 text-center md:max-w-5xl text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.35)] md:px-0">
-        <Reveal>
-          <h2 className="wd-h1 tracking-[0.16em] text-white uppercase">
-            {wedding.copy.closing.title}
-          </h2>
-          {/* PC: 24em đo bằng Chrome cho đúng 3 dòng ở mọi bề ngang 768–1920px
-              (khung 672px cũ ra 4 dòng từ 1024px). */}
-          <p className="wd-body-serif mx-auto mt-6 whitespace-pre-line text-white md:mt-8 md:max-w-[24em]">
-            {wedding.copy.closing.thanks}
-          </p>
-        </Reveal>
+      <RevealGate>
+        <div className="flex w-full max-w-2xl flex-col items-center px-1 text-center md:max-w-5xl text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.35)] md:px-0">
+          {/* Tiêu đề tự viết theo cuộn; lời cảm ơn và mọi thứ bên dưới chờ nó
+              viết xong (RevealGate) rồi mới hiện. */}
+          <div>
+            <TypewriterTitle className="wd-h1 tracking-[0.16em] text-white uppercase">
+              {wedding.copy.closing.title}
+            </TypewriterTitle>
+            {/* PC: 24em đo bằng Chrome cho đúng 3 dòng ở mọi bề ngang 768–1920px
+                (khung 672px cũ ra 4 dòng từ 1024px). */}
+            <Reveal
+              as="p"
+              className="wd-body-serif mx-auto mt-6 whitespace-pre-line text-white md:mt-8 md:max-w-[24em]"
+            >
+              {wedding.copy.closing.thanks}
+            </Reveal>
+          </div>
 
-        <Reveal delay={0.16}>
-          <p className="wd-display mt-12 text-white text-[clamp(2.5rem,11vw,5.5rem)] md:text-[clamp(calc(2.5rem_+_8px),calc(11vw_+_8px),calc(5.5rem_+_8px))] uppercase md:mt-16">
-            {wedding.groom.short}
-            <span className="mx-3 text-champagne italic lowercase">&amp;</span>
-            {wedding.bride.short}
-          </p>
-        </Reveal>
+          <Reveal delay={0.16}>
+            <p className="wd-display mt-12 text-white text-[clamp(2.5rem,11vw,5.5rem)] md:text-[clamp(calc(2.5rem_+_8px),calc(11vw_+_8px),calc(5.5rem_+_8px))] uppercase md:mt-16">
+              {wedding.groom.short}
+              <span className="mx-3 text-champagne italic lowercase">&amp;</span>
+              {wedding.bride.short}
+            </p>
+          </Reveal>
 
-        <Reveal delay={0.3} className="mt-8 flex flex-col items-center gap-7">
-          <span aria-hidden="true" className="h-px w-16 bg-white/50" />
-          <p className="wd-eyebrow wd-num wd-closing-date text-[16px] text-white/90 md:text-[25px]">{wedding.date.display}</p>
-        </Reveal>
+          <Reveal delay={0.3} className="mt-8 flex flex-col items-center gap-7">
+            <span aria-hidden="true" className="h-px w-16 bg-white/50" />
+            <p className="wd-eyebrow wd-num wd-closing-date text-[16px] text-white/90 md:text-[25px]">{wedding.date.display}</p>
+          </Reveal>
 
-        <Reveal delay={0.42}>
-          <Botanical variant="mark" className="mt-12 h-5 w-16 text-white/70" />
-        </Reveal>
+          <Reveal delay={0.42}>
+            <Botanical variant="mark" className="mt-12 h-5 w-16 text-white/70" />
+          </Reveal>
 
-        {/* Kín đáo, đặt cuối cùng — không phải một section mừng cưới lớn. */}
-        <Reveal delay={0.5} className="mt-10">
-          <GiftCTA className="border-white/80 text-white" />
-        </Reveal>
-      </div>
+          {/* Kín đáo, đặt cuối cùng — không phải một section mừng cưới lớn. */}
+          <Reveal delay={0.5} className="mt-10">
+            <GiftCTA className="border-white/80 text-white" />
+          </Reveal>
+        </div>
+      </RevealGate>
     </footer>
   );
 }

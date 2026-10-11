@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { Reveal } from "@/components/ui/Reveal";
 import { gapFor, justifyRows } from "@/app/album/justified-layout";
 
 /**
@@ -85,7 +86,8 @@ function OverviewGrid({
     <div ref={containerRef} className={className}>
       <div className="flex flex-col" style={{ rowGap: gap }}>
         {rows.map((row) => (
-          <div
+          // Mỗi hàng ảnh tự hiện khi cuộn tới — cả lưới không hiện cùng một lúc.
+          <Reveal
             key={row.key}
             className="flex justify-start"
             style={{ height: row.height, columnGap: gap }}
@@ -147,7 +149,7 @@ function OverviewGrid({
                 </button>
               );
             })}
-          </div>
+          </Reveal>
         ))}
       </div>
     </div>

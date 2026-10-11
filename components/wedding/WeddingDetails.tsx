@@ -3,6 +3,7 @@ import { CalendarHeart, MapPin, Phone } from "lucide-react";
 import { wedding } from "@/lib/wedding";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
+import { RevealGate } from "@/components/ui/RevealGate";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
 import { BotanicalRule } from "@/components/ui/Botanical";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -53,180 +54,192 @@ export function WeddingDetails() {
         className="top-[24%] -right-[2vw] hidden h-[36vh] w-[20vh] lg:block"
       />
 
-      <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
-        <SectionHeading
-          label={copy.details.eyebrow}
-          title={copy.details.title}
-          titleClassName="wd-h1-fit"
-          rule={false}
-        />
-
-        {/* Lịch tháng cưới — thay cho khối ngày dạng hàng dọc cũ, ngày cưới
-            được khoanh tròn bằng đúng màu champagne đang dùng chung site. */}
-        <Reveal delay={0.15} className="mt-9 w-full md:mt-16">
-          <WeddingCalendar />
-        </Reveal>
-
-        <Reveal delay={0.2} className="mt-9 flex flex-col items-center md:mt-14">
-          {/* Nút nhỏ, không nổi bật — chỉ mở Google Calendar điền sẵn sự kiện */}
-          <a
-            href={buildGoogleCalendarUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wd-btn-ghost gap-3"
-          >
-            <CalendarHeart className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
-            {copy.details.calendarLabel}
-          </a>
-        </Reveal>
-
-        {/* Tiệc nhà trai / nhà gái: bỏ hẳn Google Map nhúng, chỉ còn giờ · thứ
-            · ngày · địa chỉ dạng editorial — đúng tinh thần thiệp giấy hơn là
-            một dashboard card. */}
-        <Reveal delay={0.2} className="mt-14 flex w-full flex-col items-center md:mt-28">
-          <BotanicalRule className="mb-9 w-full max-w-xs md:mb-14" lineClassName="flex-1" />
-          {/* h3 chứ không phải h2: khối này nằm TRONG section "Ngày cưới".
-              reveal={false} vì cả khối đã nằm trong <Reveal delay={0.2}> ở trên. */}
+      <RevealGate>
+        <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
           <SectionHeading
-            as="h3"
-            label={copy.details.venueEyebrow}
-            title={copy.details.venueLabel}
+            label={copy.details.eyebrow}
+            title={copy.details.title}
             titleClassName="wd-h1-fit"
             rule={false}
-            reveal={false}
           />
 
-          {/*
-            Mỗi bên tiệc là một khối hai cột CHỮ | ẢNH, đổi bên giữa nhà trai
-            và nhà gái. Giữ hai cột ở cả mobile (đúng bản mockup) — cột chữ
-            rộng hơn cột ảnh vì nó phải chứa cả hàng hai nút.
-          */}
-          <div className="mt-12 flex w-full flex-col gap-14 md:mt-16 md:gap-24">
-            {parties.map(({ place, phone }, index) => {
-              // Khối thứ hai (nhà trai) đảo ảnh sang trái cho bố cục so le.
-              const photoFirst = index === 1;
+          {/* Lịch tháng cưới — thay cho khối ngày dạng hàng dọc cũ, ngày cưới
+              được khoanh tròn bằng đúng màu champagne đang dùng chung site. */}
+          <Reveal delay={0.15} className="mt-9 w-full md:mt-16">
+            <WeddingCalendar />
+          </Reveal>
 
-              return (
-                <div
-                  key={place.label}
-                  className={cn(
-                    // items-stretch để cột ảnh cao bằng cột chữ — ảnh là một
-                    // dải dọc cạnh khối thông tin, không phải một ô nhỏ lọt thỏm.
-                    "grid items-stretch gap-4 sm:gap-8 md:grid-cols-2 md:gap-14",
-                    // Cột CHỮ luôn phải là cột rộng hơn (nó chứa cả hàng hai
-                    // nút). `order` chỉ đổi thứ tự hiển thị chứ không đổi bề
-                    // rộng cột, nên khối đảo ảnh phải đảo luôn tỉ lệ cột.
-                    photoFirst
-                      ? "grid-cols-[0.88fr_1.12fr]"
-                      : "grid-cols-[1.12fr_0.88fr]",
-                  )}
-                >
-                  {/* --- Cột chữ --- */}
-                  <div
-                    className={cn(
-                      "flex min-w-0 flex-col items-center justify-center text-center",
-                      photoFirst ? "order-2" : "order-1",
-                    )}
-                  >
-                    <h4 className="wd-label text-[13px] tracking-[0.18em] text-ink uppercase sm:text-[15px] sm:tracking-[0.26em] md:text-[29px] md:font-semibold">
-                      {copy.details.partyLabel} {place.label}
-                    </h4>
-                    <span
-                      aria-hidden="true"
-                      className="mt-3 block h-px w-[34px] bg-champagne/70"
-                    />
+          <Reveal delay={0.2} className="mt-9 flex flex-col items-center md:mt-14">
+            {/* Nút nhỏ, không nổi bật — chỉ mở Google Calendar điền sẵn sự kiện */}
+            <a
+              href={buildGoogleCalendarUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="wd-btn-ghost gap-3"
+            >
+              <CalendarHeart className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
+              {copy.details.calendarLabel}
+            </a>
+          </Reveal>
 
-                    <p className="wd-body-sm mt-5 text-[13px] sm:text-[15px] md:mt-6 md:text-[23px]">
-                      {copy.details.atLabel}{" "}
-                      <span className="wd-num">
-                        {"time" in place ? place.time : reception.time}
-                      </span>
-                    </p>
+          {/* Tiệc nhà trai / nhà gái: bỏ hẳn Google Map nhúng, chỉ còn giờ · thứ
+              · ngày · địa chỉ dạng editorial — đúng tinh thần thiệp giấy hơn là
+              một dashboard card. */}
+          <RevealGate>
+            <div className="mt-14 flex w-full flex-col items-center md:mt-28">
+              {/* h3 chứ không phải h2: khối này nằm TRONG section "Ngày cưới".
+                  Có RevealGate riêng: tiêu đề "Địa điểm" viết xong thì từng cột
+                  chữ, từng ảnh bên dưới mới hiện khi cuộn tới. Nét lá phía trên
+                  không phải chờ (ignoreGate). */}
+              <div className="flex w-full flex-col items-center">
+                <Reveal ignoreGate className="mb-9 w-full max-w-xs md:mb-14">
+                  <BotanicalRule lineClassName="flex-1" />
+                </Reveal>
+                <SectionHeading
+                  as="h3"
+                  label={copy.details.venueEyebrow}
+                  title={copy.details.venueLabel}
+                  titleClassName="wd-h1-fit"
+                  rule={false}
+                />
+              </div>
 
-                    {/* Hàng ngày tháng: thứ (xếp 2 dòng giữa hai nét ngang) ·
-                        ngày/tháng cỡ lớn · năm mờ. Grid 1fr|auto|1fr để
-                        ngày/tháng luôn nằm đúng trục giữa, thẳng với tiêu đề
-                        "Tiệc nhà …" dù khối thứ và khối năm rộng khác nhau. */}
-                    <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 sm:mt-4 sm:gap-3">
-                      <span className="flex flex-col items-center gap-[3px] justify-self-end border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe uppercase sm:gap-1 sm:px-1 sm:py-1.5 sm:text-[11px] md:text-[19px] sm:tracking-[0.1em]">
-                        {("weekday" in place ? place.weekday : date.weekday)
-                          .split(" ")
-                          .map((word) => (
-                            <span key={word}>{word}</span>
-                          ))}
-                      </span>
-                      <span className="wd-num text-[clamp(1.35rem,5.5vw,2.5rem)] md:text-[clamp(calc(1.35rem_+_8px),calc(5.5vw_+_8px),calc(2.5rem_+_8px))] leading-none tracking-[0.02em] text-ink">
-                        {"day" in place ? place.day : date.day}/
-                        {"month" in place ? place.month : date.month}
-                      </span>
-                      <span className="wd-num justify-self-start border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe sm:px-1 sm:py-1.5 sm:text-[11px] md:text-[19px] sm:tracking-[0.1em]">
-                        {date.year}
-                      </span>
-                    </div>
+              {/*
+                Mỗi bên tiệc là một khối hai cột CHỮ | ẢNH, đổi bên giữa nhà trai
+                và nhà gái. Giữ hai cột ở cả mobile (đúng bản mockup) — cột chữ
+                rộng hơn cột ảnh vì nó phải chứa cả hàng hai nút.
+              */}
+              <div className="mt-12 flex w-full flex-col gap-14 md:mt-16 md:gap-24">
+                {parties.map(({ place, phone }, index) => {
+                  // Khối thứ hai (nhà trai) đảo ảnh sang trái cho bố cục so le.
+                  const photoFirst = index === 1;
 
-                    <p className="wd-fact-label mt-5 text-[10px] tracking-[0.18em] sm:text-[12px] sm:tracking-[0.24em] md:text-[20px] md:mt-7">
-                      {copy.details.atHome} {place.label}
-                    </p>
-                    <p className="wd-body-sm mt-2 max-w-[34ch] text-[12px] whitespace-pre-line text-balance sm:mt-3 sm:text-[15px] md:text-[23px]">
-                      {place.address}
-                    </p>
-
-                    <div className="mt-5 flex w-full items-center justify-center gap-1.5 sm:mt-7 sm:gap-3">
-                      <a
-                        href={place.mapsUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={PARTY_BTN}
-                      >
-                        <MapPin
-                          className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5"
-                          strokeWidth={1.5}
-                          aria-hidden="true"
-                        />
-                        {copy.details.mapsLabel}
-                      </a>
-                      <a href={`tel:${phone}`} className={PARTY_BTN}>
-                        <Phone
-                          className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5"
-                          strokeWidth={1.5}
-                          aria-hidden="true"
-                        />
-                        {copy.details.contactLabel}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* --- Cột ảnh --- */}
-                  <div className={cn("min-w-0", photoFirst ? "order-1" : "order-2")}>
-                    {/* Mobile: ảnh kéo cao bằng cột chữ (đúng bản mockup).
-                        Từ md cột rộng gấp ba nên kéo cao như vậy sẽ thành một
-                        khung ngang bẹt cắt mất phần lớn ảnh dọc — chuyển về
-                        đúng tỉ lệ 4:5 và để cột chữ căn giữa theo nó. */}
-                    <PhotoZoom
-                      images={partyPhotos}
-                      index={index}
-                      className="relative h-full min-h-[240px] w-full overflow-hidden rounded-[3px] bg-warm sm:min-h-[320px] md:aspect-[4/5] md:h-auto md:min-h-0"
+                  return (
+                    <div
+                      key={place.label}
+                      className={cn(
+                        // items-stretch để cột ảnh cao bằng cột chữ — ảnh là một
+                        // dải dọc cạnh khối thông tin, không phải một ô nhỏ lọt thỏm.
+                        "grid items-stretch gap-4 sm:gap-8 md:grid-cols-2 md:gap-14",
+                        // Cột CHỮ luôn phải là cột rộng hơn (nó chứa cả hàng hai
+                        // nút). `order` chỉ đổi thứ tự hiển thị chứ không đổi bề
+                        // rộng cột, nên khối đảo ảnh phải đảo luôn tỉ lệ cột.
+                        photoFirst
+                          ? "grid-cols-[0.88fr_1.12fr]"
+                          : "grid-cols-[1.12fr_0.88fr]",
+                      )}
                     >
-                      <Image
-                        src={place.photo.src}
-                        alt={place.photo.alt}
-                        fill
-                        /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+                      {/* --- Cột chữ --- */}
+                      <Reveal
+                        className={cn(
+                          "flex min-w-0 flex-col items-center justify-center text-center",
+                          photoFirst ? "order-2" : "order-1",
+                        )}
+                      >
+                        <h4 className="wd-label text-[13px] tracking-[0.18em] text-ink uppercase sm:text-[15px] sm:tracking-[0.26em] md:text-[29px] md:font-semibold">
+                          {copy.details.partyLabel} {place.label}
+                        </h4>
+                        <span
+                          aria-hidden="true"
+                          className="mt-3 block h-px w-[34px] bg-champagne/70"
+                        />
 
-                        loading="eager"
-                        /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
-                        decoding="sync"
-                        sizes="(max-width: 767px) 40vw, 46vw"
-                        className="object-cover"
-                      />
-                    </PhotoZoom>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Reveal>
-      </div>
+                        <p className="wd-body-sm mt-5 text-[13px] sm:text-[15px] md:mt-6 md:text-[23px]">
+                          {copy.details.atLabel}{" "}
+                          <span className="wd-num">
+                            {"time" in place ? place.time : reception.time}
+                          </span>
+                        </p>
+
+                        {/* Hàng ngày tháng: thứ (xếp 2 dòng giữa hai nét ngang) ·
+                            ngày/tháng cỡ lớn · năm mờ. Grid 1fr|auto|1fr để
+                            ngày/tháng luôn nằm đúng trục giữa, thẳng với tiêu đề
+                            "Tiệc nhà …" dù khối thứ và khối năm rộng khác nhau. */}
+                        <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 sm:mt-4 sm:gap-3">
+                          <span className="flex flex-col items-center gap-[3px] justify-self-end border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe uppercase sm:gap-1 sm:px-1 sm:py-1.5 sm:text-[11px] md:text-[19px] sm:tracking-[0.1em]">
+                            {("weekday" in place ? place.weekday : date.weekday)
+                              .split(" ")
+                              .map((word) => (
+                                <span key={word}>{word}</span>
+                              ))}
+                          </span>
+                          <span className="wd-num text-[clamp(1.35rem,5.5vw,2.5rem)] md:text-[clamp(calc(1.35rem_+_8px),calc(5.5vw_+_8px),calc(2.5rem_+_8px))] leading-none tracking-[0.02em] text-ink">
+                            {"day" in place ? place.day : date.day}/
+                            {"month" in place ? place.month : date.month}
+                          </span>
+                          <span className="wd-num justify-self-start border-y border-taupe/35 px-0.5 py-1 text-[9px] leading-none tracking-[0.06em] text-taupe sm:px-1 sm:py-1.5 sm:text-[11px] md:text-[19px] sm:tracking-[0.1em]">
+                            {date.year}
+                          </span>
+                        </div>
+
+                        <p className="wd-fact-label mt-5 text-[10px] tracking-[0.18em] sm:text-[12px] sm:tracking-[0.24em] md:text-[20px] md:mt-7">
+                          {copy.details.atHome} {place.label}
+                        </p>
+                        <p className="wd-body-sm mt-2 max-w-[34ch] text-[12px] whitespace-pre-line text-balance sm:mt-3 sm:text-[15px] md:text-[23px]">
+                          {place.address}
+                        </p>
+
+                        <div className="mt-5 flex w-full items-center justify-center gap-1.5 sm:mt-7 sm:gap-3">
+                          <a
+                            href={place.mapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={PARTY_BTN}
+                          >
+                            <MapPin
+                              className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5"
+                              strokeWidth={1.5}
+                              aria-hidden="true"
+                            />
+                            {copy.details.mapsLabel}
+                          </a>
+                          <a href={`tel:${phone}`} className={PARTY_BTN}>
+                            <Phone
+                              className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5"
+                              strokeWidth={1.5}
+                              aria-hidden="true"
+                            />
+                            {copy.details.contactLabel}
+                          </a>
+                        </div>
+                      </Reveal>
+
+                      {/* --- Cột ảnh --- */}
+                      <Reveal
+                        delay={0.15}
+                        className={cn("min-w-0", photoFirst ? "order-1" : "order-2")}
+                      >
+                        {/* Mobile: ảnh kéo cao bằng cột chữ (đúng bản mockup).
+                            Từ md cột rộng gấp ba nên kéo cao như vậy sẽ thành một
+                            khung ngang bẹt cắt mất phần lớn ảnh dọc — chuyển về
+                            đúng tỉ lệ 4:5 và để cột chữ căn giữa theo nó. */}
+                        <PhotoZoom
+                          images={partyPhotos}
+                          index={index}
+                          className="relative h-full min-h-[240px] w-full overflow-hidden rounded-[3px] bg-warm sm:min-h-[320px] md:aspect-[4/5] md:h-auto md:min-h-0"
+                        >
+                          <Image
+                            src={place.photo.src}
+                            alt={place.photo.alt}
+                            fill
+                            /* eager: tải ngay lúc mở thiệp (sau lưng tấm thiệp), tránh ảnh "bụp" hiện khi cuộn trên iPhone */
+
+                            loading="eager"
+                            /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
+                            decoding="sync"
+                            sizes="(max-width: 767px) 40vw, 46vw"
+                            className="object-cover"
+                          />
+                        </PhotoZoom>
+                      </Reveal>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </RevealGate>
+        </div>
+      </RevealGate>
     </section>
   );
 }
