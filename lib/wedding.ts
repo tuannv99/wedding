@@ -282,18 +282,18 @@ export const wedding = {
      */
     photos: [
       { src: "/images/album/01.jpg", alt: "Tuấn và Hoa dưới mái vòm giữa trời xanh" },
-      { src: "/images/wedding/home-hero.jpg", alt: "Tuấn và Hoa hôn nhau dưới mái vòm, tà voan bay trong gió" },
-      { src: "/images/album/03.jpg", alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ" },
       { src: "/images/album/02.jpg", alt: "Hoa giơ cao bó hoa cưới, tà voan bay trong gió" },
+      { src: "/images/album/03.jpg", alt: "Tuấn quỳ gối trao nhẫn cho Hoa trên bãi cỏ" },
+      { src: "/images/wedding/home-hero.jpg", alt: "Tuấn và Hoa hôn nhau dưới mái vòm, tà voan bay trong gió" },
       { src: "/images/wedding/home-story-03.jpg", alt: "Tuấn quỳ gối trao nhẫn dưới trời xanh" },
       { src: "/images/album/04.jpg", alt: "Tuấn và Hoa bước lên bậc đá dưới vòm cột" },
       { src: "/images/wedding/home-story-01.jpg", alt: "Tuấn và Hoa đứng trước vòm cửa đá giữa hai hàng cây" },
       { src: "/images/album/05.jpg", alt: "Tuấn dắt tay Hoa giữa vườn hoa" },
       { src: "/images/album/06.jpg", alt: "Hoa trong tà voan ren, tay cầm bó hoa" },
       { src: "/images/wedding/home-story-02.jpg", alt: "Tuấn ôm Hoa giữa khu vườn xanh" },
-      { src: "/images/wedding/venue-groom.jpg", alt: "Tuấn và Hoa trên bãi cỏ giữa vườn" },
-      { src: "/images/album/08.jpg", alt: "Tuấn và Hoa dưới vòm gạch giữa tán lá xanh" },
       { src: "/images/album/09.jpg", alt: "Tuấn và Hoa nắm tay bên đài phun nước" },
+      { src: "/images/album/08.jpg", alt: "Tuấn và Hoa dưới vòm gạch giữa tán lá xanh" },
+      { src: "/images/wedding/venue-groom.jpg", alt: "Tuấn và Hoa trên bãi cỏ giữa vườn" },
       {
         src: "/images/wedding/home-closing.jpg",
         alt: "Tuấn và Hoa nhìn nhau trong vườn, tà voan dài bay trong gió",
