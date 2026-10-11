@@ -1,9 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { requireAdminClient } from "@/app/admin/actions";
+import { WISHES_TAG } from "@/lib/wishes";
 
 function revalidateWishPaths() {
+  revalidateTag(WISHES_TAG);
   revalidatePath("/admin/wishes");
   revalidatePath("/wishes");
   revalidatePath("/");

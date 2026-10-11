@@ -1,6 +1,7 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { toWishRow } from "@/lib/wishes";
+import { toWishRow, WISHES_TAG } from "@/lib/wishes";
 import { isRateLimited } from "@/lib/rate-limit";
 
 const MIN_FILL_TIME_MS = 1500;
@@ -119,6 +120,7 @@ export async function POST(request: Request) {
         .from("wedding_wishes")
         .insert({ name: wishRow.name, message: wishRow.message });
       if (error) console.error("[rsvp] wish insert failed:", error.message);
+      else revalidateTag(WISHES_TAG);
     } catch (err) {
       console.error("[rsvp] wish insert threw:", err);
     }

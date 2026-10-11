@@ -7,6 +7,13 @@ export type Wish = {
   createdAt: string;
 };
 
+/**
+ * Tag cache của dữ liệu trang /wishes (xem app/wishes/page.tsx). Chỗ nào ghi
+ * hoặc xoá trong bảng wedding_wishes phải gọi revalidateTag(WISHES_TAG) để
+ * lời chúc mới hiện ra / lời chúc bị xoá biến mất ngay.
+ */
+export const WISHES_TAG = "wishes";
+
 export const WISH_NAME_MAX = 80;
 export const WISH_MESSAGE_MAX = 500;
 

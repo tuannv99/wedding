@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
+import { createClient } from "@supabase/supabase-js";
 import { SimpleHeader } from "@/components/ui/SimpleHeader";
 import { EnsureOpened } from "@/components/ui/EnsureOpened";
 import { BotanicalRule } from "@/components/ui/Botanical";
 import { BotanicalAccent } from "@/components/ui/BotanicalAccent";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { type Wish } from "@/lib/wishes";
+import { type Wish, WISHES_TAG } from "@/lib/wishes";
 import { coupleShort, wedding } from "@/lib/wedding";
 import { cn } from "@/lib/utils";
 import { WishCard } from "@/app/wishes/WishCard";
@@ -16,44 +17,67 @@ export const metadata: Metadata = {
   description: "Lời chúc từ những người thân yêu gửi đến Tuấn & Hoa.",
 };
 
-// Luôn lấy dữ liệu mới — lời chúc vừa gửi hiện ra ngay, lời chúc admin vừa
-// xoá biến mất ngay, và mỗi lần đổi trang (?page=n) là một request khác.
+// Trang render theo từng request (mỗi ?page=n một request), nhưng dữ liệu thì
+// lấy qua cache bên dưới — chuyển trang không phải chờ Supabase mỗi lần.
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 12;
 
-async function getWishes(
-  page: number,
-): Promise<{ wishes: Wish[]; total: number; configured: boolean }> {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) return { wishes: [], total: 0, configured: false };
+type WishesResult = { wishes: Wish[]; total: number; configured: boolean };
 
-  const from = (page - 1) * PAGE_SIZE;
-  const to = from + PAGE_SIZE - 1;
+/**
+ * Dữ liệu từng trang được cache trên server theo tag WISHES_TAG: lần đầu mở
+ * trang n mới hỏi Supabase, các lần sau (và lúc pagination prefetch trước)
+ * trả ngay từ cache. /api/rsvp và nút Xoá ở admin gọi revalidateTag ngay khi
+ * bảng đổi, nên lời chúc vừa gửi vẫn hiện ra ngay; revalidate 60s chỉ là lưới
+ * an toàn cho thay đổi làm thẳng trên Supabase dashboard.
+ *
+ * Dùng client supabase-js thường (không cookie): khách xem trang này luôn là
+ * anon, mà trong unstable_cache cũng không được đọc cookies(). Lỗi thì throw
+ * để KHÔNG bị cache — getWishes() bên dưới bắt lại thành trạng thái rỗng.
+ */
+const fetchWishesPage = unstable_cache(
+  async (page: number): Promise<WishesResult> => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !anonKey) return { wishes: [], total: 0, configured: false };
 
-  // { count: "exact" }: chỉ đếm, KHÔNG kéo hết dữ liệu về — range() giới hạn
-  // đúng 1 trang (12 dòng) dù bảng có 10 hay 5000 lời chúc.
-  const { data, error, count } = await supabase
-    .from("wedding_wishes")
-    .select("id, name, message, created_at", { count: "exact" })
-    .order("created_at", { ascending: false })
-    .range(from, to);
+    const supabase = createClient(url, anonKey, { auth: { persistSession: false } });
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
 
-  if (error) {
-    console.error("[wishes] fetch failed:", error.message);
+    // { count: "exact" }: chỉ đếm, KHÔNG kéo hết dữ liệu về — range() giới hạn
+    // đúng 1 trang (12 dòng) dù bảng có 10 hay 5000 lời chúc.
+    const { data, error, count } = await supabase
+      .from("wedding_wishes")
+      .select("id, name, message, created_at", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    if (error) throw new Error(error.message);
+
+    return {
+      configured: true,
+      total: count ?? 0,
+      wishes: (data ?? []).map((row) => ({
+        id: row.id,
+        name: row.name,
+        message: row.message,
+        createdAt: row.created_at,
+      })),
+    };
+  },
+  ["wishes-page"],
+  { tags: [WISHES_TAG], revalidate: 60 },
+);
+
+async function getWishes(page: number): Promise<WishesResult> {
+  try {
+    return await fetchWishesPage(page);
+  } catch (err) {
+    console.error("[wishes] fetch failed:", err instanceof Error ? err.message : err);
     return { wishes: [], total: 0, configured: true };
   }
-
-  return {
-    configured: true,
-    total: count ?? 0,
-    wishes: (data ?? []).map((row) => ({
-      id: row.id,
-      name: row.name,
-      message: row.message,
-      createdAt: row.created_at,
-    })),
-  };
 }
 
 /**

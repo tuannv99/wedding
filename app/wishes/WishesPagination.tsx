@@ -18,6 +18,10 @@ const cell =
  * ngay vì đây là link thật. Chỉ tạo link tới trang hợp lệ; mũi tên ở trang
  * đầu/cuối là span mờ, không phải link chết.
  *
+ * `prefetch` (đầy đủ, không chỉ tới loading.tsx): trang đích được tải sẵn khi
+ * link lọt vào màn hình, bấm là hiện ngay thay vì chờ server render. Dữ liệu
+ * đã cache ở server (xem page.tsx) nên tải sẵn vài trang lân cận rất rẻ.
+ *
  * Mobile và từ sm trở lên dùng hai dãy số khác nhau (dãy kia display:none,
  * nên không lọt vào cây accessibility): màn 320px chỉ còn ~272px, vừa đủ cho
  * 2 mũi tên + 5 ô (siblingCount 0); từ sm mới đủ chỗ cho 7 ô (siblingCount 1).
@@ -39,6 +43,7 @@ export function WishesPagination({ currentPage, totalPages }: Props) {
         <li key={token}>
           <Link
             href={`/wishes?page=${token}`}
+            prefetch
             aria-label={`Trang ${token}`}
             aria-current={token === currentPage ? "page" : undefined}
             className={cn(
@@ -73,6 +78,7 @@ export function WishesPagination({ currentPage, totalPages }: Props) {
     return (
       <Link
         href={`/wishes?page=${target}`}
+        prefetch
         aria-label={direction === "prev" ? "Trang trước" : "Trang sau"}
         className={cn(cell, "text-taupe transition-colors duration-200 hover:text-ink")}
       >
