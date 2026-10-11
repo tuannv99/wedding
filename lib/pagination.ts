@@ -1,8 +1,15 @@
 /**
  * Sinh danh sách token trang rút gọn kiểu "1 … 4 5 6 … 42" — dùng cho
  * pagination /wishes khi có hàng trăm lời chúc (không hiện hết số trang).
+ *
+ * Số ô luôn cố định (siblingCount * 2 + 5) khi có nhiều trang: chuyển trang
+ * không làm thanh pagination co giãn bề ngang, mũi tên không bị xô đi.
+ * Mỗi số trang chỉ xuất hiện đúng một lần (dùng làm React key).
  */
 export type PageToken = number | "ellipsis";
+
+const range = (from: number, to: number) =>
+  Array.from({ length: to - from + 1 }, (_, i) => from + i);
 
 export function buildPageTokens(
   current: number,
@@ -12,28 +19,23 @@ export function buildPageTokens(
   if (total <= 0) return [];
 
   const totalVisible = siblingCount * 2 + 5;
-  if (total <= totalVisible) {
-    return Array.from({ length: total }, (_, i) => i + 1);
+  if (total <= totalVisible) return range(1, total);
+
+  // Số ô liền nhau ở một đầu khi trang hiện tại nằm sát đầu đó:
+  // trang đầu/cuối + 2 ô sibling + chính nó + 1 ô bù cho dấu "…" bị bỏ.
+  const edgeCount = siblingCount * 2 + 3;
+
+  if (current <= edgeCount - siblingCount) {
+    return [...range(1, edgeCount), "ellipsis", total];
   }
-
-  const leftSibling = Math.max(current - siblingCount, 1);
-  const rightSibling = Math.min(current + siblingCount, total);
-  const showLeftEllipsis = leftSibling > 2;
-  const showRightEllipsis = rightSibling < total - 1;
-
-  const tokens: PageToken[] = [1];
-
-  if (showLeftEllipsis) tokens.push("ellipsis");
-  else if (leftSibling === 2) tokens.push(2);
-
-  for (let page = Math.max(leftSibling, 2); page <= Math.min(rightSibling, total - 1); page++) {
-    tokens.push(page);
+  if (current >= total - edgeCount + siblingCount + 1) {
+    return [1, "ellipsis", ...range(total - edgeCount + 1, total)];
   }
-
-  if (showRightEllipsis) tokens.push("ellipsis");
-  else if (rightSibling === total - 1) tokens.push(total - 1);
-
-  tokens.push(total);
-
-  return tokens;
+  return [
+    1,
+    "ellipsis",
+    ...range(current - siblingCount, current + siblingCount),
+    "ellipsis",
+    total,
+  ];
 }

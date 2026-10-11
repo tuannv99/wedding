@@ -11,40 +11,48 @@ create table if not exists public.wedding_wishes (
   name text not null,
   message text not null,
   created_at timestamptz not null default now(),
-  is_approved boolean not null default false,
+  -- Di sản của chức năng duyệt cũ (đã bỏ): lời chúc gửi lên là hiện ngay ở
+  -- /wishes, admin chỉ còn quyền xoá. Giữ cột để không phải xoá dữ liệu cũ;
+  -- mặc định true và không còn policy nào cho phép đổi giá trị này.
+  is_approved boolean not null default true,
   constraint wedding_wishes_name_length check (char_length(name) between 1 and 80),
   constraint wedding_wishes_message_length check (char_length(message) between 1 and 500)
 );
 
--- Đọc trang /wishes theo "mới nhất trước" nên index sẵn is_approved + created_at.
-create index if not exists wedding_wishes_approved_created_at_idx
-  on public.wedding_wishes (is_approved, created_at desc);
+-- Bỏ duyệt lời chúc: bảng đã tạo trước đây có default false → đổi sang true,
+-- và mở luôn những lời chúc còn nằm trong hàng chờ duyệt cũ.
+alter table public.wedding_wishes alter column is_approved set default true;
+update public.wedding_wishes set is_approved = true where is_approved = false;
+
+-- Đọc trang /wishes theo "mới nhất trước".
+drop index if exists public.wedding_wishes_approved_created_at_idx;
+create index if not exists wedding_wishes_created_at_idx
+  on public.wedding_wishes (created_at desc);
 
 alter table public.wedding_wishes enable row level security;
 
--- Khách (chưa đăng nhập — role "anon"): chỉ đọc được lời chúc đã duyệt.
+-- Khách (chưa đăng nhập — role "anon"): đọc được mọi lời chúc.
 drop policy if exists "public can read approved wishes" on public.wedding_wishes;
-create policy "public can read approved wishes"
+drop policy if exists "public can read wishes" on public.wedding_wishes;
+create policy "public can read wishes"
   on public.wedding_wishes
   for select
   to anon
-  using (is_approved = true);
+  using (true);
 
 -- Được phép gửi lời chúc mới (cả khách chưa đăng nhập lẫn admin đang đăng
--- nhập sẵn khi tự dùng form RSVP/wishes trên trình duyệt của mình), nhưng
--- bắt buộc is_approved = false ngay ở tầng database — không thể tự set true
--- dù có sửa request thế nào.
+-- nhập sẵn khi tự dùng form RSVP trên trình duyệt của mình).
 drop policy if exists "guests can insert unapproved wishes" on public.wedding_wishes;
-create policy "guests can insert unapproved wishes"
+drop policy if exists "guests can insert wishes" on public.wedding_wishes;
+create policy "guests can insert wishes"
   on public.wedding_wishes
   for insert
   to anon, authenticated
-  with check (is_approved = false);
+  with check (true);
 
 -- Khách: KHÔNG có policy update/delete nào cho role anon → mặc định bị từ chối.
 
--- Admin (đã đăng nhập qua Supabase Auth — role "authenticated"): đọc tất cả,
--- kể cả lời chúc chưa duyệt.
+-- Admin (đã đăng nhập qua Supabase Auth — role "authenticated"): đọc tất cả.
 drop policy if exists "authenticated can read all wishes" on public.wedding_wishes;
 create policy "authenticated can read all wishes"
   on public.wedding_wishes
@@ -52,14 +60,11 @@ create policy "authenticated can read all wishes"
   to authenticated
   using (true);
 
--- Admin: duyệt / bỏ duyệt (chỉ được đổi is_approved, không đổi name/message).
+-- Không còn duyệt / bỏ duyệt → không ai được update lời chúc nữa (kể cả
+-- admin). Gỡ policy update và trigger giới hạn cột update của chức năng cũ.
 drop policy if exists "authenticated can update approval" on public.wedding_wishes;
-create policy "authenticated can update approval"
-  on public.wedding_wishes
-  for update
-  to authenticated
-  using (true)
-  with check (true);
+drop trigger if exists wedding_wishes_restrict_update_trigger on public.wedding_wishes;
+drop function if exists public.wedding_wishes_restrict_update();
 
 -- Admin: xoá lời chúc.
 drop policy if exists "authenticated can delete wishes" on public.wedding_wishes;
@@ -68,30 +73,6 @@ create policy "authenticated can delete wishes"
   for delete
   to authenticated
   using (true);
-
--- Policy "update approval" ở trên chỉ kiểm tra ROLE, không kiểm tra CỘT nào
--- bị đổi — về lý thuyết một request update() tuỳ ý vẫn có thể kèm theo
--- name/message mới. Trigger dưới đây chặn đúng phần đó ở tầng database:
--- update chỉ được phép đổi is_approved, mọi cột khác giữ nguyên giá trị cũ.
-create or replace function public.wedding_wishes_restrict_update()
-returns trigger
-language plpgsql
-as $$
-begin
-  if new.name is distinct from old.name
-     or new.message is distinct from old.message
-     or new.created_at is distinct from old.created_at then
-    raise exception 'only is_approved can be changed on wedding_wishes';
-  end if;
-  return new;
-end;
-$$;
-
-drop trigger if exists wedding_wishes_restrict_update_trigger on public.wedding_wishes;
-create trigger wedding_wishes_restrict_update_trigger
-  before update on public.wedding_wishes
-  for each row
-  execute function public.wedding_wishes_restrict_update();
 
 -- Xác nhận tham dự (RSVP) — trước đây /api/rsvp chỉ console.log, không lưu
 -- đâu cả. Bảng này lưu thật để admin xem được danh sách khách + số người đi

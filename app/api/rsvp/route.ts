@@ -13,7 +13,7 @@ const MIN_FILL_TIME_MS = 1500;
  *
  * Riêng ô "Lời chúc" thì NGOÀI RA còn được nối vào bảng wedding_wishes với
  * form ở /wishes — khách RSVP kèm lời chúc không cần gửi lại ở trang riêng,
- * lời chúc vẫn vào hàng chờ is_approved=false như mọi lời chúc khác.
+ * lời chúc hiện ngay ở /wishes (không qua duyệt; admin xoá được ở /admin/wishes).
  */
 
 type RsvpBody = {
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
       const wishRow = toWishRow(entry.name, entry.message);
       const { error } = await supabase
         .from("wedding_wishes")
-        .insert({ name: wishRow.name, message: wishRow.message, is_approved: false });
+        .insert({ name: wishRow.name, message: wishRow.message });
       if (error) console.error("[rsvp] wish insert failed:", error.message);
     } catch (err) {
       console.error("[rsvp] wish insert threw:", err);

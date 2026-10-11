@@ -16,7 +16,7 @@ async function getAllWishes(): Promise<{ wishes: Wish[]; configured: boolean }> 
 
   const { data, error } = await supabase
     .from("wedding_wishes")
-    .select("id, name, message, created_at, is_approved")
+    .select("id, name, message, created_at")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -31,15 +31,12 @@ async function getAllWishes(): Promise<{ wishes: Wish[]; configured: boolean }> 
       name: row.name,
       message: row.message,
       createdAt: row.created_at,
-      isApproved: row.is_approved,
     })),
   };
 }
 
 export default async function AdminWishesPage() {
   const { wishes, configured } = await getAllWishes();
-  const pending = wishes.filter((w) => !w.isApproved);
-  const approved = wishes.filter((w) => w.isApproved);
 
   return (
     <>
@@ -64,37 +61,14 @@ export default async function AdminWishesPage() {
         ) : wishes.length === 0 ? (
           <p className="wd-body-sm mt-10">Chưa có lời chúc nào được gửi.</p>
         ) : (
-          <>
-            <section className="mt-12">
-              <h2 className="wd-label text-taupe">
-                Chưa duyệt ({pending.length})
-              </h2>
-              {pending.length === 0 ? (
-                <p className="wd-body-sm mt-4">Không có lời chúc nào đang chờ duyệt.</p>
-              ) : (
-                <ul className="mt-4">
-                  {pending.map((wish) => (
-                    <WishRow key={wish.id} wish={wish} />
-                  ))}
-                </ul>
-              )}
-            </section>
-
-            <section className="mt-16">
-              <h2 className="wd-label text-taupe">
-                Đã duyệt ({approved.length})
-              </h2>
-              {approved.length === 0 ? (
-                <p className="wd-body-sm mt-4">Chưa có lời chúc nào được duyệt.</p>
-              ) : (
-                <ul className="mt-4">
-                  {approved.map((wish) => (
-                    <WishRow key={wish.id} wish={wish} />
-                  ))}
-                </ul>
-              )}
-            </section>
-          </>
+          <section className="mt-12">
+            <h2 className="wd-label text-taupe">Tất cả lời chúc ({wishes.length})</h2>
+            <ul className="mt-4">
+              {wishes.map((wish) => (
+                <WishRow key={wish.id} wish={wish} />
+              ))}
+            </ul>
+          </section>
         )}
       </main>
     </>

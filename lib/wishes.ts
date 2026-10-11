@@ -5,7 +5,6 @@ export type Wish = {
   name: string;
   message: string;
   createdAt: string;
-  isApproved: boolean;
 };
 
 export const WISH_NAME_MAX = 80;
