@@ -30,6 +30,15 @@ export function Timeline() {
           />
 
           <div className="mt-14 flex flex-col items-center md:mt-16">
+            {/* Ngày cưới đứng trên mốc đầu tiên — cùng cỡ chữ với dòng ngày ở Hero. */}
+            <Reveal
+              as="p"
+              y={16}
+              className="wd-eyebrow wd-num mb-8 text-center text-ink/70 md:mb-10 md:tracking-[0.5em]"
+            >
+              {wedding.date.display}
+            </Reveal>
+
             {/* w-fit + mx-auto: danh sách chỉ rộng vừa nội dung nên căn giữa đúng theo
               tiêu đề, thay vì một khung max-w-sm mà chữ dồn sang trái. */}
             <ol className="mx-auto w-fit max-w-full">
