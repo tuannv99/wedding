@@ -95,24 +95,13 @@ export default async function WishesPage({
         {/* Editorial hero — giữ ở mọi trạng thái (kể cả rỗng / lỗi). */}
         <header className="mx-auto flex max-w-[700px] flex-col items-center text-center">
           <BotanicalRule lineClassName="w-8 sm:w-12" />
-          <p className="wd-eyebrow mt-5 text-[11px] tracking-[0.24em] sm:text-[12px] sm:tracking-[0.32em] md:text-[14px]">
-            A collection of love &amp; wishes
-          </p>
-          <h1 className="wd-h1 mt-3 text-[clamp(30px,calc((100vw_-_48px)/8),38px)] leading-[1.1] sm:text-[42px] md:mt-4 md:text-[46px] lg:text-[54px]">
+          <h1 className="wd-h1 mt-4 text-[clamp(30px,calc((100vw_-_48px)/8),38px)] leading-[1.1] sm:text-[42px] md:mt-5 md:text-[46px] lg:text-[54px]">
             Những lời yêu thương
           </h1>
           <p className="wd-body-sm mt-4 max-w-[460px] text-[17px] leading-[1.55] sm:text-[18px] md:text-[19px] lg:text-[20px]">
             Có những lời chúc giản dị, nhưng sẽ trở thành kỷ niệm đẹp theo
             chúng mình mãi về sau.
           </p>
-          {configured && total > 0 && (
-            <>
-              <span aria-hidden="true" className="mt-6 block h-px w-10 bg-taupe/30" />
-              <p className="font-display mt-4 text-[14px] tracking-[0.06em] text-taupe md:text-[16px]">
-                {total} lời chúc được gửi đến chúng mình
-              </p>
-            </>
-          )}
         </header>
 
         <div className="mx-auto mt-10 w-full max-w-[1260px] md:mt-14">

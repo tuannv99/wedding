@@ -17,12 +17,9 @@ export default function WishesLoading() {
       <main className="w-full overflow-x-hidden bg-ivory px-6 pt-10 pb-20 sm:px-8 md:pt-14 md:pb-28 lg:px-10">
         <div className="mx-auto flex max-w-[700px] flex-col items-center text-center">
           <div className="h-6 w-28 animate-pulse rounded bg-taupe/10 sm:w-40" />
-          <div className="mt-5 h-3 w-52 animate-pulse rounded bg-taupe/10 md:w-64" />
-          <div className="mt-3 h-10 w-64 animate-pulse rounded bg-taupe/10 md:mt-4 md:h-14 md:w-[26rem]" />
+          <div className="mt-4 h-10 w-64 animate-pulse rounded bg-taupe/10 md:mt-5 md:h-14 md:w-[26rem]" />
           <div className="mt-4 h-4 w-72 max-w-full animate-pulse rounded bg-taupe/10 md:w-[26rem]" />
           <div className="mt-2 h-4 w-56 animate-pulse rounded bg-taupe/10 md:w-80" />
-          <div className="mt-6 h-px w-10 bg-taupe/20" />
-          <div className="mt-4 h-3 w-48 animate-pulse rounded bg-taupe/10" />
         </div>
 
         <div className="mx-auto mt-10 w-full max-w-[1260px] columns-1 gap-4 sm:columns-2 sm:gap-5 md:mt-14 lg:columns-3 lg:gap-6">

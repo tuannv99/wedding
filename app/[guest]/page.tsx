@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       images: [
         {
-          url: "/images/wedding/og.jpg",
+          url: "/images/wedding/og.jpg?v=2",
           width: 1200,
           height: 630,
           alt: `${wedding.groom.name} & ${wedding.bride.name} — 25.10.2026`,
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: ["/images/wedding/og.jpg"],
+      images: ["/images/wedding/og.jpg?v=2"],
     },
   };
 }

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description: wedding.site.description,
     images: [
       {
-        url: "/images/wedding/og.jpg",
+        url: "/images/wedding/og.jpg?v=2",
         width: 1200,
         height: 630,
         alt: `${wedding.groom.name} & ${wedding.bride.name} — 25.10.2026`,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: wedding.site.title,
     description: wedding.site.description,
-    images: ["/images/wedding/og.jpg"],
+    images: ["/images/wedding/og.jpg?v=2"],
   },
   robots: { index: true, follow: true },
 };
