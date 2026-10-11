@@ -268,6 +268,10 @@
     opacity: 0;
     transform: translate3d(0, var(--wd-reveal-y, 24px), 0);
   }
+  /* Hiện cùng section đang nổi lên lúc mở thiệp — không fade thêm lượt nữa. */
+  .wd-reveal[data-instant] {
+    transition: none;
+  }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
   .wd-reveal:not([data-shown]) {
@@ -625,5 +629,34 @@
     --wd-story-col: calc(
       (min(380px, (min(100cqw, 896px) - 56px) / 2.15) - 21px) * 1.3846 + 21px
     );
+  }
+}
+
+/* Ảnh tiệc nhà trai / nhà gái (WeddingDetails.tsx): khi <Reveal> bọc ngoài
+   hiện, ảnh trượt từ mép ngoài vào khung — khung overflow-hidden nên ảnh
+   "đi vào" khung. Chậm hơn khung một nhịp (+0.3s) để thấy được cú trượt
+   thay vì ảnh đã vào xong lúc khung còn đang mờ. Trạng thái ẩn khớp đúng
+   với .wd-reveal ở trên (máy chuột: chưa data-shown; cảm ứng: "pending"). */
+.wd-slide-in {
+  transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1)
+    calc(var(--wd-reveal-delay, 0s) + 0.3s);
+}
+.wd-slide-from-left { --wd-slide-from: -100%; }
+.wd-slide-from-right { --wd-slide-from: 100%; }
+@media (hover: hover) and (pointer: fine) {
+  .wd-reveal:not([data-shown]) .wd-slide-in {
+    transform: translate3d(var(--wd-slide-from), 0, 0);
+  }
+}
+.wd-reveal[data-touch="pending"] .wd-slide-in {
+  transform: translate3d(var(--wd-slide-from), 0, 0);
+}
+/* Cảm ứng: ảnh giữ layer riêng suốt (như data-media của Reveal) — Safari
+   không huỷ layer lúc trượt xong nên không vẽ lại ảnh, không nháy. */
+.wd-reveal[data-media] .wd-slide-in { will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .wd-slide-in {
+    transform: none !important;
+    transition: none;
   }
 }

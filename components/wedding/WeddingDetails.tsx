@@ -228,7 +228,11 @@ export function WeddingDetails() {
                             /* sync: iPhone xả bitmap ảnh đã ra khỏi màn hình; async thì lúc cuộn quay lại Safari vẽ ô trống trước rồi ảnh mới hiện (nháy) */
                             decoding="sync"
                             sizes="(max-width: 767px) 40vw, 46vw"
-                            className="object-cover"
+                            /* Trượt từ mép ngoài vào khung (nhà trai ảnh bên trái → từ trái, nhà gái → từ phải); xem .wd-slide-in ở wedding.css */
+                            className={cn(
+                              "wd-slide-in object-cover",
+                              photoFirst ? "wd-slide-from-left" : "wd-slide-from-right",
+                            )}
                           />
                         </PhotoZoom>
                       </Reveal>

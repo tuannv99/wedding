@@ -80,6 +80,8 @@ export function Reveal({
   const [settled, setSettled] = useState(false);
   const [fine, setFine] = useState(true);
   const [media, setMedia] = useState(false);
+  /** Máy có chuột: hiện ngay không transition (xem .wd-rise ở dưới). */
+  const [instant, setInstant] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -93,30 +95,75 @@ export function Reveal({
     }
 
     let first = true;
-    // -12% ở đáy: khối bắt đầu hiện khi đã lên hẳn trong màn hình, đúng kiểu
-    // "lướt tới đâu hiện tới đó".
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const visible = !!entry?.isIntersecting || (entry?.boundingClientRect.top ?? 0) < 0;
+    let observer: IntersectionObserver | undefined;
 
-        if (!isFine && first) {
-          first = false;
-          // Đang trong (hoặc đã qua) màn hình lúc mount và không phải chờ
-          // tiêu đề → để yên, không ẩn.
-          if (visible && gateOpenRef.current) {
-            observer.disconnect();
-            return;
+    /**
+     * instantFirst: lần đo đầu mà khối đã trong màn hình thì hiện luôn, không
+     * fade (máy cảm ứng vốn đã làm vậy ở mọi khối — để yên, không ẩn).
+     */
+    const observe = (instantFirst: boolean) => {
+      // -12% ở đáy: khối bắt đầu hiện khi đã lên hẳn trong màn hình, đúng kiểu
+      // "lướt tới đâu hiện tới đó".
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          const visible = !!entry?.isIntersecting || (entry?.boundingClientRect.top ?? 0) < 0;
+
+          if (first) {
+            first = false;
+            // Đang trong (hoặc đã qua) màn hình ngay lần đo đầu và không phải
+            // chờ tiêu đề → để yên, không ẩn.
+            if (visible && gateOpenRef.current && (instantFirst || !isFine)) {
+              if (isFine) {
+                setInstant(true);
+                setInView(true);
+              }
+              observer?.disconnect();
+              return;
+            }
+            if (!isFine) setArmed(true);
           }
-          setArmed(true);
-        }
-        if (!visible) return;
-        setInView(true);
-        observer.disconnect();
-      },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+          if (!visible) return;
+          setInView(true);
+          observer?.disconnect();
+        },
+        { rootMargin: "0px 0px -12% 0px", threshold: 0 },
+      );
+      observer.observe(el);
+    };
+
+    // Section đầu tiên sau khi "Mở thiệp" (Lễ Thành Hôn) đã có hiệu ứng vào
+    // riêng: cả khối nổi lên theo nhịp cánh thiệp mở (.wd-rise, wedding.css).
+    // Lúc khối này mount trang còn ở đầu, chưa cuộn tới — đo ngay thì mọi thứ
+    // "ngoài màn hình", phải chờ rồi fade thêm một lượt nữa: section nổi lên
+    // trống trơn mấy giây. Nên đợi tới lúc nó bắt đầu nổi lên (trang đã cuộn
+    // tới) mới đo: phần đang trong màn hình lúc đó hiện cùng section, phần
+    // bên dưới (vd. cột chú rể trên điện thoại) vẫn chờ cuộn tới như thường.
+    const rising = el.closest<HTMLElement>(".wd-rise > :first-child");
+    const rise = rising
+      ?.getAnimations()
+      .find((a) => a instanceof CSSAnimation && a.animationName === "wd-rise");
+    const timing = rise?.effect?.getComputedTiming();
+    let onRiseStart: ((e: AnimationEvent) => void) | undefined;
+
+    if (rising && rise && timing && rise.playState !== "finished") {
+      if (Number(timing.localTime ?? 0) < Number(timing.delay ?? 0)) {
+        onRiseStart = (e) => {
+          if (e.target !== rising || e.animationName !== "wd-rise") return;
+          rising.removeEventListener("animationstart", onRiseStart!);
+          observe(true);
+        };
+        rising.addEventListener("animationstart", onRiseStart);
+      } else {
+        observe(true);
+      }
+    } else {
+      observe(false);
+    }
+
+    return () => {
+      if (rising && onRiseStart) rising.removeEventListener("animationstart", onRiseStart);
+      observer?.disconnect();
+    };
   }, []);
 
   const go = inView && gateOpen;
@@ -128,6 +175,7 @@ export function Reveal({
       data-shown={fine && go ? "" : undefined}
       data-touch={touch}
       data-media={media ? "" : undefined}
+      data-instant={instant ? "" : undefined}
       // Khối chữ fade xong thì bỏ hẳn transition — Safari gỡ layer, khối lại
       // tĩnh như cũ. Khối có ảnh giữ nguyên "in" (xem ghi chú ở trên).
       onTransitionEnd={(e: TransitionEvent) => {

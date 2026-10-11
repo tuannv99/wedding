@@ -93,10 +93,11 @@ export function Closing() {
             <Botanical variant="mark" className="mt-12 h-5 w-16 text-white/70" />
           </Reveal>
 
-          {/* Kín đáo, đặt cuối cùng — không phải một section mừng cưới lớn. */}
-          <Reveal delay={0.5} className="mt-10">
+          {/* Kín đáo, đặt cuối cùng — không phải một section mừng cưới lớn.
+              Không fade: nút luôn hiện sẵn, không chờ tiêu đề hay cuộn tới. */}
+          <div className="mt-10">
             <GiftCTA className="border-white/80 text-white" />
-          </Reveal>
+          </div>
         </div>
       </RevealGate>
     </footer>

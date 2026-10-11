@@ -7,68 +7,10 @@ import { useRevealGate } from "@/components/ui/RevealGate";
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-/**
- * Cửa sổ cuộn để viết hết tiêu đề, tính theo mép trên của tiêu đề so với
- * chiều cao màn hình: bắt đầu khi tiêu đề vừa ló lên (92%), viết xong khi nó
- * lên tới 55% — khoảng 1/3 màn hình cuộn, đủ chậm để thấy từng chữ.
- */
-const START = 0.92;
-const END = 0.55;
-/** Làm tròn tiến độ (theo phần của một ký tự) để không render lại mỗi pixel cuộn. */
+/** Mỗi ký tự viết trong bao lâu (ms) — tiêu đề ~10 ký tự viết xong trong ~0,8 giây. */
+const CHAR_MS = 80;
+/** Phần lẻ của một ký tự (ký tự đang viết mờ dần lên thay vì bật ra). */
 const STEPS_PER_CHAR = 8;
-
-/**
- * Một listener scroll/resize dùng chung cho mọi tiêu đề, gom về một lần mỗi
- * khung hình (requestAnimationFrame) — không phải mỗi tiêu đề một listener.
- */
-const subscribers = new Set<() => void>();
-let frame = 0;
-
-function schedule() {
-  if (frame) return;
-  frame = requestAnimationFrame(() => {
-    frame = 0;
-    subscribers.forEach((update) => update());
-  });
-}
-
-function subscribe(update: () => void) {
-  subscribers.add(update);
-  if (subscribers.size === 1) {
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-  }
-  return () => {
-    subscribers.delete(update);
-    if (subscribers.size === 0) {
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      cancelAnimationFrame(frame);
-      frame = 0;
-    }
-  };
-}
-
-/** Tiến độ 0 → 1 của tiêu đề, chỉ phụ thuộc vị trí cuộn hiện tại. */
-function progressOf(el: HTMLElement) {
-  const vh = window.innerHeight;
-  const top = el.getBoundingClientRect().top;
-  const remaining = Math.max(
-    0,
-    document.documentElement.scrollHeight - vh - window.scrollY,
-  );
-
-  // Đã cuộn tới đáy trang mà tiêu đề đang trong màn hình → viết xong luôn.
-  if (remaining <= 1 && top < vh) return 1;
-
-  const start = vh * START;
-  // Tiêu đề gần cuối trang có thể không bao giờ lên tới 55%: lấy luôn vị trí
-  // cao nhất nó lên được (lúc cuộn hết trang) làm mốc viết xong.
-  const end = Math.max(vh * END, top - remaining);
-  if (end >= start - 1) return top <= start ? 1 : 0;
-
-  return Math.min(1, Math.max(0, (start - top) / (start - end)));
-}
 
 /** Tách theo ký tự người đọc thấy (giữ nguyên dấu tiếng Việt dạng tổ hợp). */
 function splitGraphemes(text: string) {
@@ -88,8 +30,9 @@ type TypewriterTitleProps = {
 };
 
 /**
- * Tiêu đề "tự viết ra" từng ký tự theo đúng vị trí cuộn: cuộn xuống chữ hiện
- * dần; cuộn ngược thì chữ đã viết giữ nguyên. Không chạy theo thời gian.
+ * Tiêu đề "tự viết ra" từng ký tự: cuộn tới là tự viết một mạch cho hết
+ * (CHAR_MS mỗi ký tự), không phải cuộn tiếp mới hiện đủ. Viết một lần rồi
+ * thôi — cuộn ngược hay quay lại thì chữ vẫn nguyên.
  *
  * Bố cục giữ nguyên tuyệt đối: toàn bộ chữ luôn nằm trong DOM, phần chưa viết
  * chỉ opacity 0 (vẫn chiếm chỗ, vẫn xuống dòng y hệt, trình đọc màn hình vẫn
@@ -97,8 +40,8 @@ type TypewriterTitleProps = {
  * tiến độ, nên chữ hiện mượt chứ không bật) | chưa viết.
  *
  * Viết xong lần đầu thì mở RevealGate gần nhất — nội dung bên dưới mới bắt
- * đầu hiện. Cuộn nhanh vượt qua cũng vậy: tiến độ tính từ vị trí, vượt qua
- * cửa sổ là 1, không có trạng thái nào bị bỏ qua.
+ * đầu hiện. Cuộn nhanh vượt qua cũng vậy: tiêu đề đã ở trên màn hình thì
+ * vẫn viết như thường rồi mở gate, không bỏ sót trạng thái nào.
  *
  * Giảm chuyển động: hiện đủ chữ và mở gate ngay.
  */
@@ -126,18 +69,36 @@ export function TypewriterTitle({
       return;
     }
 
-    // Chỉ tiến, không lùi: cuộn ngược thì chữ đã viết giữ nguyên.
-    let max = 0;
-    const update = () => {
-      const progress = progressOf(el);
-      const next = Math.round(progress * total * STEPS_PER_CHAR);
-      if (next < max) return;
-      max = next;
-      setSteps(next);
-      if (progress >= 1) markOpen?.();
+    setSteps(0);
+    let frame = 0;
+
+    const write = () => {
+      const startedAt = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / (total * CHAR_MS));
+        setSteps(Math.round(progress * total * STEPS_PER_CHAR));
+        if (progress < 1) frame = requestAnimationFrame(tick);
+        else markOpen?.();
+      };
+      frame = requestAnimationFrame(tick);
     };
-    update();
-    return subscribe(update);
+
+    // Cùng mốc với Reveal (đáy hụt 12%): tiêu đề lên tới đó — hoặc đã nằm
+    // phía trên màn hình (cuộn nhanh vượt qua) — là bắt đầu viết.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting && (entry?.boundingClientRect.top ?? 0) >= 0) return;
+        observer.disconnect();
+        write();
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0 },
+    );
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
   }, [total, markOpen]);
 
   const written = Math.floor(steps / STEPS_PER_CHAR);
